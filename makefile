@@ -39,13 +39,13 @@ clean:
 
 test: test.o $(FRONT_OBJS)
 	$(FRONT_LINK) $^ $(FRONT_LIBS) -o $@
-test.o: test.c back.h basics.h
+test.o: exe/test.c back.h basics.h
 	$(FRONT_COMPILE) -c $<
 
-cocoa_main.o: ext/cocoa_main.m ext/../front.h
+cocoa_main.o: ext/cocoa_main.m front.h
 	$(FRONT_COMPILE) -c $<
 
-basics.o: ext/basics.c ext/../basics.h
+basics.o: ext/basics.c basics.h
 	$(BACK_COMPILE) -c $<
 
 flex.o: flex.c flex.h stack.h basics.h

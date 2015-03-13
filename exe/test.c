@@ -1,5 +1,5 @@
-#include "back.h"
-#include "basics.h"
+#include "../back.h"
+#include "../basics.h"
 
 #define WIDTH 640
 #define HEIGHT 480
