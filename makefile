@@ -3,6 +3,8 @@ CONFIG ?= default
 include $(CONFIG).mk
 
 BACK_OBJS = \
+cad.o \
+list.o \
 flex.o \
 stack.o \
 basics.o

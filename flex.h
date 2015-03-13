@@ -11,7 +11,7 @@ typedef struct {
 } flex;
 
 void flex_init(flex* f);
-void flex_free(flex* f);
+void flex_dtor(flex* f);
 int flex_full(flex* f);
 unsigned flex_grow(flex* f);
 int flex_add(flex* f);

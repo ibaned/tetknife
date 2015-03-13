@@ -10,7 +10,7 @@ void flex_init(flex* f)
   f->n = 0;
 }
 
-void flex_free(flex* f)
+void flex_dtor(flex* f)
 {
   my_free(f->fl);
 }
