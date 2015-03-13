@@ -2,8 +2,7 @@ CONFIG ?= default
 
 include $(CONFIG).mk
 
-BACK_OBJS = \
-stdlib/basics.o
+BACK_OBJS = basics.o
 
 ifeq "$(GUI)" "cocoa"
 GUI_OBJ += cocoa_main.o
@@ -28,6 +27,7 @@ endif
 
 FRONT_LINK = $(FRONT_CC) $(FRONT_LDFLAGS)
 FRONT_COMPILE = $(FRONT_CC) $(FRONT_CFLAGS)
+BACK_COMPILE = $(CC) $(CFLAGS)
 
 all: $(TARGETS)
 
@@ -39,8 +39,9 @@ test: test.o $(FRONT_OBJS)
 test.o: test.c back.h basics.h
 	$(FRONT_COMPILE) -c $<
 
-cocoa_main.o: gui/cocoa_main.m gui/../front.h
+cocoa_main.o: ext/cocoa_main.m ext/../front.h
 	$(FRONT_COMPILE) -c $<
 
 front_back.o: front_back.c front.h back.h
-basics.o: stdlib/basics.c stdlib/../basics.h
+basics.o: ext/basics.c ext/../basics.h
+	$(BACK_COMPILE) -c $<
