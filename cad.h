@@ -41,6 +41,8 @@ typedef struct {
 } guse;
 
 extern gent const gent_null;
+extern gbnd const gbnd_null;
+extern guse const guse_null;
 
 int gent_eq(gent a, gent b);
 int gent_ok(gent e);

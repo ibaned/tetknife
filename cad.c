@@ -36,6 +36,8 @@ struct cad_struct {
 };
 
 gent const gent_null = { 0, NULL_IDX };
+gbnd const gbnd_null = { 0, NULL_IDX };
+guse const guse_null = { 0, NULL_IDX };
 
 int gent_eq(gent a, gent b)
 {
@@ -342,6 +344,8 @@ gent gbnd_of(cad* c, gbnd b)
 gbnd gbnd_of_f(cad* c, gent e)
 {
   gbnd b;
+  if (e.t == CAD_VERTEX)
+    return gbnd_null;
   b.t = e2b[e.t];
   b.i = c->e[e.t].bf[e.i];
   return b;
@@ -425,6 +429,8 @@ gbnd guse_by(cad* c, guse u)
 guse guse_of_f(cad* c, gent e)
 {
   guse u;
+  if (e.t == CAD_REGION)
+    return guse_null;
   u.t = e2u[e.t];
   u.i = c->e[e.t].uf[e.i];
   return u;
