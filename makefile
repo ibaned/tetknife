@@ -2,7 +2,10 @@ CONFIG ?= default
 
 include $(CONFIG).mk
 
-BACK_OBJS = basics.o
+BACK_OBJS = \
+flex.o \
+stack.o \
+basics.o
 
 ifeq "$(GUI)" "cocoa"
 GUI_OBJ += cocoa_main.o
@@ -42,6 +45,9 @@ test.o: test.c back.h basics.h
 cocoa_main.o: ext/cocoa_main.m ext/../front.h
 	$(FRONT_COMPILE) -c $<
 
-front_back.o: front_back.c front.h back.h
 basics.o: ext/basics.c ext/../basics.h
 	$(BACK_COMPILE) -c $<
+
+flex.o: flex.c flex.h stack.h basics.h
+front_back.o: front_back.c front.h back.h
+stack.o: stack.c stack.h basics.h
