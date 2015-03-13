@@ -22,7 +22,10 @@ int flex_full(flex* f)
 
 unsigned flex_grow(flex* f)
 {
-  return stack_grow(&f->s);
+  unsigned c;
+  c = stack_grow(&f->s);
+  REALLOC(f->fl, c);
+  return c;
 }
 
 int flex_add(flex* f)
