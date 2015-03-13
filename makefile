@@ -7,6 +7,7 @@ cad.o \
 list.o \
 flex.o \
 stack.o \
+space.o \
 basics.o
 
 ifeq "$(GUI)" "cocoa"

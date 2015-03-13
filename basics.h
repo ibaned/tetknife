@@ -20,4 +20,9 @@ enum { NULL_IDX = -1 };
 
 #define IDX_OK(i) ((i) >= 0)
 
+double my_sin(double x);
+double my_cos(double x);
+double my_atan2(double y, double x);
+double my_sqrt(double x);
+
 #endif

@@ -2,6 +2,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 void debug(char const* format, ...)
 {
@@ -38,4 +39,24 @@ void* my_realloc(void* p, unsigned long bytes)
 void my_free(void* p)
 {
   free(p);
+}
+
+double my_sin(double x)
+{
+  return sin(x);
+}
+
+double my_cos(double x)
+{
+  return cos(x);
+}
+
+double my_atan2(double y, double x)
+{
+  return atan2(y, x);
+}
+
+double my_sqrt(double x)
+{
+  return sqrt(x);
 }
