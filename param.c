@@ -15,12 +15,16 @@ void pplane_points_add(pplane* p, point x, dim* d)
       return;
     case DIM1:
       p->f.b.x = point_sub(x, p->f.o);
-      if (point_mag(p->f.b.x) > epsilon)
+      if (point_mag(p->f.b.x) > epsilon) {
+        p->f.b.x = point_norm(p->f.b.x);
         *d = DIM2;
+      }
       return;
     case DIM2:
       p->f.b.y = point_sub(x, p->f.o);
+      p->f.b.y = point_rej(p->f.b.y, p->f.b.x);
       if (point_mag(p->f.b.y) > epsilon) {
+        p->f.b.y = point_norm(p->f.b.y);
         p->f.b.z = point_cross(p->f.b.x, p->f.b.z);
         if (point_mag(p->f.b.z) > epsilon)
           *d = DIM3;

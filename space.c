@@ -58,6 +58,11 @@ point point_rej(point a, point b)
   return point_sub(a, point_proj(a, b));
 }
 
+point point_norm(point p)
+{
+  return point_scale(p, 1.0 / point_mag(p));
+}
+
 basis basis_new(point x, point y, point z)
 {
   basis b;
