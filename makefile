@@ -7,6 +7,7 @@ cad.o \
 list.o \
 flex.o \
 stack.o \
+param.o \
 space.o \
 basics.o
 
@@ -55,6 +56,11 @@ cocoa_main.o: ext/cocoa_main.m front.h
 basics.o: ext/basics.c basics.h
 	$(BACK_COMPILE) -c $<
 
+cad.o: cad.c cad.h flex.h stack.h basics.h list.h
+cad_geom.o: cad_geom.c cad_geom.h cad.h space.h
 flex.o: flex.c flex.h stack.h basics.h
 front_back.o: front_back.c front.h back.h
+list.o: list.c list.h basics.h
+param.o: param.c param.h space.h basics.h
+space.o: space.c space.h basics.h
 stack.o: stack.c stack.h basics.h

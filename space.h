@@ -34,6 +34,7 @@ point point_new(double x, double y, double z);
 double point_dot(point a, point b);
 double point_mag(point p);
 point point_add(point a, point b);
+point point_sub(point a, point b);
 point point_scale(point p, double s);
 point point_cross(point a, point b);
 
