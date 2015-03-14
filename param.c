@@ -75,18 +75,18 @@ point parc_uneval(parc* a, point x)
   return point_new(t, 0, 0);
 }
 
-void pcyl_from_parc(pcyl* c, parc* a, point n)
+void pcylinder_from_parc(pcylinder* c, parc* a, point n)
 {
   c->f = a->f;
   c->f.b.z = n;
 }
 
-point pcyl_eval(pcyl* c, point uv)
+point pcylinder_eval(pcylinder* c, point uv)
 {
   return frame_eval(c->f, point_new(my_cos(uv.x), my_sin(uv.x), uv.y));
 }
 
-point pcyl_uneval(pcyl* pc, point x)
+point pcylinder_uneval(pcylinder* pc, point x)
 {
   point c;
   double t;

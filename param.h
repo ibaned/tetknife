@@ -13,7 +13,7 @@ typedef struct {
 
 typedef struct {
   frame f;
-} pcyl;
+} pcylinder;
 
 void pplane_points_start(dim* d);
 void pplane_points_add(pplane* p, point x, dim* d);
@@ -25,8 +25,8 @@ void parc_init(parc* a, point c, point n, point x);
 point parc_eval(parc* a, point uv);
 point parc_uneval(parc* a, point x);
 
-void pcyl_from_parc(pcyl* c, parc* a, point n);
-point pcyl_eval(pcyl* c, point uv);
-point pcyl_uneval(pcyl* c, point x);
+void pcylinder_from_parc(pcylinder* c, parc* a, point n);
+point pcylinder_eval(pcylinder* c, point uv);
+point pcylinder_uneval(pcylinder* c, point x);
 
 #endif
