@@ -1,7 +1,7 @@
 #ifndef CAD_H
 #define CAD_H
 
-typedef struct cad_struct cad;
+typedef struct cad cad;
 
 typedef enum {
   CAD_VERTEX,

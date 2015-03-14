@@ -29,7 +29,7 @@ typedef struct {
   int* bp;
 } guses;
 
-struct cad_struct {
+struct cad {
   gents e[CAD_ENT_TYPES];
   gbnds b[CAD_BND_TYPES];
   guses u[CAD_USE_TYPES];
