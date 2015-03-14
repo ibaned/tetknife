@@ -1,6 +1,7 @@
 #include "cad.h"
 #include "flex.h"
 #include "list.h"
+#include "flag.h"
 
 typedef struct {
   flex e;
@@ -454,4 +455,55 @@ guse guse_by_n(cad* c, guse u)
 {
   u.i = c->u[u.t].bn[u.i];
   return u;
+}
+
+static void for_bnd(cad* c, gent e, cad_for_op f, void* a);
+
+static void for_closure(cad* c, gent e, cad_for_op f, void* a)
+{
+  f(e, a);
+  for_bnd(c, e, f, a);
+}
+
+static void for_bnd(cad* c, gent e, cad_for_op f, void* a)
+{
+  gbnd b;
+  guse u;
+  for (b = gbnd_of_f(c, e); gbnd_ok(b); b = gbnd_of_n(c, b))
+    for (u = guse_by_f(c, b); guse_ok(u); u = guse_by_n(c, u))
+      for_closure(c, guse_of(c, u), f, a);
+}
+
+typedef struct {
+  gflag* f;
+  cad_for_op op;
+  void* a;
+} unique;
+
+static void clear_unique(gent e, void* a)
+{
+  unique* u = a;
+  gflag_clear(u->f, e);
+}
+
+static void run_unique(gent e, void* a)
+{
+  unique* u = a;
+  if (!gflag_get(u->f, e))
+    u->op(e, u->a);
+  gflag_set(u->f, e);
+}
+
+void cad_for_bnd(cad* c, gent e, cad_for_op f, void* a)
+{
+  unique u;
+  gent_type t;
+  u.f = gflag_new();
+  u.op = f;
+  u.a = a;
+  for (t = 0; t < e.t; ++t)
+    gflag_grow(u.f, t, c->e[t].e.s.c);
+  for_bnd(c, e, clear_unique, &u);
+  for_bnd(c, e, run_unique, &u);
+  gflag_free(u.f);
 }
