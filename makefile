@@ -5,6 +5,7 @@ include $(CONFIG).mk
 BACK_OBJS = \
 cad.o \
 list.o \
+flag.o \
 flex.o \
 stack.o \
 param.o \
