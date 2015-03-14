@@ -37,6 +37,8 @@ point point_add(point a, point b);
 point point_sub(point a, point b);
 point point_scale(point p, double s);
 point point_cross(point a, point b);
+point point_proj(point a, point b);
+point point_rej(point a, point b);
 
 basis basis_new(point x, point y, point z);
 point basis_eval(basis b, point p);

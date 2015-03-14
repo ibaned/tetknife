@@ -43,6 +43,21 @@ point point_cross(point a, point b)
   return basis_eval(basis_cross(a), b);
 }
 
+point point_proj(point a, point b)
+{
+  /* a.b = |a||b|cos(t)
+     mag(proj) = |a|cos(t)
+     dir(proj) = dir(b)
+     proj = (b / |b|) * (a.b / |b|)
+     proj = b * a.b / b.b */
+  return point_scale(b, point_dot(a, b) / point_dot(b, b));
+}
+
+point point_rej(point a, point b)
+{
+  return point_sub(a, point_proj(a, b));
+}
+
 basis basis_new(point x, point y, point z)
 {
   basis b;
