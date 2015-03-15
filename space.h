@@ -30,6 +30,8 @@ typedef struct {
 extern double const my_pi;
 extern double const epsilon;
 
+extern point const point_zero;
+
 point point_new(double x, double y, double z);
 double point_dot(point a, point b);
 double point_mag(point p);

@@ -4,6 +4,8 @@
 double const my_pi = 3.14159265358979323846;
 double const epsilon = 1e-10;
 
+point const point_zero = {0,0,0};
+
 point point_new(double x, double y, double z)
 {
   point p;

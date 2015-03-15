@@ -507,3 +507,14 @@ void cad_for_bnd(cad* c, gent e, cad_for_op f, void* a)
   for_bnd(c, e, run_unique, &u);
   gflag_free(u.f);
 }
+
+void cad_edge_verts(cad* c, gent e, gent v[])
+{
+  gbnd b;
+  guse u;
+  b = gbnd_of_f(c, e);
+  u = guse_by_f(c, b);
+  v[0] = guse_of(c, u);
+  u = guse_by_n(c, u);
+  v[1] = guse_of(c, u);
+}
