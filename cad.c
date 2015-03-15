@@ -461,7 +461,7 @@ static void for_bnd(cad* c, gent e, cad_for_op f, void* a);
 
 static void for_closure(cad* c, gent e, cad_for_op f, void* a)
 {
-  f(e, a);
+  f(c, e, a);
   for_bnd(c, e, f, a);
 }
 
@@ -480,17 +480,19 @@ typedef struct {
   void* a;
 } unique;
 
-static void clear_unique(gent e, void* a)
+static void clear_unique(cad* c, gent e, void* a)
 {
+  (void)c;
   unique* u = a;
   gflag_clear(u->f, e);
 }
 
-static void run_unique(gent e, void* a)
+static void run_unique(cad* c, gent e, void* a)
 {
+  (void)c;
   unique* u = a;
   if (!gflag_get(u->f, e))
-    u->op(e, u->a);
+    u->op(c, e, u->a);
   gflag_set(u->f, e);
 }
 

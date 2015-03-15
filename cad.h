@@ -82,7 +82,7 @@ guse guse_of_n(cad* c, guse u);
 guse guse_by_f(cad* c, gbnd b);
 guse guse_by_n(cad* c, guse u);
 
-typedef void (*cad_for_op)(gent, void*);
+typedef void (*cad_for_op)(cad*, gent, void*);
 
 void cad_for_bnd(cad* c, gent e, cad_for_op f, void* a);
 
