@@ -88,4 +88,9 @@ void cad_for_bnd(cad* c, gent e, cad_for_op f, void* a);
 
 void cad_edge_verts(cad* c, gent e, gent v[]);
 
+struct geom;
+
+struct geom* cad_geom(cad* c);
+void cad_set_geom(cad* c, struct geom* g);
+
 #endif

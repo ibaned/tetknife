@@ -2,6 +2,7 @@
 #include "flex.h"
 #include "list.h"
 #include "flag.h"
+#include "cad_geom.h"
 
 typedef struct {
   flex e;
@@ -34,6 +35,7 @@ struct cad {
   gents e[CAD_ENT_TYPES];
   gbnds b[CAD_BND_TYPES];
   guses u[CAD_USE_TYPES];
+  geom* g;
 };
 
 gent const gent_null = { 0, NULL_IDX };
@@ -83,7 +85,7 @@ static int gents_full(gents* e)
   return flex_full(&e->e);
 }
 
-static void gents_grow(gents* e, gent_type t)
+static unsigned gents_grow(gents* e, gent_type t)
 {
   unsigned c;
   c = flex_grow(&e->e);
@@ -95,6 +97,7 @@ static void gents_grow(gents* e, gent_type t)
     REALLOC(e->uf, c);
     REALLOC(e->ul, c);
   }
+  return c;
 }
 
 static int gents_add(gents* e, gent_type t)
@@ -232,6 +235,7 @@ cad* cad_new(void)
     gbnds_init(c->b + bt);
   for (ut = 0; ut < CAD_USE_TYPES; ++ut)
     guses_init(c->u + ut);
+  c->g = 0;
   return c;
 }
 
@@ -240,6 +244,8 @@ void cad_free(cad* c)
   gent_type et;
   gbnd_type bt;
   guse_type ut;
+  if (c->g)
+    geom_free(c->g);
   for (et = 0; et < CAD_ENT_TYPES; ++et)
     gents_dtor(c->e + et);
   for (bt = 0; bt < CAD_BND_TYPES; ++bt)
@@ -253,10 +259,14 @@ gent gent_new(cad* c, gent_type t)
 {
   gents* es;
   gent e;
+  unsigned cap;
   es = c->e + t;
   e.t = t;
-  if (gents_full(es))
-    gents_grow(es, t);
+  if (gents_full(es)) {
+    cap = gents_grow(es, t);
+    if (c->g)
+      geom_grow_gents(c->g, t, cap);
+  }
   e.i = gents_add(es, t);
   return e;
 }
@@ -517,4 +527,14 @@ void cad_edge_verts(cad* c, gent e, gent v[])
   v[0] = guse_of(c, u);
   u = guse_by_n(c, u);
   v[1] = guse_of(c, u);
+}
+
+struct geom* cad_geom(cad* c)
+{
+  return c->g;
+}
+
+void cad_set_geom(cad* c, struct geom* g)
+{
+  c->g = g;
 }

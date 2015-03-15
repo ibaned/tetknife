@@ -3,6 +3,7 @@ CONFIG ?= default
 include $(CONFIG).mk
 
 BACK_OBJS = \
+cad_geom.o \
 cad.o \
 list.o \
 flag.o \
