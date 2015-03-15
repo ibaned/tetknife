@@ -9,6 +9,7 @@ flag.o \
 flex.o \
 stack.o \
 param.o \
+simplex.o \
 space.o \
 basics.o
 
