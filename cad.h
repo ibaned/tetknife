@@ -7,23 +7,26 @@ typedef enum {
   CAD_VERTEX,
   CAD_EDGE,
   CAD_FACE,
-  CAD_REGION,
-  CAD_ENT_TYPES
+  CAD_REGION
 } gent_type;
+
+enum { CAD_ENT_TYPES = CAD_REGION + 1 };
 
 typedef enum {
   CAD_PAIR,
   CAD_LOOP,
-  CAD_SHELL,
-  CAD_BND_TYPES
+  CAD_SHELL
 } gbnd_type;
+
+enum { CAD_BND_TYPES = CAD_SHELL + 1 };
 
 typedef enum {
   CAD_VERTEX_USE,
   CAD_EDGE_USE,
-  CAD_FACE_USE,
-  CAD_USE_TYPES
+  CAD_FACE_USE
 } guse_type;
+
+enum { CAD_USE_TYPES = CAD_SHELL + 1 };
 
 typedef struct {
   gent_type t;
