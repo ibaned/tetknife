@@ -68,6 +68,7 @@ flag.o: flag.c flag.h cad.h basics.h
 flex.o: flex.c flex.h stack.h basics.h
 front_back.o: front_back.c front.h back.h
 list.o: list.c list.h basics.h
+mesh.o: mesh.c mesh.h simplex.h space.h flex.h stack.h basics.h list.h
 param.o: param.c param.h space.h basics.h
 simplex.o: simplex.c simplex.h space.h
 space.o: space.c space.h basics.h
