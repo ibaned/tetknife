@@ -7,6 +7,7 @@ cad_geom.o \
 cad.o \
 list.o \
 flag.o \
+mesh.o \
 flex.o \
 stack.o \
 param.o \
