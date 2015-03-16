@@ -1,5 +1,12 @@
 #include "simplex.h"
 
+unsigned const simplex_ndown[SIMPLICES][SIMPLICES] = {
+  {1,0,0,0},
+  {2,1,0,0},
+  {3,3,1,0},
+  {4,6,4,1}
+};
+
 line line_new(point a, point b)
 {
   line l;

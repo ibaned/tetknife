@@ -4,12 +4,16 @@
 #include "space.h"
 
 typedef enum {
-  POINT,
-  LINE,
+  VERTEX,
+  EDGE,
   TRIANGLE,
   TET,
   SIMPLICES
 } simplex;
+
+enum { SIMPLEX_MAX_DOWN = 6 };
+
+extern unsigned const simplex_ndown[SIMPLICES][SIMPLICES];
 
 typedef struct {
   point a;
