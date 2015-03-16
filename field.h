@@ -3,27 +3,24 @@
 
 #include "mesh.h"
 
-typedef struct fields fields;
+typedef struct fields {
+  struct vfield* vf;
+} fields;
 
-typedef struct {
-  fields* fs;
-  int i;
-  int padding_;
+typedef struct vfield {
+  struct vfield* n;
+  point* x;
 } vfield;
 
-fields* fields_new(mesh* m);
-void fields_free(fields* fs);
+void fields_init(fields* fs);
+void fields_dtor(mesh* m);
 
 void fields_grow(fields* fs, unsigned c);
 
-vfield vfield_new(mesh* m);
-void vfield_free(vfield f);
+void vfield_init(mesh* m, vfield* f);
+void vfield_dtor(mesh* m, vfield* f);
 
-point vfield_get(vfield f, ment e);
-void vfield_set(vfield f, ment e, point v);
-
-vfield vfield_f(mesh* m);
-vfield vfield_n(vfield f);
-int vfield_ok(vfield f);
+point vfield_get(vfield* f, ment e);
+void vfield_set(vfield* f, ment e, point v);
 
 #endif

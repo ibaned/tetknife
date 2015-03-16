@@ -46,8 +46,9 @@ ment muse_of(muse u);
 point mesh_point(mesh* m, ment v);
 void mesh_set_point(mesh* m, ment v, point x);
 
+unsigned mesh_cap(mesh* m, simplex t);
+
 struct fields;
 struct fields* mesh_fields(mesh* m);
-void mesh_set_fields(mesh* m, struct fields* fs);
 
 #endif

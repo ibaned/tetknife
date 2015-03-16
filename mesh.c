@@ -11,7 +11,7 @@ struct mesh {
   int* fu[SIMPLICES];
   simplex et;
   int padding_;
-  fields* fs;
+  fields fs;
   vfield x;
 };
 
@@ -50,15 +50,15 @@ mesh* mesh_new(void)
     m->fu[t] = 0;
   }
   m->et = VERTEX;
-  m->fs = fields_new(m);
-  m->x = vfield_new(m);
+  fields_init(&m->fs);
+  vfield_init(m, &m->x);
   return m;
 }
 
 void mesh_free(mesh* m)
 {
   simplex t;
-  fields_free(m->fs);
+  fields_dtor(m);
   for (t = 0; t < SIMPLICES; ++t) {
     flex_dtor(&m->f[t]);
     my_free(m->d[t]);
@@ -82,7 +82,7 @@ static unsigned mesh_grow(mesh* m, simplex t)
   if (t == VERTEX) {
     for (ut = EDGE; ut < m->et; ++ut)
       REALLOC(m->fu[ut], c);
-    fields_grow(m->fs, c);
+    fields_grow(&m->fs, c);
   } else {
     wc = c * nverts(t);
     REALLOC(m->d[t], wc);
@@ -204,20 +204,20 @@ ment muse_of(muse u)
 
 point mesh_point(mesh* m, ment v)
 {
-  return vfield_get(m->x, v);
+  return vfield_get(&m->x, v);
 }
 
 void mesh_set_point(mesh* m, ment v, point x)
 {
-  vfield_set(m->x, v, x);
+  vfield_set(&m->x, v, x);
+}
+
+unsigned mesh_cap(mesh* m, simplex t)
+{
+  return m->f[t].s.c;
 }
 
 struct fields* mesh_fields(mesh* m)
 {
-  return m->fs;
-}
-
-void mesh_set_fields(mesh* m, struct fields* fs)
-{
-  m->fs = fs;
+  return &m->fs;
 }

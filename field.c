@@ -1,83 +1,52 @@
 #include "field.h"
-#include "flex.h"
+#include "basics.h"
 
-struct fields {
-  mesh* m;
-  flex fv;
-  point** v;
-};
-
-fields* fields_new(mesh* m)
+void fields_init(fields* fs)
 {
-  fields* fs;
-  fs = my_malloc(sizeof(*fs));
-  fs->m = m;
-  flex_init(&fs->fv);
-  fs->v = 0;
-  mesh_set_fields(m, fs);
-  return fs;
+  fs->vf = 0;
 }
 
-void fields_free(fields* fs)
+void fields_dtor(mesh* m)
 {
-  mesh_set_fields(fs->m, 0);
-  while (vfield_ok(vfield_f(fs->m)))
-    vfield_free(vfield_f(fs->m));
-  my_free(fs);
+  fields* fs = mesh_fields(m);
+  while (fs->vf)
+    vfield_dtor(m, fs->vf);
 }
 
 void fields_grow(fields* fs, unsigned c)
 {
-  int i;
-  for (i = flex_f(&fs->fv); IDX_OK(i); i = flex_n(&fs->fv, i))
-    REALLOC(fs->v[i], c);
+  vfield* v;
+  for (v = fs->vf; v; v = v->n)
+    REALLOC(v->x, c);
 }
 
-vfield vfield_new(mesh* m)
+void vfield_init(mesh* m, vfield* f)
 {
-  vfield f;
   fields* fs = mesh_fields(m);
-  f.fs = fs;
-  if (flex_full(&fs->fv))
-    REALLOC(fs->v, flex_grow(&fs->fv));
-  f.i = flex_add(&fs->fv);
-  fs->v[f.i] = 0;
-  return f;
+  f->n = fs->vf;
+  fs->vf = f;
+  f->x = my_malloc(sizeof(point) * mesh_cap(m, VERTEX));
 }
 
-void vfield_free(vfield f)
+void vfield_dtor(mesh* m, vfield* f)
 {
-  my_free(f.fs->v[f.i]);
-  flex_rm(&f.fs->fv, f.i);
+  fields* fs;
+  vfield** p;
+  fs = mesh_fields(m);
+  for (p = &fs->vf; *p != f; *p = (*p)->n);
+  *p = f->n;
+  my_free(f->x);
 }
 
-point vfield_get(vfield f, ment e)
-{
-  ASSERT(e.t == VERTEX);
-  return f.fs->v[f.i][e.i];
-}
-
-void vfield_set(vfield f, ment e, point v)
+point vfield_get(vfield* f, ment e)
 {
   ASSERT(e.t == VERTEX);
-  f.fs->v[f.i][e.i] = v;
+  return f->x[e.i];
 }
 
-vfield vfield_f(mesh* m)
+void vfield_set(vfield* f, ment e, point v)
 {
-  vfield f;
-  f.fs = mesh_fields(m);
-  f.i = flex_f(&f.fs->fv);
-  return f;
+  ASSERT(e.t == VERTEX);
+  f->x[e.i] = v;
 }
 
-vfield vfield_n(vfield f)
-{
-  f.i = flex_n(&f.fs->fv, f.i);
-  return f;
-}
-
-int vfield_ok(vfield f)
-{
-  return IDX_OK(f.i);
-}
