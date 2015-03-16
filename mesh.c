@@ -2,6 +2,7 @@
 #include "flex.h"
 #include "basics.h"
 #include "list.h"
+#include "field.h"
 
 struct mesh {
   flex f[SIMPLICES];
@@ -10,6 +11,8 @@ struct mesh {
   int* fu[SIMPLICES];
   simplex et;
   int padding_;
+  fields* fs;
+  vfield x;
 };
 
 ment const ment_null = { 0, NULL_IDX };
@@ -47,12 +50,15 @@ mesh* mesh_new(void)
     m->fu[t] = 0;
   }
   m->et = VERTEX;
+  m->fs = fields_new(m);
+  m->x = vfield_new(m);
   return m;
 }
 
 void mesh_free(mesh* m)
 {
   simplex t;
+  fields_free(m->fs);
   for (t = 0; t < SIMPLICES; ++t) {
     flex_dtor(&m->f[t]);
     my_free(m->d[t]);
@@ -76,6 +82,7 @@ static unsigned mesh_grow(mesh* m, simplex t)
   if (t == VERTEX) {
     for (ut = EDGE; ut < m->et; ++ut)
       REALLOC(m->fu[ut], c);
+    fields_grow(m->fs, c);
   } else {
     wc = c * nverts(t);
     REALLOC(m->d[t], wc);
@@ -193,4 +200,24 @@ ment muse_of(muse u)
   e.t = u.t;
   e.i = (int)((unsigned)u.i / nverts(e.t));
   return e;
+}
+
+point mesh_point(mesh* m, ment v)
+{
+  return vfield_get(m->x, v);
+}
+
+void mesh_set_point(mesh* m, ment v, point x)
+{
+  vfield_set(m->x, v, x);
+}
+
+struct fields* mesh_fields(mesh* m)
+{
+  return m->fs;
+}
+
+void mesh_set_fields(mesh* m, struct fields* fs)
+{
+  m->fs = fs;
 }

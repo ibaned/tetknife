@@ -43,4 +43,11 @@ muse muse_n(mesh* m, muse u);
 
 ment muse_of(muse u);
 
+point mesh_point(mesh* m, ment v);
+void mesh_set_point(mesh* m, ment v, point x);
+
+struct fields;
+struct fields* mesh_fields(mesh* m);
+void mesh_set_fields(mesh* m, struct fields* fs);
+
 #endif
