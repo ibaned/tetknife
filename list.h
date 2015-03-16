@@ -11,6 +11,8 @@ void dlist_link(int* first, int* last, int* next, int* prev,
 void dlist_unlink(int* first, int* last, int* next, int* prev,
     int head, int node);
 
+void list_link(int* first, int* next,
+    int head, int node);
 void list_unlink(int* first, int* next,
     int head, int node);
 

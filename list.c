@@ -1,12 +1,18 @@
 #include "list.h"
 #include "basics.h"
 
+void list_link(int* first, int* next,
+    int head, int node)
+{
+  next[node] = first[head];
+  first[head] = node;
+}
+
 void list_link_after(int* first, int* next,
     int head, int node, int prev)
 {
   if (prev == NULL_IDX) {
-    next[node] = first[head];
-    first[head] = node;
+    list_link(first, next, head, node);
   } else {
     next[node] = next[prev];
     next[prev] = node;
