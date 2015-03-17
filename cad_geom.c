@@ -21,6 +21,15 @@ struct geom {
   pcylinder* cls;
 };
 
+int const geom_curved[GEOM_TYPES] = {
+  0,
+  0,
+  1,
+  0,
+  1,
+  0
+};
+
 geom* geom_new(cad* c)
 {
   geom* g;

@@ -16,6 +16,8 @@ typedef enum {
   GEOM_TYPES
 } geom_type;
 
+extern int const geom_curved[GEOM_TYPES];
+
 geom* geom_new(cad* c);
 void geom_free(geom* g);
 
