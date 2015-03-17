@@ -39,7 +39,7 @@ static void add_path_edge(cad* c, gbnd b, gent pv, gent nv)
   guse_new(c, e, b);
 }
 
-gbnd cad_gen_loop(cad* c, unsigned npts, point pts[])
+gbnd cad_gen_loop(cad* c, unsigned npts, point const pts[])
 {
   gbnd b;
   gent pv;
@@ -56,7 +56,7 @@ gbnd cad_gen_loop(cad* c, unsigned npts, point pts[])
   return b;
 }
 
-gbnd cad_gen_line_loop(cad* c, unsigned npts, point pts[])
+gbnd cad_gen_line_loop(cad* c, unsigned npts, point const pts[])
 {
   gbnd b;
   guse u;
@@ -90,7 +90,7 @@ gent cad_gen_plane(cad* c, gbnd b)
   return e;
 }
 
-gent cad_gen_polygon(cad* c, unsigned npts, point pts[])
+gent cad_gen_polygon(cad* c, unsigned npts, point const pts[])
 {
   return cad_gen_plane(c, cad_gen_line_loop(c, npts, pts));
 }
