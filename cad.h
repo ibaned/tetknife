@@ -1,6 +1,8 @@
 #ifndef CAD_H
 #define CAD_H
 
+#include "space.h"
+
 typedef struct cad cad;
 
 typedef enum {
@@ -44,6 +46,8 @@ extern gent const gent_null;
 extern gbnd const gbnd_null;
 extern guse const guse_null;
 
+extern dim const gent_dim[CAD_ENT_TYPES];
+
 int gent_eq(gent a, gent b);
 int gent_ok(gent e);
 
@@ -81,6 +85,8 @@ guse guse_of_n(cad* c, guse u);
 
 guse guse_by_f(cad* c, gbnd b);
 guse guse_by_n(cad* c, guse u);
+
+unsigned gent_cap(cad* c, gent_type t);
 
 typedef void (*cad_for_op)(gent, void*);
 

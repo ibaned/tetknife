@@ -42,6 +42,13 @@ gent const gent_null = { 0, NULL_IDX };
 gbnd const gbnd_null = { 0, NULL_IDX };
 guse const guse_null = { 0, NULL_IDX };
 
+dim const gent_dim[CAD_ENT_TYPES] = {
+  DIM0,
+  DIM1,
+  DIM2,
+  DIM3
+};
+
 int gent_eq(gent a, gent b)
 {
   return a.t == b.t && a.i == b.i;
@@ -465,6 +472,11 @@ guse guse_by_n(cad* c, guse u)
 {
   u.i = c->u[u.t].bn[u.i];
   return u;
+}
+
+unsigned gent_cap(cad* c, gent_type t)
+{
+  return c->e[t].e.s.c;
 }
 
 static void for_bnd(cad* c, gent e, cad_for_op f, void* a);

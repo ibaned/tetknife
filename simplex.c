@@ -6,6 +6,12 @@ unsigned const simplex_ndown[SIMPLICES][SIMPLICES] = {
   {3,3,1,0},
   {4,6,4,1}
 };
+dim const simplex_dim[SIMPLICES] = {
+  DIM0,
+  DIM1,
+  DIM2,
+  DIM3
+};
 
 line line_new(point a, point b)
 {
