@@ -68,7 +68,7 @@ gbnd gbnd_new(cad* c, gbnd_type t);
 gbnd gbnd_of_new(cad* c, gent e);
 void gbnd_free(cad* c, gbnd b);
 
-void gbnd_of_set(cad* c, gbnd b, gent e);
+void gbnd_set_of(cad* c, gbnd b, gent e);
 gent gbnd_of(cad* c, gbnd b);
 
 gbnd gbnd_of_f(cad* c, gent e);
@@ -84,6 +84,7 @@ guse guse_of_f(cad* c, gent e);
 guse guse_of_n(cad* c, guse u);
 
 guse guse_by_f(cad* c, gbnd b);
+guse guse_by_l(cad* c, gbnd b);
 guse guse_by_n(cad* c, guse u);
 
 unsigned gent_cap(cad* c, gent_type t);

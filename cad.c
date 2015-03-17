@@ -326,7 +326,7 @@ gbnd gbnd_of_new(cad* c, gent e)
 {
   gbnd b;
   b = gbnd_new(c, e2b[e.t]);
-  gbnd_of_set(c, b, e);
+  gbnd_set_of(c, b, e);
   return b;
 }
 
@@ -338,7 +338,7 @@ void gbnd_free(cad* c, gbnd b)
   gbnds_rm(c->b + b.t, b.i);
 }
 
-void gbnd_of_set(cad* c, gbnd b, gent e)
+void gbnd_set_of(cad* c, gbnd b, gent e)
 {
   ASSERT(b.t == e2b[e.t]);
   dlist_link(c->e[e.t].bf, c->e[e.t].bl, c->b[b.t].bn, c->b[b.t].bp, e.i, b.i);
@@ -465,6 +465,14 @@ guse guse_by_f(cad* c, gbnd b)
   guse u;
   u.t = b2u[b.t];
   u.i = c->b[b.t].uf[b.i];
+  return u;
+}
+
+guse guse_by_l(cad* c, gbnd b)
+{
+  guse u;
+  u.t = b2u[b.t];
+  u.i = c->b[b.t].ul[b.i];
   return u;
 }
 
