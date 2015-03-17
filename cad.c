@@ -303,6 +303,15 @@ gent gent_n(cad* c, gent e)
   return e;
 }
 
+unsigned gent_count(cad* c, gent_type t)
+{
+  gent e;
+  unsigned n = 0;
+  for (e = gent_f(c, t); gent_ok(e); e = gent_n(c, e))
+    ++n;
+  return n;
+}
+
 gbnd gbnd_new(cad* c, gbnd_type t)
 {
   gbnds* bs;

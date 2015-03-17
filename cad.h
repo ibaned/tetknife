@@ -64,6 +64,8 @@ void gent_free(cad* c, gent e);
 gent gent_f(cad* c, gent_type t);
 gent gent_n(cad* c, gent e);
 
+unsigned gent_count(cad* c, gent_type t);
+
 gbnd gbnd_new(cad* c, gbnd_type t);
 gbnd gbnd_of_new(cad* c, gent e);
 void gbnd_free(cad* c, gbnd b);
