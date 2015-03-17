@@ -30,6 +30,15 @@ int const geom_curved[GEOM_TYPES] = {
   0
 };
 
+char const* const geom_name[GEOM_TYPES] = {
+  "CAD point",
+  "CAD line",
+  "CAD arc",
+  "CAD plane",
+  "CAD cylinder",
+  "CAD region"
+};
+
 geom* geom_new(cad* c)
 {
   geom* g;

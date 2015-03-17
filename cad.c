@@ -42,11 +42,24 @@ gent const gent_null = { 0, NULL_IDX };
 gbnd const gbnd_null = { 0, NULL_IDX };
 guse const guse_null = { 0, NULL_IDX };
 
+char const* const gent_name[CAD_ENT_TYPES] = {
+  "CAD vertex",
+  "CAD edge",
+  "CAD face",
+  "CAD region"
+};
+
 dim const gent_dim[CAD_ENT_TYPES] = {
   DIM0,
   DIM1,
   DIM2,
   DIM3
+};
+
+char const* const guse_name[CAD_ENT_TYPES] = {
+  "CAD vertex use",
+  "CAD edge use",
+  "CAD face use"
 };
 
 int gent_eq(gent a, gent b)
