@@ -35,6 +35,11 @@ point point_sub(point a, point b)
   return point_new(a.x - b.x, a.y - b.y, a.z - b.z);
 }
 
+point point_neg(point p)
+{
+  return point_new(-p.x, -p.y, -p.z);
+}
+
 point point_scale(point p, double s)
 {
   return point_new(p.x * s, p.y * s, p.z * s);
