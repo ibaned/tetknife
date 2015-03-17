@@ -3,6 +3,7 @@
 #include "basics.h"
 #include "list.h"
 #include "field.h"
+#include "classif.h"
 
 struct mesh {
   flex f[SIMPLICES];
@@ -13,6 +14,7 @@ struct mesh {
   int padding_;
   fields fs;
   vfield x;
+  classif* cl;
 };
 
 ment const ment_null = { 0, NULL_IDX };
@@ -52,6 +54,7 @@ mesh* mesh_new(void)
   m->et = VERTEX;
   fields_init(&m->fs);
   vfield_init(m, &m->x);
+  m->cl = 0;
   return m;
 }
 
@@ -59,6 +62,8 @@ void mesh_free(mesh* m)
 {
   simplex t;
   fields_dtor(m);
+  if (m->cl)
+    classif_free(m->cl);
   for (t = 0; t < SIMPLICES; ++t) {
     flex_dtor(&m->f[t]);
     my_free(m->d[t]);
@@ -220,4 +225,14 @@ unsigned mesh_cap(mesh* m, simplex t)
 struct fields* mesh_fields(mesh* m)
 {
   return &m->fs;
+}
+
+struct classif* mesh_classif(mesh* m)
+{
+  return m->cl;
+}
+
+void mesh_set_classif(mesh* m, struct classif* cl)
+{
+  m->cl = cl;
 }
