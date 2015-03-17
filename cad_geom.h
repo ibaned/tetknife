@@ -3,6 +3,7 @@
 
 #include "cad.h"
 #include "space.h"
+#include "param.h"
 
 typedef struct geom geom;
 
@@ -24,8 +25,10 @@ void geom_free(geom* g);
 
 geom_type geom_typeof(cad* c, gent e);
 point geom_point(cad* c, gent e);
+parc* geom_arc(cad* c, gent e);
 void geom_add_point(cad* c, gent e, point x);
 void geom_add_line(cad* c, gent e);
+void geom_add_arc_by_frame(cad* c, gent e, frame f);
 void geom_add_arc(cad* c, gent e, point o, point n, point x);
 void geom_add_plane(cad* c, gent e);
 void geom_add_cylinder(cad* c, gent e);
@@ -33,6 +36,7 @@ point geom_eval(cad* c, gent e, point uv);
 point geom_uneval_hint(cad* c, gent e, point x, point uv_hint);
 point geom_uneval(cad* c, gent e, point x);
 point geom_reparam(cad* c, gent from, point x, gent onto);
+void geom_transform(cad* c, gent e, frame t);
 
 void geom_grow_gents(geom* g, gent_type t, unsigned c);
 

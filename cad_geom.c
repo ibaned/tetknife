@@ -108,7 +108,7 @@ void geom_add_line(cad* c, gent e)
   cad_geom(c)->e[e.t][e.i].t = GEOM_LINE;
 }
 
-void geom_add_arc(cad* c, gent e, point o, point n, point x)
+static ent add_arc(cad* c, gent e)
 {
   geom* g;
   ent a;
@@ -118,7 +118,17 @@ void geom_add_arc(cad* c, gent e, point o, point n, point x)
     REALLOC(g->acs, flex_grow(&g->facs));
   a.i = flex_add(&g->facs);
   g->e[e.t][e.i] = a;
-  parc_init(g->acs + a.i, o, n, x);
+  return a;
+}
+
+void geom_add_arc_by_frame(cad* c, gent e, frame f)
+{
+  cad_geom(c)->acs[add_arc(c, e).i].f = f;
+}
+
+void geom_add_arc(cad* c, gent e, point o, point n, point x)
+{
+  parc_init(cad_geom(c)->acs + add_arc(c, e).i, o, n, x);
 }
 
 typedef struct {
@@ -152,7 +162,7 @@ typedef struct {
   int padding_;
 } by_arc;
 
-static parc* geom_arc(cad* c, gent e)
+parc* geom_arc(cad* c, gent e)
 {
   geom* g;
   ent a;
@@ -273,6 +283,34 @@ point geom_uneval(cad* c, gent e, point x)
 point geom_reparam(cad* c, gent from, point x, gent onto)
 {
   return geom_uneval(c, onto, geom_eval(c, from, x));
+}
+
+void geom_transform(cad* c, gent e, frame t)
+{
+  geom* g;
+  ent a;
+  g = cad_geom(c);
+  a = get_ent(c, e);
+  switch (a.t) {
+    case GEOM_POINT:
+      g->pts[a.i] = frame_eval(t, g->pts[a.i]);
+      return;
+    case GEOM_LINE:
+      return;
+    case GEOM_ARC:
+      g->acs[a.i].f = frame_cat(t, g->acs[a.i].f);
+      return;
+    case GEOM_PLANE:
+      g->pls[a.i].f = frame_cat(t, g->pls[a.i].f);
+      return;
+    case GEOM_CYLINDER:
+      g->cls[a.i].f = frame_cat(t, g->cls[a.i].f);
+      return;
+    case GEOM_REGION:
+    case GEOM_TYPES:
+      break;
+  };
+  die("bad geom_type %d in geom_transform\n", a.t);
 }
 
 void geom_grow_gents(geom* g, gent_type t, unsigned c)

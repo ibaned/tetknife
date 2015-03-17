@@ -11,5 +11,6 @@ gbnd cad_gen_circle(cad* c, point o, point n, point x);
 gent cad_gen_plane(cad* c, gbnd b);
 gent cad_gen_polygon(cad* c, unsigned npts, point const pts[]);
 gent cad_gen_disk(cad* c, point o, point n, point x);
+void cad_extrude_face(cad* c, gent f, point n);
 
 #endif

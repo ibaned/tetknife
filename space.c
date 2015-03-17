@@ -120,6 +120,21 @@ basis basis_inv(basis b)
                      1.0 / basis_det(b));
 }
 
+basis basis_cat(basis a, basis b)
+{
+  return basis_new(basis_eval(a, b.x),
+                   basis_eval(a, b.y),
+                   basis_eval(a, b.z));
+}
+
+frame frame_new(basis b, point o)
+{
+  frame f;
+  f.b = b;
+  f.o = o;
+  return f;
+}
+
 point frame_eval(frame f, point x)
 {
   return point_add(basis_eval(f.b, x), f.o);
@@ -136,4 +151,10 @@ frame frame_inv(frame f)
 point frame_uneval(frame f, point x)
 {
   return frame_eval(frame_inv(f), x);
+}
+
+frame frame_cat(frame a, frame b)
+{
+  return frame_new(basis_cat(a.b, b.b),
+                   point_add(basis_eval(a.b, b.o), a.o));
 }

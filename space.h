@@ -51,9 +51,12 @@ basis basis_trans(basis b);
 basis basis_scale(basis b, double s);
 basis basis_cross(point p);
 basis basis_inv(basis b);
+basis basis_cat(basis a, basis b);
 
+frame frame_new(basis b, point c);
 point frame_eval(frame f, point x);
 frame frame_inv(frame f);
 point frame_uneval(frame f, point x);
+frame frame_cat(frame a, frame b);
 
 #endif
