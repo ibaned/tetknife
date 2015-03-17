@@ -28,7 +28,7 @@ int muse_ok(muse e);
 mesh* mesh_new(void);
 void mesh_free(mesh* m);
 
-ment ment_new(mesh* m, simplex t, ment v[]);
+ment ment_new(mesh* m, simplex t, ment const v[]);
 void ment_free(mesh* m, ment e);
 
 ment ment_f(mesh* m, simplex t);

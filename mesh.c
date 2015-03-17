@@ -110,7 +110,7 @@ static void raise_dim(mesh* m)
   m->et++;
 }
 
-ment ment_new(mesh* m, simplex t, ment v[])
+ment ment_new(mesh* m, simplex t, ment const v[])
 {
   ment e;
   muse u;
