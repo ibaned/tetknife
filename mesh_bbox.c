@@ -62,7 +62,7 @@ static void gen_bbox_elems(mesh* m, dim d, ment v[], ment e[])
   unsigned i, j;
   ment ev[SIMPLEX_MAX_DOWN];
   for (i = 0; i < bbox_simplices[d]; ++i) {
-    for (j = 0; j < simplex_ndown[d][DIM0]; ++j)
+    for (j = 0; j < simplex_ndown[d][VERTEX]; ++j)
       ev[j] = v[etables[d][i][j]];
     e[i] = ment_new(m, simplex_by_dim[d], ev);
   }
