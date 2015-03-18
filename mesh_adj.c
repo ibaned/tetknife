@@ -67,6 +67,8 @@ void mesh_up(mesh* m, simplex from, ment dv[], simplex to, mset* s)
 {
   muse u;
   mset_clear(s);
+  if (to < from)
+    return;
   for (u = muse_f(m, dv[0], to); muse_ok(u); u = muse_n(m, u))
     if (verts_bound_ment(m, from, dv, muse_of(u)))
       mset_add(s, muse_of(u));
