@@ -3,6 +3,7 @@ CONFIG ?= default
 include $(CONFIG).mk
 
 BACK_OBJS = \
+mesh_adj.o \
 mesh_bbox.o \
 classif.o \
 cad_gen.o \
