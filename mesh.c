@@ -93,6 +93,8 @@ static unsigned mesh_grow(mesh* m, simplex t)
     REALLOC(m->d[t], wc);
     REALLOC(m->nu[t], wc);
   }
+  if (m->cl)
+    classif_grow_ments(m->cl, t, c);
   return c;
 }
 
