@@ -28,6 +28,8 @@ int muse_ok(muse e);
 mesh* mesh_new(void);
 void mesh_free(mesh* m);
 
+simplex mesh_element(mesh* m);
+
 ment ment_new(mesh* m, simplex t, ment const v[]);
 void ment_free(mesh* m, ment e);
 
