@@ -188,6 +188,7 @@ bbox bbox_new(void)
   bbox b;
   b.min = point_new(my_dbl_max, my_dbl_max, my_dbl_max);
   b.max = point_neg(b.min);
+  return b;
 }
 
 static point point_min(point a, point b)
