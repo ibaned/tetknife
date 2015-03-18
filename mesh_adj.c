@@ -29,6 +29,12 @@ int mset_has(mset* s, ment e)
   return ments_have(s->s.n, s->e, e);
 }
 
+void mset_reserve(mset* s, unsigned n)
+{
+  if (!stack_can_hold(&s->s, n))
+    REALLOC(s->e, stack_grow_to(&s->s, n));
+}
+
 int ments_have(unsigned n, ment es[], ment e)
 {
   unsigned i;
