@@ -3,6 +3,7 @@ CONFIG ?= default
 include $(CONFIG).mk
 
 BACK_OBJS = \
+simplify.o \
 classif.o \
 cad_gen.o \
 cad_geom.o \
