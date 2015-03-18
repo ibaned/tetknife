@@ -11,9 +11,21 @@ void stack_clear(stack* s)
   s->n = 0;
 }
 
+int stack_full_n(stack* s, unsigned n)
+{
+  return s->n + n >= s->c;
+}
+
 int stack_full(stack* s)
 {
   return s->n == s->c;
+}
+
+unsigned stack_grow_n(stack* s, unsigned n)
+{
+  stack_grow(s);
+  s->c = MAX(s->c, s->n + n);
+  return s->c;
 }
 
 unsigned stack_grow(stack* s)
