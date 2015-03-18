@@ -46,6 +46,7 @@ void split_start_with(split* s, simplex t, ment v[], ment sv)
   unsigned i, j;
   simplex rt;
   all_up(s->m, t, v, s->oe);
+  classif_transfer_vert(s->m, sv, s->oe);
   nv = simplex_ndown[t][VERTEX];
   for (rt = t; rt < SIMPLICES; ++rt) {
     mset_reserve(s->ne + rt, s->oe[rt].s.n * nv);
