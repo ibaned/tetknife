@@ -28,4 +28,6 @@ void classif_grow_ments(classif* cl, simplex t, unsigned c);
 
 point classif_eval_point(mesh* m, ment me);
 
+void classif_transfer_rebuild(mesh* m, ment oe, ment ne);
+
 #endif

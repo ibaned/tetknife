@@ -134,3 +134,11 @@ point classif_eval_point(mesh* m, ment me)
 {
   return geom_eval(mesh_cad(m), classif_get(m, me), classif_point(m, me));
 }
+
+void classif_transfer_rebuild(mesh* m, ment oe, ment ne)
+{
+  classif* cl;
+  cl = mesh_classif(m);
+  if (cl)
+    classif_set(m, ne, classif_get(m, oe));
+}
