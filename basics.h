@@ -25,4 +25,6 @@ double my_cos(double x);
 double my_atan2(double y, double x);
 double my_sqrt(double x);
 
+extern double const my_dbl_max;
+
 #endif

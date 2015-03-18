@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <float.h>
 
 void debug(char const* format, ...)
 {
@@ -60,3 +61,5 @@ double my_sqrt(double x)
 {
   return sqrt(x);
 }
+
+double const my_dbl_max = DBL_MAX;
