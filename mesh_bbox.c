@@ -1,4 +1,4 @@
-#include "simplify.h"
+#include "mesh_bbox.h"
 
 unsigned const bbox_verts[DIMS] = {
   1,
