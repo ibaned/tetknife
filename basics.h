@@ -27,4 +27,7 @@ double my_sqrt(double x);
 
 extern double const my_dbl_max;
 
+#define MIN(a,b) (((b)<(a))?(b):(a))
+#define MAX(a,b) (((b)>(a))?(b):(a))
+
 #endif
