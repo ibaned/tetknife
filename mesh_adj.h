@@ -4,7 +4,7 @@
 #include "mesh.h"
 #include "stack.h"
 
-typedef struct {
+typedef struct mset {
   stack s;
   ment* e;
 } mset;
