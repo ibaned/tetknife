@@ -182,3 +182,27 @@ frame frame_trans(point x)
 {
   return frame_new(basis_ident, x);
 }
+
+bbox bbox_new(void)
+{
+  bbox b;
+  b.min = point_new(my_dbl_max, my_dbl_max, my_dbl_max);
+  b.max = point_neg(b.min);
+}
+
+static point point_min(point a, point b)
+{
+  return point_new(MIN(a.x, b.x), MIN(a.y, b.y), MIN(a.z, b.z));
+}
+
+static point point_max(point a, point b)
+{
+  return point_new(MAX(a.x, b.x), MAX(a.y, b.y), MAX(a.z, b.z));
+}
+
+bbox bbox_add(bbox b, point p)
+{
+  b.min = point_min(b.min, p);
+  b.max = point_max(b.max, p);
+  return b;
+}

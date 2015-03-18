@@ -27,6 +27,11 @@ typedef struct {
   point o;
 } frame;
 
+typedef struct {
+  point min;
+  point max;
+} bbox;
+
 extern double const my_pi;
 extern double const epsilon;
 
@@ -61,5 +66,8 @@ frame frame_inv(frame f);
 point frame_uneval(frame f, point x);
 frame frame_cat(frame a, frame b);
 frame frame_trans(point x);
+
+bbox bbox_new(void);
+bbox bbox_add(bbox b, point p);
 
 #endif
