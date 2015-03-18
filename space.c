@@ -89,6 +89,11 @@ int point_lex(point a, point b)
   return 0;
 }
 
+double* point_arr(point* p)
+{
+  return (double*)(&p->x);
+}
+
 basis basis_new(point x, point y, point z)
 {
   basis b;
@@ -207,3 +212,4 @@ bbox bbox_add(bbox b, point p)
   b.max = point_max(b.max, p);
   return b;
 }
+
