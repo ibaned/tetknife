@@ -1,4 +1,5 @@
 #include "mesh_bbox.h"
+#include "classif.h"
 
 unsigned const bbox_verts[DIMS] = {
   1,

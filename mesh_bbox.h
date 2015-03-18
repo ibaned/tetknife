@@ -1,7 +1,8 @@
 #ifndef SIMPLIFY_H
 #define SIMPLIFY_H
 
-#include "classif.h"
+#include "mesh.h"
+#include "cad.h"
 
 enum { MAX_BBOX_VERTS = 8 };
 enum { MAX_BBOX_SIMPLICES = 6 };

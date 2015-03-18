@@ -65,12 +65,12 @@ basics.o: ext/basics.c basics.h
 	$(BACK_COMPILE) -c $<
 
 cad.o: cad.c cad.h space.h flex.h stack.h basics.h list.h flag.h \
-  cad_geom.h
-cad_gen.o: cad_gen.c cad_gen.h cad.h space.h cad_geom.h
-cad_geom.o: cad_geom.c cad_geom.h cad.h space.h flex.h stack.h basics.h \
-  param.h simplex.h
+  cad_geom.h param.h
+cad_gen.o: cad_gen.c cad_gen.h cad.h space.h cad_geom.h param.h
+cad_geom.o: cad_geom.c cad_geom.h cad.h space.h param.h flex.h stack.h \
+  basics.h simplex.h
 classif.o: classif.c classif.h mesh.h simplex.h space.h cad.h list.h \
-  field.h basics.h
+  field.h basics.h cad_geom.h param.h
 field.o: field.c field.h mesh.h simplex.h space.h basics.h
 flag.o: flag.c flag.h cad.h space.h basics.h
 flex.o: flex.c flex.h stack.h basics.h
@@ -78,6 +78,7 @@ front_back.o: front_back.c front.h back.h
 list.o: list.c list.h basics.h
 mesh.o: mesh.c mesh.h simplex.h space.h flex.h stack.h basics.h list.h \
   field.h classif.h cad.h
+mesh_bbox.o: mesh_bbox.c mesh_bbox.h mesh.h simplex.h space.h cad.h
 param.o: param.c param.h space.h basics.h
 simplex.o: simplex.c simplex.h space.h
 space.o: space.c space.h basics.h
