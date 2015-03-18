@@ -11,6 +11,7 @@ void classif_free(classif* cl);
 
 mesh* classif_mesh(classif* cl);
 cad* classif_cad(classif* cl);
+cad* mesh_cad(mesh* m);
 
 gent classif_get(mesh* m, ment me);
 void classif_set(mesh* m, ment me, gent ge);
@@ -24,5 +25,7 @@ ment classif_f(mesh* m, gent ge, simplex t);
 ment classif_n(mesh* m, ment me);
 
 void classif_grow_ments(classif* cl, simplex t, unsigned c);
+
+point classif_eval_point(mesh* m, ment me);
 
 #endif

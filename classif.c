@@ -2,6 +2,7 @@
 #include "list.h"
 #include "field.h"
 #include "basics.h"
+#include "cad_geom.h"
 
 struct classif {
   mesh* m;
@@ -69,6 +70,11 @@ cad* classif_cad(classif* cl)
   return cl->c;
 }
 
+cad* mesh_cad(mesh* m)
+{
+  return classif_cad(mesh_classif(m));
+}
+
 gent classif_get(mesh* m, ment me)
 {
   return mesh_classif(m)->e[me.t][me.i];
@@ -122,4 +128,9 @@ void classif_grow_ments(classif* cl, simplex t, unsigned c)
   REALLOC(cl->e[t], c);
   REALLOC(cl->n[t], c);
   REALLOC(cl->p[t], c);
+}
+
+point classif_eval_point(mesh* m, ment me)
+{
+  return geom_eval(mesh_cad(m), classif_get(m, me), classif_point(m, me));
 }
