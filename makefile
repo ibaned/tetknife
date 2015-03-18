@@ -80,7 +80,12 @@ front_back.o: front_back.c front.h back.h
 list.o: list.c list.h basics.h
 mesh.o: mesh.c mesh.h simplex.h space.h flex.h stack.h basics.h list.h \
   field.h classif.h cad.h
-mesh_bbox.o: mesh_bbox.c mesh_bbox.h mesh.h simplex.h space.h cad.h
+mesh_adj.o: mesh_adj.c mesh_adj.h mesh.h simplex.h space.h stack.h \
+  basics.h
+mesh_bbox.o: mesh_bbox.c mesh_bbox.h mesh.h simplex.h space.h cad.h \
+  classif.h
+mesh_mod.o: mesh_mod.c mesh_mod.h mesh.h simplex.h space.h mesh_adj.h \
+  stack.h basics.h classif.h cad.h
 param.o: param.c param.h space.h basics.h
 simplex.o: simplex.c simplex.h space.h
 space.o: space.c space.h basics.h
