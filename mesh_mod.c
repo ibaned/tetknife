@@ -36,7 +36,7 @@ static ment rebuild(mesh* m, ment e, ment ov, ment nv,
 static void all_up(mesh* m, simplex t, ment v[], mset s[SIMPLICES])
 {
   simplex ut;
-  for (ut = t; ut < SIMPLICES; ++ut)
+  for (ut = 0; ut < SIMPLICES; ++ut)
     mesh_up(m, t, v, ut, s + ut);
 }
 
