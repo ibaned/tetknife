@@ -73,11 +73,6 @@ void mesh_free(mesh* m)
   my_free(m);
 }
 
-simplex mesh_element(mesh* m)
-{
-  return m->et;
-}
-
 static unsigned nverts(simplex t)
 {
   return simplex_ndown[t][VERTEX];
