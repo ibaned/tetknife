@@ -3,6 +3,7 @@
 #include "field.h"
 #include "basics.h"
 #include "cad_geom.h"
+#include "mesh_adj.h"
 
 struct classif {
   mesh* m;
@@ -141,4 +142,13 @@ void classif_transfer_rebuild(mesh* m, ment oe, ment ne)
   cl = mesh_classif(m);
   if (cl)
     classif_set(m, ne, classif_get(m, oe));
+}
+
+gent classif_by_adj(mesh* m, struct mset* adj)
+{
+  dim d;
+  for (d = DIM0; d < DIMS; ++d)
+    if (adj[d].s.n)
+      return classif_get(m, adj[d].e[0]);
+  return gent_null;
 }

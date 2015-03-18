@@ -30,4 +30,8 @@ point classif_eval_point(mesh* m, ment me);
 
 void classif_transfer_rebuild(mesh* m, ment oe, ment ne);
 
+struct mset;
+
+gent classif_by_adj(mesh* m, struct mset* adj);
+
 #endif
