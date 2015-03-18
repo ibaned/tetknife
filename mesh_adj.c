@@ -47,20 +47,35 @@ static int ments_superset(unsigned nsup, ment sup[], unsigned nsub, ment sub[])
   return 1;
 }
 
-void mesh_up(mesh* m, simplex from, ment dv[], simplex to, mset* s)
+static int verts_bound_ment(mesh* m, simplex dt, ment dv[], ment e)
 {
-  muse u;
-  ment e;
   ment uv[SIMPLEX_MAX_DOWN];
   unsigned nuv;
   unsigned ndv;
-  ndv = simplex_ndown[from][VERTEX];
-  mset_clear(s);
-  for (u = muse_f(m, dv[0], to); muse_ok(u); u = muse_n(m, u)) {
-    e = muse_of(u);
-    nuv = ment_verts(m, e, uv);
-    if (ments_superset(nuv, uv, ndv, dv))
-      mset_add(s, e);
-  }
+  nuv = ment_verts(m, e, uv);
+  ndv = simplex_ndown[dt][VERTEX];
+  return ments_superset(nuv, uv, ndv, dv);
 }
 
+void mesh_up(mesh* m, simplex from, ment dv[], simplex to, mset* s)
+{
+  muse u;
+  mset_clear(s);
+  for (u = muse_f(m, dv[0], to); muse_ok(u); u = muse_n(m, u))
+    if (verts_bound_ment(m, from, dv, muse_of(u)))
+      mset_add(s, muse_of(u));
+}
+
+ment mesh_find(mesh* m, simplex t, ment v[])
+{
+  muse u;
+  for (u = muse_f(m, v[0], t); muse_ok(u); u = muse_n(m, u))
+    if (verts_bound_ment(m, t, v, muse_of(u)))
+      return muse_of(u);
+  return ment_null;
+}
+
+int mesh_has(mesh* m, simplex t, ment v[])
+{
+  return ment_ok(mesh_find(m, t, v));
+}
