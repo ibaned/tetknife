@@ -138,9 +138,7 @@ point classif_eval_point(mesh* m, ment me)
 
 void classif_transfer_rebuild(mesh* m, ment oe, ment ne)
 {
-  classif* cl;
-  cl = mesh_classif(m);
-  if (cl)
+  if (mesh_classif(m))
     classif_set(m, ne, classif_get(m, oe));
 }
 
@@ -151,4 +149,10 @@ gent classif_by_adj(mesh* m, struct mset* adj)
     if (adj[d].s.n)
       return classif_get(m, adj[d].e[0]);
   return gent_null;
+}
+
+void classif_transfer_vert(mesh* m, ment v, struct mset* adj)
+{
+  if (mesh_classif(m))
+    classif_set(m, v, classif_by_adj(m, adj));
 }

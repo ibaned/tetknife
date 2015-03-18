@@ -33,5 +33,6 @@ void classif_transfer_rebuild(mesh* m, ment oe, ment ne);
 struct mset;
 
 gent classif_by_adj(mesh* m, struct mset* adj);
+void classif_transfer_vert(mesh* m, ment v, struct mset* adj);
 
 #endif
