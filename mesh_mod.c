@@ -2,10 +2,18 @@
 #include "mesh_adj.h"
 #include "classif.h"
 
+typedef enum {
+  MADE_VERT,
+  GIVEN_VERT
+} vert_from;
+
 struct split {
   mesh* m;
   mset oe[SIMPLICES];
   mset ne[SIMPLICES];
+  ment sv;
+  vert_from vf;
+  int padding_;
 };
 
 typedef enum {
@@ -40,13 +48,35 @@ static void all_up(mesh* m, simplex t, ment v[], mset s[SIMPLICES])
     mesh_up(m, t, v, ut, s + ut);
 }
 
-void split_start_with(split* s, simplex t, ment v[], ment sv)
+static void rm_sets(mesh* m, mset e[SIMPLICES])
+{
+  simplex t;
+  unsigned i;
+  for (t = 0; t < SIMPLICES; ++t)
+    for (i = 0; i < e[t].s.n; ++i)
+      ment_free(m, e[t].e[i]);
+}
+
+static void set_sv(split* s, ment sv)
+{
+  if (ment_ok(sv)) {
+    s->sv = sv;
+    s->vf = GIVEN_VERT;
+  } else {
+    s->sv = ment_new(s->m, VERTEX, 0);
+    s->vf = MADE_VERT;
+  }
+}
+
+void split_start(split* s, simplex t, ment v[], ment sv)
 {
   unsigned nv;
   unsigned i, j;
   simplex rt;
+  set_sv(s, sv);
   all_up(s->m, t, v, s->oe);
-  classif_transfer_vert(s->m, sv, s->oe);
+  if (s->vf == MADE_VERT)
+    classif_transfer_vert(s->m, sv, s->oe);
   nv = simplex_ndown[t][VERTEX];
   for (rt = t; rt < SIMPLICES; ++rt) {
     mset_reserve(s->ne + rt, s->oe[rt].s.n * nv);
@@ -55,4 +85,16 @@ void split_start_with(split* s, simplex t, ment v[], ment sv)
         mset_add(s->ne + rt, rebuild(
               s->m, s->oe[rt].e[i], v[i], sv, IGNORE_OVERLAP));
   }
+}
+
+void split_accept(split* s)
+{
+  rm_sets(s->m, s->oe);
+}
+
+void split_cancel(split* s)
+{
+  rm_sets(s->m, s->ne);
+  if (s->vf == MADE_VERT)
+    ment_free(s->m, s->sv);
 }
