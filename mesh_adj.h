@@ -15,4 +15,7 @@ void mset_clear(mset* s);
 void mset_add(mset* s, ment e);
 int mset_has(mset* s, ment e);
 
+int ments_have(unsigned n, ment es[], ment e);
+void mesh_up(mesh* m, simplex from, ment dv[], simplex to, mset* s);
+
 #endif
