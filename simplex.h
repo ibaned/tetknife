@@ -15,6 +15,7 @@ enum { SIMPLEX_MAX_DOWN = 6 };
 
 extern unsigned const simplex_ndown[SIMPLICES][SIMPLICES];
 extern dim const simplex_dim[SIMPLICES];
+extern simplex const simplex_by_dim[DIMS];
 
 typedef struct {
   point a;
