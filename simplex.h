@@ -26,12 +26,16 @@ line line_new(point a, point b);
 point line_eval(line l, double x);
 point line_vec(line l);
 double line_uneval(line l, point p);
+double line_len(line l);
 
 typedef struct {
   point a;
   point b;
   point c;
 } triangle;
+
+double triangle_area(triangle t);
+point triangle_norm(triangle t);
 
 typedef struct {
   point a;

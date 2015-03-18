@@ -53,3 +53,23 @@ double line_uneval(line l, point p)
   pa = point_sub(p, l.a);
   return point_dot(pa, ba) / point_dot(ba, ba);
 }
+
+double line_len(line l)
+{
+  return point_mag(line_vec(l));
+}
+
+static point triangle_cross(triangle t)
+{
+  return point_cross(point_sub(t.b, t.a), point_sub(t.c, t.a));
+}
+
+double triangle_area(triangle t)
+{
+  return point_mag(triangle_cross(t)) / 2.0;
+}
+
+point triangle_norm(triangle t)
+{
+  return point_norm(triangle_cross(t));
+}
