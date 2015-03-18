@@ -74,3 +74,14 @@ void mesh_gen_bbox(mesh* m, bbox b, dim d,
   gen_bbox_elems(m, d, v, e);
 }
 
+void classif_bbox_set(mesh* m, dim d, ment v[], ment e[], gent ge)
+{
+  unsigned i;
+  for (i = 0; i < bbox_verts[d]; ++i) {
+    classif_set(m, v[i], ge);
+    classif_set_point(m, v[i], mesh_point(m, v[i]));
+    mesh_set_point(m, v[i], classif_eval_point(m, v[i]));
+  }
+  for (i = 0; i < bbox_simplices[d]; ++i)
+    classif_set(m, e[i], ge);
+}
