@@ -1,10 +1,18 @@
 #include "space.h"
 #include "basics.h"
 
+/* calm down, clang. its ok. */
+#pragma clang diagnostic ignored "-Wfloat-equal"
+
 double const my_pi = 3.14159265358979323846;
 double const epsilon = 1e-10;
 
 point const point_zero = {0,0,0};
+basis const basis_ident = {
+  {1,0,0},
+  {0,1,0},
+  {0,0,1}
+};
 
 point point_new(double x, double y, double z)
 {
@@ -68,6 +76,17 @@ point point_rej(point a, point b)
 point point_norm(point p)
 {
   return point_scale(p, 1.0 / point_mag(p));
+}
+
+int point_lex(point a, point b)
+{
+  if (a.x != b.x)
+    return a.x < b.x;
+  if (a.y != b.y)
+    return a.y < b.y;
+  if (a.z != b.z)
+    return a.z < b.z;
+  return 0;
 }
 
 basis basis_new(point x, point y, point z)
@@ -157,4 +176,9 @@ frame frame_cat(frame a, frame b)
 {
   return frame_new(basis_cat(a.b, b.b),
                    point_add(basis_eval(a.b, b.o), a.o));
+}
+
+frame frame_trans(point x)
+{
+  return frame_new(basis_ident, x);
 }

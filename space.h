@@ -31,6 +31,7 @@ extern double const my_pi;
 extern double const epsilon;
 
 extern point const point_zero;
+extern basis const basis_ident;
 
 point point_new(double x, double y, double z);
 double point_dot(point a, point b);
@@ -43,6 +44,7 @@ point point_cross(point a, point b);
 point point_proj(point a, point b);
 point point_rej(point a, point b);
 point point_norm(point p);
+int point_lex(point a, point b);
 
 basis basis_new(point x, point y, point z);
 point basis_eval(basis b, point p);
@@ -58,5 +60,6 @@ point frame_eval(frame f, point x);
 frame frame_inv(frame f);
 point frame_uneval(frame f, point x);
 frame frame_cat(frame a, frame b);
+frame frame_trans(point x);
 
 #endif
