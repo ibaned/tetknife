@@ -4,6 +4,7 @@ include $(CONFIG).mk
 
 BACK_OBJS = \
 mesh_mod.o \
+mesh_geom.o \
 mesh_adj.o \
 mesh_bbox.o \
 classif.o \
