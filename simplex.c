@@ -73,3 +73,15 @@ point triangle_norm(triangle t)
 {
   return point_norm(triangle_cross(t));
 }
+
+static basis tet_basis(tet t)
+{
+  return basis_new(point_sub(t.b, t.a),
+                   point_sub(t.c, t.a),
+                   point_sub(t.d, t.a));
+}
+
+double tet_volume(tet t)
+{
+  return basis_det(tet_basis(t)) / 6.0;
+}

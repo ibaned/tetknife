@@ -44,4 +44,6 @@ typedef struct {
   point d;
 } tet;
 
+double tet_volume(tet t);
+
 #endif
