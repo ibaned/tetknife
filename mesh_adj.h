@@ -20,5 +20,6 @@ int ments_have(unsigned n, ment const es[], ment e);
 void mesh_up(mesh* m, simplex from, ment const dv[], simplex to, mset* s);
 ment mesh_find(mesh* m, simplex t, ment const v[]);
 int mesh_has(mesh* m, simplex t, ment const v[]);
+unsigned mesh_down(mesh* m, ment e, simplex dt, unsigned di, ment dv[]);
 
 #endif
