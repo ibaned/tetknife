@@ -1,5 +1,6 @@
 #include "mesh_mod.h"
 #include "mesh_adj.h"
+#include "mesh_geom.h"
 #include "classif.h"
 
 typedef enum {
@@ -97,4 +98,15 @@ void split_cancel(split* s)
   rm_sets(s->m, s->ne);
   if (s->vf == MADE_VERT)
     ment_free(s->m, s->sv);
+}
+
+double split_quality(split* s)
+{
+  return cavity_min_quality(s->m, s->ne);
+}
+
+void split_edge(split* s, ment v[2])
+{
+  split_start(s, EDGE, v, ment_null);
+  split_accept(s);
 }
