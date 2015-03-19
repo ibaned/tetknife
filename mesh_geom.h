@@ -2,6 +2,7 @@
 #define MESH_GEOM_H
 
 #include "mesh.h"
+#include "mesh_adj.h"
 
 line ment_line(mesh* m, ment e);
 triangle ment_triangle(mesh* m, ment e);
@@ -16,5 +17,8 @@ double tet_quality(mesh* m, ment e);
 double ment_quality(mesh* m, ment e);
 
 double ment_size(mesh* m, ment e);
+
+double mset_min_quality(mesh* m, struct mset* s);
+double cavity_min_quality(mesh* m, mset c[SIMPLICES]);
 
 #endif

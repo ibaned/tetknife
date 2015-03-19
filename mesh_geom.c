@@ -1,5 +1,4 @@
 #include "mesh_geom.h"
-#include "mesh_adj.h"
 
 line ment_line(mesh* m, ment e)
 {
@@ -128,4 +127,28 @@ double ment_size(mesh* m, ment e)
       break;
   };
   die("bad ment_type %d in ment_size\n", e.t);
+}
+
+double mset_min_quality(mesh* m, mset* s)
+{
+  unsigned i;
+  double mq = 1;
+  double q;
+  for (i = 0; i < s->s.n; ++i) {
+    q = ment_quality(m, s->e[i]);
+    mq = MIN(q, mq);
+  }
+  return mq;
+}
+
+double cavity_min_quality(mesh* m, mset c[SIMPLICES])
+{
+  double mq = 1;
+  double q;
+  simplex t;
+  for (t = TRIANGLE; t < SIMPLICES; ++t) {
+    q = mset_min_quality(m, c + t);
+    mq = MIN(q, mq);
+  }
+  return mq;
 }
