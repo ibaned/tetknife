@@ -85,7 +85,7 @@ static unsigned mesh_grow(mesh* m, simplex t)
   simplex ut;
   c = flex_grow(&m->f[t]);
   if (t == VERTEX) {
-    for (ut = EDGE; ut < m->et; ++ut)
+    for (ut = EDGE; ut <= m->et; ++ut)
       REALLOC(m->fu[ut], c);
     fields_grow(&m->fs, c);
   } else {
@@ -108,8 +108,8 @@ static muse muse_at(ment e, unsigned i)
 
 static void raise_dim(mesh* m)
 {
-  REALLOC(m->fu[m->et], m->f[VERTEX].s.c);
   m->et++;
+  REALLOC(m->fu[m->et], m->f[VERTEX].s.c);
 }
 
 ment ment_new(mesh* m, simplex t, ment const v[])
@@ -117,7 +117,7 @@ ment ment_new(mesh* m, simplex t, ment const v[])
   ment e;
   muse u;
   unsigned i;
-  while (t < m->et)
+  while (t > m->et)
     raise_dim(m);
   e.t = t;
   if (flex_full(&m->f[t]))
