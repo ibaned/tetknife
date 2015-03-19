@@ -252,4 +252,5 @@ void mesh_merge_verts(mesh* m, ment v, ment into)
       list_unlink(m->fu[t], m->nu[t], v.i, u.i);
       list_link(m->fu[t], m->nu[t], into.i, u.i);
     }
+  ment_free(m, v);
 }
