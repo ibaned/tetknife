@@ -190,7 +190,7 @@ muse muse_f(mesh* m, ment v, simplex t)
 {
   muse u;
   ASSERT(v.t == VERTEX);
-  if (m->et <= t)
+  if ((t == VERTEX) || (m->et <= t))
     return muse_null;
   u.t = t;
   u.i = m->fu[t][v.i];
