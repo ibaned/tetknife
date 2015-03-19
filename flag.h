@@ -28,9 +28,9 @@ typedef struct mflag mflag;
 
 mflag* mflag_new(mesh* m);
 void mflag_grow(mflag* f, simplex t, unsigned c);
-void mflag_clear(mflag* f, gent e);
-void mflag_set(mflag* f, gent e);
-int mflag_get(mflag* f, gent e);
+void mflag_clear(mflag* f, ment e);
+void mflag_set(mflag* f, ment e);
+int mflag_get(mflag* f, ment e);
 void mflag_free(mflag* f);
 
 #endif

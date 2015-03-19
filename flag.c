@@ -92,11 +92,14 @@ mflag* mflag_new(mesh* m)
 {
   mflag* f;
   simplex t;
+  ment e;
   ASSERT(!mesh_flag(m));
   f = my_malloc(sizeof(*f));
   for (t = 0; t < SIMPLICES; ++t) {
     flag_init(f->f + t);
     flag_grow(f->f + t, mesh_cap(m, t));
+    for (e = ment_f(m, t); ment_ok(e); e = ment_n(m, e))
+      mflag_clear(f, e);
   }
   mesh_set_flag(m, f);
   return f;
@@ -107,17 +110,17 @@ void mflag_grow(mflag* f, simplex t, unsigned c)
   flag_grow(f->f + t, c);
 }
 
-void mflag_clear(mflag* f, gent e)
+void mflag_clear(mflag* f, ment e)
 {
   flag_clear(f->f + e.t, e.i);
 }
 
-void mflag_set(mflag* f, gent e)
+void mflag_set(mflag* f, ment e)
 {
   flag_set(f->f + e.t, e.i);
 }
 
-int mflag_get(mflag* f, gent e)
+int mflag_get(mflag* f, ment e)
 {
   return flag_get(f->f + e.t, e.i);
 }

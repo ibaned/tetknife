@@ -130,14 +130,15 @@ ment ment_new(mesh* m, simplex t, ment const v[])
   if (flex_full(&m->f[t]))
     mesh_grow(m, t);
   e.i = flex_add(&m->f[t]);
-  if (t == VERTEX)
-    return e;
-  for (i = 0; i < nverts(t); ++i) {
-    u = muse_at(e, i);
-    ASSERT(v[i].t == VERTEX);
-    m->d[u.t][u.i] = v[i].i;
-    list_link(m->fu[t], m->nu[t], v[i].i, u.i);
-  }
+  if (t != VERTEX)
+    for (i = 0; i < nverts(t); ++i) {
+      u = muse_at(e, i);
+      ASSERT(v[i].t == VERTEX);
+      m->d[u.t][u.i] = v[i].i;
+      list_link(m->fu[t], m->nu[t], v[i].i, u.i);
+    }
+  if (m->fl)
+    mflag_clear(m->fl, e);
   return e;
 }
 
