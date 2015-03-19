@@ -24,6 +24,7 @@ double my_sin(double x);
 double my_cos(double x);
 double my_atan2(double y, double x);
 double my_sqrt(double x);
+double my_pow(double x, double e);
 
 extern double const my_dbl_max;
 

@@ -62,4 +62,9 @@ double my_sqrt(double x)
   return sqrt(x);
 }
 
+double my_pow(double x, double e)
+{
+  return pow(x, e);
+}
+
 double const my_dbl_max = DBL_MAX;
