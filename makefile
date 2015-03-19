@@ -55,10 +55,14 @@ clean:
 test: test.o $(FRONT_OBJS)
 	$(FRONT_LINK) $^ $(FRONT_LIBS) -o $@
 cad_test: cad_test.o $(BACK_OBJS)
+quality: quality.o $(BACK_OBJS)
 
 test.o: exe/test.c back.h basics.h
 	$(FRONT_COMPILE) -c $<
 cad_test.o: exe/cad_test.c exe/../cad.h
+	$(BACK_COMPILE) -c $<
+quality.o: exe/quality.c exe/../simplex.h exe/../space.h exe/../basics.h \
+  exe/../mesh_geom.h exe/../mesh.h
 	$(BACK_COMPILE) -c $<
 
 cocoa_main.o: ext/cocoa_main.m front.h

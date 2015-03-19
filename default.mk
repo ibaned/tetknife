@@ -3,4 +3,4 @@ CC = clang
 CFLAGS = -O2 -g -Weverything -Werror
 GUI = cocoa
 BACK = direct
-TARGETS = test cad_test
+TARGETS = test cad_test quality
