@@ -33,7 +33,7 @@ static void tri_test(void)
   }
   s /= 3;
   debug("condition bound: %e\n", A / s);
-  debug("quality: %e\n", triangle_quality(m, e));
+  debug("quality: %e\n", ment_quality(m, e));
   mesh_free(m);
 }
 
@@ -69,7 +69,7 @@ static void tet_test(void)
   s /= 4;
   s = my_pow(s, 3.0 / 4.0);
   debug("condition bound: %.10e\n", V / s);
-  debug("quality: %e\n", tet_quality(m, e));
+  debug("quality: %e\n", ment_quality(m, e));
   mesh_free(m);
 }
 

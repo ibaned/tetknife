@@ -95,3 +95,20 @@ double tet_quality(mesh* m, ment e)
   s = my_pow(s, 3.0 / 4.0);
   return (V / s) / 4.1360215960e-01;
 }
+
+double ment_quality(mesh* m, ment e)
+{
+  switch (e.t) {
+    case VERTEX:
+      return 1;
+    case EDGE:
+      return 1;
+    case TRIANGLE:
+      return triangle_quality(m, e);
+    case TET:
+      return tet_quality(m, e);
+    case SIMPLICES:
+      break;
+  };
+  die("bad ment_type %d in ment_quality\n", e.t);
+}

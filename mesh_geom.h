@@ -13,5 +13,6 @@ tet verts_tet(mesh* m, ment const v[]);
 
 double triangle_quality(mesh* m, ment e);
 double tet_quality(mesh* m, ment e);
+double ment_quality(mesh* m, ment e);
 
 #endif
