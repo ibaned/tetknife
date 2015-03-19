@@ -15,4 +15,6 @@ double triangle_quality(mesh* m, ment e);
 double tet_quality(mesh* m, ment e);
 double ment_quality(mesh* m, ment e);
 
+double ment_size(mesh* m, ment e);
+
 #endif

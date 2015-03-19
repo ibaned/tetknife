@@ -112,3 +112,20 @@ double ment_quality(mesh* m, ment e)
   };
   die("bad ment_type %d in ment_quality\n", e.t);
 }
+
+double ment_size(mesh* m, ment e)
+{
+  switch (e.t) {
+    case VERTEX:
+      return 0;
+    case EDGE:
+      return line_len(ment_line(m, e));
+    case TRIANGLE:
+      return triangle_area(ment_triangle(m, e));
+    case TET:
+      return tet_volume(ment_tet(m, e));
+    case SIMPLICES:
+      break;
+  };
+  die("bad ment_type %d in ment_size\n", e.t);
+}
