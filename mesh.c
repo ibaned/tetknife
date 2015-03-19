@@ -240,3 +240,16 @@ void mesh_set_classif(mesh* m, struct classif* cl)
 {
   m->cl = cl;
 }
+
+void mesh_merge_verts(mesh* m, ment v, ment into)
+{
+  simplex t;
+  muse u;
+  for (t = 0; t < SIMPLICES; ++t)
+    while (muse_ok(muse_f(m, v, t))) {
+      u = muse_f(m, v, t);
+      m->d[u.t][u.i] = into.i;
+      list_unlink(m->fu[t], m->nu[t], v.i, u.i);
+      list_link(m->fu[t], m->nu[t], into.i, u.i);
+    }
+}
