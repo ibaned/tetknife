@@ -1,5 +1,5 @@
 #include <gtk/gtk.h>
-#include "front.h"
+#include "../front.h"
 
 static GtkWidget* image;
 static GdkPixbuf* pixbuf;

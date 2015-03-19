@@ -179,9 +179,9 @@ void cad_extrude_face(cad* c, gent f, point n)
   for (b = gbnd_of_f(c, f); gbnd_ok(b); b = gbnd_of_n(c, b)) {
     ob = copy_loop(c, b);
     (void)n;
-  //transform_loop(c, ob, frame_trans(n));
-  //connect_loops(c, b, ob);
-  //extrude_geom(c, b, ob);
+  /*transform_loop(c, ob, frame_trans(n));
+    connect_loops(c, b, ob);
+    extrude_geom(c, b, ob);*/
     gbnd_set_of(c, ob, of);
   }
 }

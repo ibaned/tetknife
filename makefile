@@ -67,6 +67,8 @@ quality.o: exe/quality.c exe/../simplex.h exe/../space.h exe/../basics.h \
 
 cocoa_main.o: ext/cocoa_main.m front.h
 	$(FRONT_COMPILE) -c $<
+gtk_main.o: ext/gtk_main.c ext/../front.h
+	$(FRONT_COMPILE) $(GTK_FLAGS) -c $<
 
 basics.o: ext/basics.c basics.h
 	$(BACK_COMPILE) -c $<
