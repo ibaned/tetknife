@@ -142,7 +142,6 @@ static gent copy_edge(cad* c, gent e, gent v0, gent v1)
 static gbnd copy_loop(cad* c, gbnd b)
 {
   gbnd ob;
-  gent fv;
   gent pv;
   gent nv;
   gent ofv;
@@ -152,7 +151,7 @@ static gbnd copy_loop(cad* c, gbnd b)
   gent oe;
   guse u;
   ob = gbnd_new(c, CAD_LOOP);
-  fv = nv = common_vert(c, path_first_edge(c, b), path_last_edge(c, b));
+  nv = common_vert(c, path_first_edge(c, b), path_last_edge(c, b));
   ofv = onv = copy_vert(c, nv);
   for (u = guse_by_f(c, b); guse_ok(u); u = guse_by_n(c, u)) {
     pv = nv;
@@ -170,11 +169,9 @@ static gbnd copy_loop(cad* c, gbnd b)
 
 void cad_extrude_face(cad* c, gent f, point n)
 {
-  gent r;
   gent of;
   gbnd b;
   gbnd ob;
-  r = gent_new(c, CAD_REGION);
   of = gent_new(c, CAD_FACE);
   for (b = gbnd_of_f(c, f); gbnd_ok(b); b = gbnd_of_n(c, b)) {
     ob = copy_loop(c, b);
