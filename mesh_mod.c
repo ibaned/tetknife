@@ -69,6 +69,29 @@ static void set_sv(split* s, ment sv)
   }
 }
 
+split* split_new(mesh* m)
+{
+  split* s;
+  simplex t;
+  s = my_malloc(sizeof(*s));
+  s->m = m;
+  for (t = 0; t < SIMPLICES; ++t) {
+    mset_init(s->oe + t);
+    mset_init(s->ne + t);
+  }
+  return s;
+}
+
+void split_free(split* s)
+{
+  simplex t;
+  for (t = 0; t < SIMPLICES; ++t) {
+    mset_dtor(s->oe + t);
+    mset_dtor(s->ne + t);
+  }
+  my_free(s);
+}
+
 void split_start(split* s, simplex t, ment v[], ment sv)
 {
   unsigned nv;
