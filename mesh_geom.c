@@ -1,4 +1,5 @@
 #include "mesh_geom.h"
+#include "mesh_adj.h"
 
 line ment_line(mesh* m, ment e)
 {
@@ -45,3 +46,52 @@ tet verts_tet(mesh* m, ment const v[])
   return t;
 }
 
+/* Shewchuk, J. "What is a good linear finite element?
+   interpolation, conditioning, anisotropy, and quality measures (preprint)."
+   University of California at Berkeley 73 (2002).
+
+   http://www.cs.berkeley.edu/~jrs/papers/elem.pdf
+ 
+   we choose the scale-invariant quality measures related to
+   element matrix condition numbers for several reasons:
+     1) they are simple, at least to state if not also to compute
+     2) they are zero for zero-volume elements
+     3) they are scale-invariant
+ */
+
+double triangle_quality(mesh* m, ment e)
+{
+  ment v[2];
+  unsigned i;
+  double A;
+  double l[3];
+  double s;
+  A = triangle_area(ment_triangle(m, e));
+  s = 0;
+  for (i = 0; i < 3; ++i) {
+    mesh_down(m, e, EDGE, i, v);
+    l[i] = line_len(verts_line(m, v));
+    s += l[i] * l[i];
+  }
+  s /= 3;
+  return (A / s) / 4.330127e-01;
+}
+
+double tet_quality(mesh* m, ment e)
+{
+  ment v[3];
+  unsigned i;
+  double V;
+  double A[4];
+  double s;
+  V = tet_volume(ment_tet(m, e));
+  s = 0;
+  for (i = 0; i < 4; ++i) {
+    mesh_down(m, e, TRIANGLE, i, v);
+    A[i] = triangle_area(verts_triangle(m, v));
+    s += A[i] * A[i];
+  }
+  s /= 4;
+  s = my_pow(s, 3.0 / 4.0);
+  return (V / s) / 4.1360215960e-01;
+}
