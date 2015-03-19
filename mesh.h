@@ -55,6 +55,10 @@ struct classif;
 struct classif* mesh_classif(mesh* m);
 void mesh_set_classif(mesh* m, struct classif* cl);
 
+struct mflag;
+struct mflag* mesh_flag(mesh* m);
+void mesh_set_flag(mesh* m, struct mflag* f);
+
 void mesh_merge_verts(mesh* m, ment v, ment into);
 
 #endif

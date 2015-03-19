@@ -82,3 +82,51 @@ void gflag_free(gflag* f)
     flag_dtor(f->f + t);
   my_free(f);
 }
+
+struct mflag {
+  mesh* m;
+  flag f[SIMPLICES];
+};
+
+mflag* mflag_new(mesh* m)
+{
+  mflag* f;
+  simplex t;
+  ASSERT(!mesh_flag(m));
+  f = my_malloc(sizeof(*f));
+  for (t = 0; t < SIMPLICES; ++t) {
+    flag_init(f->f + t);
+    flag_grow(f->f + t, mesh_cap(m, t));
+  }
+  mesh_set_flag(m, f);
+  return f;
+}
+
+void mflag_grow(mflag* f, simplex t, unsigned c)
+{
+  flag_grow(f->f + t, c);
+}
+
+void mflag_clear(mflag* f, gent e)
+{
+  flag_clear(f->f + e.t, e.i);
+}
+
+void mflag_set(mflag* f, gent e)
+{
+  flag_set(f->f + e.t, e.i);
+}
+
+int mflag_get(mflag* f, gent e)
+{
+  return flag_get(f->f + e.t, e.i);
+}
+
+void mflag_free(mflag* f)
+{
+  simplex t;
+  mesh_set_flag(f->m, 0);
+  for (t = 0; t < SIMPLICES; ++t)
+    flag_dtor(f->f + t);
+  my_free(f);
+}

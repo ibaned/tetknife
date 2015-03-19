@@ -2,6 +2,7 @@
 #define FLAG_H
 
 #include "cad.h"
+#include "mesh.h"
 
 typedef struct {
   unsigned char* bytes;
@@ -22,5 +23,14 @@ void gflag_clear(gflag* f, gent e);
 void gflag_set(gflag* f, gent e);
 int gflag_get(gflag* f, gent e);
 void gflag_free(gflag* f);
+
+typedef struct mflag mflag;
+
+mflag* mflag_new(mesh* m);
+void mflag_grow(mflag* f, simplex t, unsigned c);
+void mflag_clear(mflag* f, gent e);
+void mflag_set(mflag* f, gent e);
+int mflag_get(mflag* f, gent e);
+void mflag_free(mflag* f);
 
 #endif

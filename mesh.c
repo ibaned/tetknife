@@ -4,6 +4,7 @@
 #include "list.h"
 #include "field.h"
 #include "classif.h"
+#include "flag.h"
 
 struct mesh {
   flex f[SIMPLICES];
@@ -15,6 +16,7 @@ struct mesh {
   fields fs;
   vfield x;
   classif* cl;
+  mflag* fl;
 };
 
 ment const ment_null = { 0, NULL_IDX };
@@ -55,6 +57,7 @@ mesh* mesh_new(void)
   fields_init(&m->fs);
   vfield_init(m, &m->x);
   m->cl = 0;
+  m->fl = 0;
   return m;
 }
 
@@ -64,6 +67,8 @@ void mesh_free(mesh* m)
   fields_dtor(m);
   if (m->cl)
     classif_free(m->cl);
+  if (m->fl)
+    mflag_free(m->fl);
   for (t = 0; t < SIMPLICES; ++t) {
     flex_dtor(&m->f[t]);
     my_free(m->d[t]);
@@ -95,6 +100,8 @@ static unsigned mesh_grow(mesh* m, simplex t)
   }
   if (m->cl)
     classif_grow_ments(m->cl, t, c);
+  if (m->fl)
+    mflag_grow(m->fl, t, c);
   return c;
 }
 
@@ -239,6 +246,16 @@ struct classif* mesh_classif(mesh* m)
 void mesh_set_classif(mesh* m, struct classif* cl)
 {
   m->cl = cl;
+}
+
+struct mflag* mesh_flag(mesh* m)
+{
+  return m->fl;
+}
+
+void mesh_set_flag(mesh* m, struct mflag* f)
+{
+  m->fl = f;
 }
 
 void mesh_merge_verts(mesh* m, ment v, ment into)
