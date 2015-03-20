@@ -51,12 +51,12 @@ extern dim const gent_dim[CAD_ENT_TYPES];
 extern char const* const guse_name[CAD_USE_TYPES];
 extern char const* const gbnd_name[CAD_BND_TYPES];
 
-int gent_eq(gent a, gent b);
-int gent_ok(gent e);
+int gent_eq(gent a, gent b) __attribute__((const));
+int gent_ok(gent e) __attribute__((const));
 
-int gbnd_ok(gbnd b);
+int gbnd_ok(gbnd b) __attribute__((const));
 
-int guse_ok(guse u);
+int guse_ok(guse u) __attribute__((const));
 
 cad* cad_new(void);
 void cad_free(cad* c);
@@ -64,8 +64,8 @@ void cad_free(cad* c);
 gent gent_new(cad* c, gent_type t);
 void gent_free(cad* c, gent e);
 
-gent gent_f(cad* c, gent_type t);
-gent gent_n(cad* c, gent e);
+gent gent_f(cad* c, gent_type t) __attribute__((pure));
+gent gent_n(cad* c, gent e) __attribute__((pure));
 
 unsigned gent_count(cad* c, gent_type t);
 
@@ -74,25 +74,25 @@ gbnd gbnd_of_new(cad* c, gent e);
 void gbnd_free(cad* c, gbnd b);
 
 void gbnd_set_of(cad* c, gbnd b, gent e);
-gent gbnd_of(cad* c, gbnd b);
+gent gbnd_of(cad* c, gbnd b) __attribute__((pure));
 
-gbnd gbnd_of_f(cad* c, gent e);
-gbnd gbnd_of_n(cad* c, gbnd b);
+gbnd gbnd_of_f(cad* c, gent e) __attribute__((pure));
+gbnd gbnd_of_n(cad* c, gbnd b) __attribute__((pure));
 
 guse guse_new(cad* c, gent e, gbnd b);
 void guse_free(cad* c, guse u);
 
-gent guse_of(cad* c, guse u);
-gbnd guse_by(cad* c, guse u);
+gent guse_of(cad* c, guse u) __attribute__((pure));
+gbnd guse_by(cad* c, guse u) __attribute__((pure));
 
-guse guse_of_f(cad* c, gent e);
-guse guse_of_n(cad* c, guse u);
+guse guse_of_f(cad* c, gent e) __attribute__((pure));
+guse guse_of_n(cad* c, guse u) __attribute__((pure));
 
-guse guse_by_f(cad* c, gbnd b);
-guse guse_by_l(cad* c, gbnd b);
-guse guse_by_n(cad* c, guse u);
+guse guse_by_f(cad* c, gbnd b) __attribute__((pure));
+guse guse_by_l(cad* c, gbnd b) __attribute__((pure));
+guse guse_by_n(cad* c, guse u) __attribute__((pure));
 
-unsigned gent_cap(cad* c, gent_type t);
+unsigned gent_cap(cad* c, gent_type t) __attribute__((pure));
 
 typedef void (*cad_for_op)(gent, void*);
 
