@@ -3,6 +3,7 @@ CONFIG ?= default
 include $(CONFIG).mk
 
 BACK_OBJS = \
+charbits.o \
 image.o \
 mesh_adapt.o \
 mesh_mod.o \
