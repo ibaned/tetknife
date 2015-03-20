@@ -11,8 +11,6 @@ color const yellow = {255,255,0};
 void image_init(image* im, unsigned w, unsigned h)
 {
   unsigned i;
-  ASSERT(w >= 0);
-  ASSERT(h >= 0);
   im->w = w;
   im->h = h;
   im->p = my_malloc(h * sizeof(color*));
