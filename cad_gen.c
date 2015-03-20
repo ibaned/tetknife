@@ -184,17 +184,22 @@ static gbnd extrude_loop(cad* c, gbnd b, point along, gbnd sh)
   gent oe;
   gent pv;
   gent nv;
+  gent fv;
   gent opv;
   gent onv;
+  gent ofv;
   ob = gbnd_new(c, b.t);
-  nv = common_vert(c, first_edge(c, b), last_edge(c, b));
-  onv = extrude_vert(c, nv, along);
+  fv = nv = common_vert(c, first_edge(c, b), last_edge(c, b));
+  ofv = onv = extrude_vert(c, nv, along);
   for (u = guse_by_f(c, b); guse_ok(u); u = guse_by_n(c, u)) {
     pv = nv;
     opv = onv;
     e = guse_of(c, u);
     nv = other_vert(c, e, pv);
-    onv = extrude_vert(c, nv, along);
+    if (gent_eq(nv, fv))
+      onv = ofv;
+    else
+      onv = extrude_vert(c, nv, along);
     oe = extrude_edge(c, e, pv, nv, opv, onv, sh);
     guse_new(c, oe, ob);
   }
