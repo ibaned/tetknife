@@ -20,29 +20,6 @@ gent cad_gen_edge(cad* c, gent v0, gent v1)
   return e;
 }
 
-static gent path_first_edge(cad* c, gbnd b)
-{
-  return guse_of(c, guse_by_f(c, b));
-}
-
-static gent path_last_edge(cad* c, gbnd b)
-{
-  return guse_of(c, guse_by_l(c, b));
-}
-
-static gent common_vert(cad* c, gent e0, gent e1)
-{
-  gent v[2][2];
-  unsigned i,j;
-  cad_edge_verts(c, e0, v[0]);
-  cad_edge_verts(c, e1, v[1]);
-  for (i = 0; i < 2; ++i)
-  for (j = 0; j < 2; ++j)
-    if (gent_eq(v[0][i], v[1][j]))
-      return v[0][i];
-  return gent_null;
-}
-
 static void add_path_edge(cad* c, gbnd b, gent pv, gent nv)
 {
   gent e;
@@ -112,73 +89,130 @@ gent cad_gen_disk(cad* c, point o, point n, point x)
   return cad_gen_plane(c, cad_gen_circle(c, o, n, x));
 }
 
-static gent copy_vert(cad* c, gent v)
+static gent last_edge(cad* c, gbnd b)
 {
-  return cad_gen_point(c, geom_point(c, v));
+  return guse_of(c, guse_by_l(c, b));
+}
+
+static gent first_edge(cad* c, gbnd b)
+{
+  return guse_of(c, guse_by_f(c, b));
+}
+
+static int edge_has_vert(cad* c, gent e, gent v)
+{
+  gent ev[2];
+  cad_edge_verts(c, e, ev);
+  return gent_eq(ev[0], v) || gent_eq(ev[1], v);
+}
+
+static gent common_vert(cad* c, gent e0, gent e1)
+{
+  gent v0[2];
+  unsigned i;
+  cad_edge_verts(c, e0, v0);
+  for (i = 0; i < 2; ++i)
+    if (edge_has_vert(c, e1, v0[i]))
+      return v0[i];
+  return gent_null;
 }
 
 static gent other_vert(cad* c, gent e, gent v)
 {
-  gent vs[2];
-  cad_edge_verts(c, e, vs);
-  if (gent_eq(vs[0], v))
-    return vs[1];
-  return vs[0];
+  gent ev[2];
+  cad_edge_verts(c, e, ev);
+  return (gent_eq(ev[0], v)) ? ev[1] : ev[0];
 }
 
-static gent copy_edge(cad* c, gent e, gent v0, gent v1)
+static gent common_edge(cad* c, gent v0, gent v1)
+{
+  guse u;
+  gent e;
+  for (u = guse_of_f(c, v0); guse_ok(u); u = guse_of_n(c, u)) {
+    e = gbnd_of(c, guse_by(c, u));
+    if (edge_has_vert(c, e, v1))
+      return e;
+  }
+  return gent_null;
+}
+
+static gent extrude_vert(cad* c, gent v, point along)
+{
+  gent ov;
+  gent xe;
+  ov = cad_gen_point(c, point_add(geom_point(c, v), along));
+  xe = cad_gen_edge(c, v, ov);
+  geom_add_line(c, xe);
+  return ov;
+}
+
+static gent extrude_edge(cad* c, gent e, gent pv, gent nv, gent opv, gent onv,
+    gbnd sh)
 {
   gent oe;
+  gent xpe;
+  gent xne;
+  gent f;
+  gbnd b;
   geom_type gt;
-  oe = cad_gen_edge(c, v0, v1);
+  oe = cad_gen_edge(c, opv, onv);
+  xpe = common_edge(c, pv, opv);
+  xne = common_edge(c, nv, onv);
+  f = gent_new(c, CAD_FACE);
+  b = gbnd_of_new(c, f);
+  guse_new(c, e, b);
+  guse_new(c, xne, b);
+  guse_new(c, oe, b);
+  guse_new(c, xpe, b);
   gt = geom_typeof(c, e);
-  if (gt == GEOM_LINE)
+  if (gt == GEOM_LINE) {
     geom_add_line(c, oe);
-  else if (gt == GEOM_ARC)
+    geom_add_plane(c, f);
+  } else if (gt == GEOM_ARC) {
     geom_add_arc_by_frame(c, oe, geom_arc(c, e)->f);
+    geom_add_cylinder(c, f);
+  }
+  guse_new(c, f, sh);
   return oe;
 }
 
-static gbnd copy_loop(cad* c, gbnd b)
+static gbnd extrude_loop(cad* c, gbnd b, point along, gbnd sh)
 {
   gbnd ob;
-  gent pv;
-  gent nv;
-  gent ofv;
-  gent opv;
-  gent onv;
+  guse u;
   gent e;
   gent oe;
-  guse u;
-  ob = gbnd_new(c, CAD_LOOP);
-  nv = common_vert(c, path_first_edge(c, b), path_last_edge(c, b));
-  ofv = onv = copy_vert(c, nv);
-  for (u = guse_by_f(c, b); guse_ok(u); u = guse_by_n(c, u)) {
+  gent pv;
+  gent nv;
+  gent opv;
+  gent onv;
+  ob = gbnd_new(c, b.t);
+  nv = common_vert(c, first_edge(c, b), last_edge(c, b));
+  onv = extrude_vert(c, nv, along);
+  for (u = guse_by_f(c, b); guse_ok(u); guse_by_n(c, u)) {
     pv = nv;
     opv = onv;
     e = guse_of(c, u);
     nv = other_vert(c, e, pv);
-    onv = copy_vert(c, nv);
-    oe = copy_edge(c, e, opv, onv);
+    onv = extrude_vert(c, nv, along);
+    oe = extrude_edge(c, e, pv, nv, opv, onv, sh);
     guse_new(c, oe, ob);
   }
-  oe = copy_edge(c, e, onv, ofv);
-  guse_new(c, oe, ob);
   return ob;
 }
 
-void cad_extrude_face(cad* c, gent f, point n)
+gbnd cad_extrude_face(cad* c, gent f, point along)
 {
   gent of;
   gbnd b;
   gbnd ob;
+  gbnd sh;
   of = gent_new(c, CAD_FACE);
+  sh = gbnd_new(c, CAD_SHELL);
   for (b = gbnd_of_f(c, f); gbnd_ok(b); b = gbnd_of_n(c, b)) {
-    ob = copy_loop(c, b);
-    (void)n;
-  /*transform_loop(c, ob, frame_trans(n));
-    connect_loops(c, b, ob);
-    extrude_geom(c, b, ob);*/
+    ob = extrude_loop(c, b, along, sh);
     gbnd_set_of(c, ob, of);
   }
+  geom_add_plane(c, of);
+  return sh;
 }
