@@ -61,7 +61,9 @@ static int verts_bound_ment(mesh* m, simplex dt, ment const dv[], ment e)
   unsigned ndv;
   nuv = ment_verts(m, e, uv);
   ndv = simplex_ndown[dt][VERTEX];
-  return ments_superset(nuv, uv, ndv, dv);
+  /* assuming we already know that dv[0] is in the entity
+                                     V       V    */
+  return ments_superset(nuv, uv, ndv - 1, dv + 1);
 }
 
 void mesh_up(mesh* m, simplex from, ment const dv[], simplex to, mset* s)
