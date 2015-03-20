@@ -3,6 +3,7 @@ CONFIG ?= default
 include $(CONFIG).mk
 
 BACK_OBJS = \
+view.o \
 draw.o \
 charbits.o \
 image.o \
