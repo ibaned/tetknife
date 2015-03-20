@@ -30,5 +30,6 @@ extern double const my_dbl_max;
 
 #define MIN(a,b) (((b)<(a))?(b):(a))
 #define MAX(a,b) (((b)>(a))?(b):(a))
+#define ABS(x) (((x)<0)?(-(x)):(x))
 
 #endif
