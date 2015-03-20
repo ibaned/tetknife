@@ -141,14 +141,3 @@ double mset_min_quality(mesh* m, mset* s)
   return mq;
 }
 
-double cavity_min_quality(mesh* m, mset c[SIMPLICES])
-{
-  double mq = 1;
-  double q;
-  simplex t;
-  for (t = TRIANGLE; t < SIMPLICES; ++t) {
-    q = mset_min_quality(m, c + t);
-    mq = MIN(q, mq);
-  }
-  return mq;
-}

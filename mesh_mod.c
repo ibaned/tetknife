@@ -125,7 +125,11 @@ void split_cancel(split* s)
 
 double split_quality(split* s)
 {
-  return cavity_min_quality(s->m, s->ne);
+  simplex t;
+  for (t = SIMPLICES - 1; t > VERTEX; --t)
+    if (s->ne[t].s.n)
+      return mset_min_quality(s->m, s->ne + t);
+  die("no sets in split_quality\n");
 }
 
 void split_edge(split* s, ment v[2])

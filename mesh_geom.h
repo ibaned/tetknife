@@ -19,6 +19,5 @@ double ment_quality(mesh* m, ment e);
 double ment_size(mesh* m, ment e);
 
 double mset_min_quality(mesh* m, struct mset* s);
-double cavity_min_quality(mesh* m, mset c[SIMPLICES]);
 
 #endif
