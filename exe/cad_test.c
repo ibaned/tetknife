@@ -38,9 +38,11 @@ int main()
     {0,1,0}
   };
   cad* c;
+  gent f;
   c = cad_new();
   geom_new(c);
-  cad_gen_polygon(c, 4, pts);
+  f = cad_gen_polygon(c, 4, pts);
+  cad_extrude_face(c, f, point_new(0,0,1));
   print_model(c);
   cad_free(c);
   return 0;
