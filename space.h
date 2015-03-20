@@ -36,7 +36,11 @@ extern double const my_pi;
 extern double const epsilon;
 
 extern point const point_zero;
+extern point const point_x;
+extern point const point_y;
+extern point const point_z;
 extern basis const basis_ident;
+extern frame const frame_ident;
 
 point point_new(double x, double y, double z);
 double point_dot(point a, point b);
@@ -60,6 +64,8 @@ basis basis_scale(basis b, double s);
 basis basis_cross(point p);
 basis basis_inv(basis b);
 basis basis_cat(basis a, basis b);
+basis basis_rot(point u, double a);
+basis basis_add(basis a, basis b);
 
 frame frame_new(basis b, point c);
 point frame_eval(frame f, point x);
@@ -67,6 +73,7 @@ frame frame_inv(frame f);
 point frame_uneval(frame f, point x);
 frame frame_cat(frame a, frame b);
 frame frame_trans(point x);
+frame frame_scale(double s);
 
 bbox bbox_new(void);
 bbox bbox_add(bbox b, point p);

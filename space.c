@@ -7,12 +7,17 @@
 double const my_pi = 3.14159265358979323846;
 double const epsilon = 1e-10;
 
-point const point_zero = {0,0,0};
-basis const basis_ident = {
-  {1,0,0},
-  {0,1,0},
-  {0,0,1}
-};
+#define POINT_ZERO {0,0,0}
+point const point_zero = POINT_ZERO;
+#define POINT_X {1,0,0}
+#define POINT_Y {0,1,0}
+#define POINT_Z {0,0,1}
+point const point_x = POINT_X;
+point const point_y = POINT_Y;
+point const point_z = POINT_Z;
+#define BASIS_IDENT {POINT_X,POINT_Y,POINT_Z}
+basis const basis_ident = BASIS_IDENT;
+frame const frame_ident = {BASIS_IDENT,POINT_ZERO};
 
 point point_new(double x, double y, double z)
 {
@@ -151,6 +156,27 @@ basis basis_cat(basis a, basis b)
                    basis_eval(a, b.z));
 }
 
+static basis point_tprod(point a, point b)
+{
+  return basis_new(point_scale(a, b.x),
+                   point_scale(a, b.y),
+                   point_scale(a, b.z));
+}
+
+basis basis_rot(point u, double a)
+{
+  return basis_add(basis_scale(basis_ident, my_cos(a)),
+         basis_add(basis_scale(basis_cross(u), my_sin(a)),
+                   basis_scale(point_tprod(u, u), (1.0 - my_cos(a)))));
+}
+
+basis basis_add(basis a, basis b)
+{
+  return basis_new(point_add(a.x, b.x),
+                   point_add(a.y, b.y),
+                   point_add(a.z, b.z));
+}
+
 frame frame_new(basis b, point o)
 {
   frame f;
@@ -186,6 +212,11 @@ frame frame_cat(frame a, frame b)
 frame frame_trans(point x)
 {
   return frame_new(basis_ident, x);
+}
+
+frame frame_scale(double s)
+{
+  return frame_new(basis_scale(basis_ident, s), point_zero);
 }
 
 bbox bbox_new(void)
