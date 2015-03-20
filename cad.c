@@ -56,10 +56,16 @@ dim const gent_dim[CAD_ENT_TYPES] = {
   DIM3
 };
 
-char const* const guse_name[CAD_ENT_TYPES] = {
+char const* const guse_name[CAD_USE_TYPES] = {
   "CAD vertex use",
   "CAD edge use",
   "CAD face use"
+};
+
+char const* const gbnd_name[CAD_BND_TYPES] = {
+  "CAD pair",
+  "CAD loop",
+  "CAD shell"
 };
 
 int gent_eq(gent a, gent b)

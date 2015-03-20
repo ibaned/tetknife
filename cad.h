@@ -48,7 +48,8 @@ extern guse const guse_null;
 
 extern char const* const gent_name[CAD_ENT_TYPES];
 extern dim const gent_dim[CAD_ENT_TYPES];
-extern char const* const guse_name[CAD_ENT_TYPES];
+extern char const* const guse_name[CAD_USE_TYPES];
+extern char const* const gbnd_name[CAD_BND_TYPES];
 
 int gent_eq(gent a, gent b);
 int gent_ok(gent e);
