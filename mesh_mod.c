@@ -58,13 +58,14 @@ static void rm_sets(mesh* m, mset e[SIMPLICES])
       ment_free(m, e[t].e[i]);
 }
 
-static void set_sv(split* s, ment sv)
+static void set_sv(split* s, ment* sv)
 {
-  if (ment_ok(sv)) {
-    s->sv = sv;
+  if (ment_ok(*sv)) {
+    s->sv = *sv;
     s->vf = GIVEN_VERT;
   } else {
     s->sv = ment_new(s->m, VERTEX, 0);
+    *sv = s->sv;
     s->vf = MADE_VERT;
   }
 }
@@ -97,7 +98,7 @@ void split_start(split* s, simplex t, ment v[], ment sv)
   unsigned nv;
   unsigned i, j;
   simplex rt;
-  set_sv(s, sv);
+  set_sv(s, &sv);
   if (s->vf == MADE_VERT)
     mesh_transfer_point(s->m, t, v, sv);
   all_up(s->m, t, v, s->oe);
