@@ -15,10 +15,8 @@ static void view_ment_edges(view* v, mesh* m, ment e)
 
 void view_mesh_wireframe(view* v, mesh* m)
 {
-  simplex t;
   ment e;
   view_clear(v, black);
-  for (t = EDGE; t < SIMPLICES; ++t)
-    for (e = ment_f(m, t); ment_ok(e); e = ment_n(m, e))
-      view_ment_edges(v, m, e);
+  for (e = ment_f(m, mesh_element(m)); ment_ok(e); e = ment_n(m, e))
+    view_ment_edges(v, m, e);
 }
