@@ -39,7 +39,7 @@ static point bbox_point(bbox b, unsigned i)
   min = point_arr(&b.min);
   max = point_arr(&b.max);
   out = point_arr(&p);
-  for (d = DIM0; d < DIMS; ++d) {
+  for (d = DIM0; d < DIM; ++d) {
     if (i & bbox_verts[d])
       out[d] = max[d];
     else
