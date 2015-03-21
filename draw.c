@@ -157,11 +157,6 @@ static linefrm pixline_frame(pixline l)
   return f;
 }
 
-static pix linefrm_uneval(linefrm f, pix p)
-{
-  return pix_sub(pix_new(pix_dot(p, f.v), pix_dot(p, f.n)), f.o);
-}
-
 typedef struct {
   pix a;
   pix b;
@@ -252,15 +247,64 @@ void draw_point(drawing* d, point p, color c)
   draw_point2(d, p, c, 4);
 }
 
+static int pix_eq(pix a, pix b)
+{
+  return a.x == b.x && a.y == b.y;
+}
+
+static pix pix_abs(pix p)
+{
+  p.x = ABS(p.x);
+  p.y = ABS(p.y);
+  return p;
+}
+
+static void draw_line2(drawing* d, line l, pixline pl, color c)
+{
+  pix v, dp;
+  double dz;
+  int sx, sy, err, vdv, e2;
+  pix at;
+  double z;
+  if (pix_eq(pl.a, pl.b)) {
+    draw_pix(d, pl.a, l.a.z, c);
+    draw_pix(d, pl.b, l.b.z, c);
+    return;
+  }
+  v = pix_sub(pl.b, pl.a); /* line vector */
+  dz = l.b.z - l.a.z; /* z gradient */
+  dp = pix_abs(v); /* line width/height */
+  sx = (v.x > 0) ? 1 : -1; /* x direction sign */
+  sy = (v.y > 0) ? 1 : -1; /* y direction sign */
+  err = dp.x - dp.y; /* deviation from true line */
+  vdv = pix_dot(v,v); /* interpolation denominator */
+  at = pl.a;
+  while (1) {
+    /* interpolation numerator */
+    int cdv = pix_dot(pix_sub(at, pl.a),v);
+    /* interpolate z */
+    z = l.a.z + (dz * cdv) / vdv;
+    draw_pix(d, at, z + line_offset, c);
+    /* Bresenham stepping rules */
+    if (pix_eq(at, pl.b))
+      return;
+    e2 = 2 * err;
+    if (e2 > -dp.y) {
+      err -= dp.y;
+      at.x += sx;
+    }
+    if (e2 < dp.x) {
+      err += dp.x;
+      at.y += sy;
+    }
+  }
+}
+
 void draw_line(drawing* d, line l, color c)
 {
   pixline pl;
   pixbox bb;
   linefrm f;
-  pix q;
-  pix e;
-  int tol;
-  double z;
   pl = line_pixline(l);
   bb = pixline_pixbox(pl);
   bb = pixbox_intersect(bb, image_pixbox(&d->im));
@@ -272,16 +316,7 @@ void draw_line(drawing* d, line l, color c)
     draw_point2(d, l.b, c, 1);
     return;
   }
-  tol = MAX(ABS(f.n.x), ABS(f.n.y)) / 2;
-  for (q.y = bb.ul.y; q.y <= bb.lr.y; ++q.y)
-    for (q.x = bb.ul.x; q.x <= bb.lr.x; ++q.x) {
-      e = linefrm_uneval(f, q);
-      if (ABS(e.y) <= tol) {
-        z = ((f.lsq - e.x) * l.a.z + e.x * l.b.z) / f.lsq;
-        z += line_offset;
-        draw_pix(d, q, z, c);
-      }
-    }
+  draw_line2(d, l, pl, c);
 }
 
 static void flip(triangle* t)
