@@ -107,6 +107,7 @@ void split_start(split* s, simplex t, ment v[], ment sv)
   nv = simplex_ndown[t][VERTEX];
   for (rt = t; rt < SIMPLICES; ++rt) {
     mset_reserve(s->ne + rt, s->oe[rt].s.n * nv);
+    mset_clear(s->ne + rt);
     for (i = 0; i < s->oe[rt].s.n; ++i)
       for (j = 0; j < nv; ++j)
         mset_add(s->ne + rt, rebuild(
