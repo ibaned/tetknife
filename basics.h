@@ -34,4 +34,6 @@ extern double const my_dbl_max;
 #define MAX(a,b) (((b)>(a))?(b):(a))
 #define ABS(x) (((x)<0)?(-(x)):(x))
 
+unsigned cubic_roots(double a, double b, double c, double d, double x[]);
+
 #endif

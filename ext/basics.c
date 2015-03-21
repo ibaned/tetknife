@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <float.h>
+#include <complex.h>
 
 void print(char const* format, ...)
 {
@@ -76,3 +77,49 @@ double my_pow(double x, double e)
 }
 
 double const my_dbl_max = DBL_MAX;
+
+/*
+http://en.wikipedia.org/wiki/Cubic_function#The_nature_of_the_roots
+*/
+
+unsigned cubic_roots(double a, double b, double c, double d, double x[])
+{
+  double del, del0, del1;
+  double t0;
+  double complex t1;
+  double complex C;
+  double complex u[3];
+  double complex cx[3];
+  double complex bx;
+  unsigned i;
+  del0 = b * b - 3 * a * c;
+  del1 = 2 * b * b * b - 9 * a * b * c + 27 * a * a * d;
+  t0 = del1 * del1 - 4 * del0 * del0 * del0;
+  del = t0 / (-27.0 * a * a);
+  u[0] = 1.0;
+  u[1] = (-1.0 + sqrt(3) * I) / 2.0;
+  u[2] = (-1.0 - sqrt(3) * I) / 2.0;
+  if (del && !del0)
+    t1 = del1;
+  else
+    t1 = csqrt(t0);
+  C = cpow((del1 + t1) / 2.0, 1.0 / 3.0);
+  for (i = 0; i < 3; ++i) {
+    if (C)
+      cx[i] = -(b + u[i] * C + del0 / (u[i] * C)) / (3 * a);
+    else
+      cx[i] = -b / (3 * a);
+  }
+  if (del < 0) {
+    bx = cx[0];
+    for (i = 1; i < 3; ++i)
+      if (fabs(cimag(cx[i])) < fabs(cimag(bx)))
+        bx = cx[i]; /* choose least imaginary root */
+    x[0] = creal(bx);
+    return 1;
+  } else {
+    for (i = 1; i < 3; ++i)
+      x[i] = creal(cx[i]);
+    return 3;
+  }
+}
