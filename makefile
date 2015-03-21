@@ -66,7 +66,10 @@ quality: quality.o $(BACK_OBJS)
 libxmesh.a: $(BACK_OBJS)
 	ar cru $@ $^
 
-test.o: exe/test.c back.h basics.h
+test.o: exe/test.c exe/../back.h exe/../view_mesh.h exe/../view.h \
+  exe/../simplex.h exe/../space.h exe/../image.h exe/../mesh.h \
+  exe/../mesh_bbox.h exe/../cad.h exe/../mesh_adapt.h exe/../flag.h \
+  exe/../mesh_geom.h exe/../mesh_adj.h exe/../stack.h exe/../basics.h
 	$(FRONT_COMPILE) -c $<
 myperf.o: exe/myperf.c exe/../view_mesh.h exe/../view.h exe/../simplex.h \
   exe/../space.h exe/../image.h exe/../mesh.h exe/../mesh_bbox.h \
