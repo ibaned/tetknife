@@ -160,7 +160,7 @@ void ment_free(mesh* m, ment e)
   }
 }
 
-simplex mesh_element(mesh* m)
+simplex mesh_elem(mesh* m)
 {
   return m->et;
 }

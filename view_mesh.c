@@ -17,6 +17,6 @@ void view_mesh_wireframe(view* v, mesh* m)
 {
   ment e;
   view_clear(v, black);
-  for (e = ment_f(m, mesh_element(m)); ment_ok(e); e = ment_n(m, e))
+  for (e = ment_f(m, mesh_elem(m)); ment_ok(e); e = ment_n(m, e))
     view_ment_edges(v, m, e);
 }

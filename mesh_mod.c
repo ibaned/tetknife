@@ -125,7 +125,7 @@ void split_cancel(split* s)
 
 double split_quality(split* s)
 {
-  return mset_min_quality(s->m, s->ne + mesh_element(s->m));
+  return mset_min_quality(s->m, s->ne + mesh_elem(s->m));
 }
 
 void split_edge(split* s, ment v[2])

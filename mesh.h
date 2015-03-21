@@ -31,7 +31,7 @@ void mesh_free(mesh* m);
 ment ment_new(mesh* m, simplex t, ment const v[]);
 void ment_free(mesh* m, ment e);
 
-simplex mesh_element(mesh* m);
+simplex mesh_elem(mesh* m);
 
 ment ment_f(mesh* m, simplex t) __attribute__((pure));
 ment ment_n(mesh* m, ment e) __attribute__((pure));
