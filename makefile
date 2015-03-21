@@ -105,7 +105,7 @@ mesh_adj.o: mesh_adj.c mesh_adj.h mesh.h simplex.h space.h stack.h \
 mesh_bbox.o: mesh_bbox.c mesh_bbox.h mesh.h simplex.h space.h cad.h \
   classif.h
 mesh_geom.o: mesh_geom.c mesh_geom.h mesh.h simplex.h space.h mesh_adj.h \
-  stack.h basics.h
+  stack.h basics.h field.h
 mesh_mod.o: mesh_mod.c mesh_mod.h mesh.h simplex.h space.h mesh_adj.h \
   stack.h basics.h mesh_geom.h classif.h cad.h
 param.o: param.c param.h space.h basics.h
