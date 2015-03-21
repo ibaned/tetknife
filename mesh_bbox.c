@@ -20,14 +20,32 @@ static unsigned const* const e1[1] = {e10};
 static unsigned const e20[3] = {0,1,3};
 static unsigned const e21[3] = {0,3,2};
 static unsigned const* const e2[2] = {e20,e21};
-static unsigned const e30[4] = {0,3,1,7};
-static unsigned const e31[4] = {5,0,1,7};
-static unsigned const e32[4] = {5,4,0,7};
-static unsigned const e33[4] = {4,6,0,7};
-static unsigned const e34[4] = {0,2,3,7};
-static unsigned const e35[4] = {0,6,2,7};
+static unsigned const e30[4] = {0,1,3,7};
+static unsigned const e31[4] = {0,5,1,7};
+static unsigned const e32[4] = {0,4,5,7};
+static unsigned const e33[4] = {0,6,4,7};
+static unsigned const e34[4] = {0,2,6,7};
+static unsigned const e35[4] = {0,3,2,7};
 static unsigned const* const e3[6] = {e30,e31,e32,e33,e34,e35};
 static unsigned const* const* const etables[DIMS] = {0,e1,e2,e3};
+
+/*
+the above tables describe the simplices that result
+from the application of the algorithm here:
+
+Dompierre, Julien, et al.
+"How to Subdivide Pyramids, Prisms, and Hexahedra into Tetrahedra."
+IMR. 1999.
+
+http://www.imr.sandia.gov/papers/imr8/dompierre.ps.gz
+
+when applied to tensor product elements, namely
+the line, quad, and hex.
+the vertex ordering chosen is the *lexicographical*
+coordinate order (see bbox_point below).
+note that this differs significantly
+from the hex vertex orders of finite element codes.
+*/
 
 static point bbox_point(bbox b, unsigned i)
 {

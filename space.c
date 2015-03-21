@@ -136,9 +136,9 @@ basis basis_scale(basis b, double s)
 
 basis basis_cross(point p)
 {
-  return basis_new(point_new(    0, -p.z,  p.y),
-                   point_new(  p.z,    0, -p.x),
-                   point_new( -p.y,  p.x,    0));
+  return basis_new(point_new(    0,  p.z, -p.y),
+                   point_new( -p.z,    0,  p.x),
+                   point_new(  p.y, -p.x,    0));
 }
 
 basis basis_inv(basis b)
