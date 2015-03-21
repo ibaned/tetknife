@@ -157,6 +157,11 @@ void ment_free(mesh* m, ment e)
   }
 }
 
+simplex mesh_element(mesh* m)
+{
+  return m->et;
+}
+
 ment ment_f(mesh* m, simplex t)
 {
   ment e;
