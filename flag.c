@@ -95,6 +95,7 @@ mflag* mflag_new(mesh* m)
   ment e;
   ASSERT(!mesh_flag(m));
   f = my_malloc(sizeof(*f));
+  f->m = m;
   for (t = 0; t < SIMPLICES; ++t) {
     flag_init(f->f + t);
     flag_grow(f->f + t, mesh_cap(m, t));
