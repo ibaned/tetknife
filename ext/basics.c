@@ -5,6 +5,14 @@
 #include <math.h>
 #include <float.h>
 
+void print(char const* format, ...)
+{
+  va_list ap;
+  va_start(ap, format);
+  vfprintf(stdout, format, ap);
+  va_end(ap);
+}
+
 void debug(char const* format, ...)
 {
   va_list ap;

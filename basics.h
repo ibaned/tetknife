@@ -1,6 +1,8 @@
 #ifndef BASICS_H
 #define BASICS_H
 
+void print(char const* format, ...)
+  __attribute__((format(printf, 1, 2)));
 void debug(char const* format, ...)
   __attribute__((format(printf, 1, 2)));
 void die(char const* why, ...)
