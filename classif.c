@@ -56,7 +56,7 @@ void classif_free(classif* cl)
     my_free(cl->n[et]);
     my_free(cl->p[et]);
   }
-  vfield_dtor(cl->m, &cl->x);
+  vfield_dtor(&cl->x);
   mesh_set_classif(cl->m, 0);
   my_free(cl);
 }
