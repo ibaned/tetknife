@@ -1,11 +1,13 @@
 #include "../back.h"
 #include "../view_mesh.h"
 #include "../mesh_bbox.h"
+#include "../basics.h"
 
 #define WIDTH 640
 #define HEIGHT 480
 static view* global_view;
 static mesh* global_mesh;
+static char global_key;
 
 static void render(void)
 {
@@ -47,21 +49,34 @@ unsigned back_height(void)
 
 void back_mouse_down(double x, double y)
 {
-  (void)x;
-  (void)y;
+  view_click(global_view, x, y);
 }
 
 void back_mouse_up(double x, double y)
 {
-  (void)x;
-  (void)y;
+  view_drag(global_view, x, y);
+  render();
 }
 
 void back_key_down(char k)
 {
-  (void)k;
+  switch (k) {
+    case 'p':
+      view_set_mode(global_view, VIEW_PAN);
+      break;
+    case 'z':
+      view_set_mode(global_view, VIEW_ZOOM);
+      break;
+  };
+  global_key = k;
 }
 
 void back_key_up(void)
 {
+  switch (global_key) {
+    case 'p':
+    case 'z':
+      view_set_mode(global_view, VIEW_ROT);
+      break;
+  };
 }
