@@ -1,5 +1,12 @@
 #include "simplex.h"
 
+char const* const simplex_name[SIMPLICES] = {
+  "vertex",
+  "edge",
+  "triangle",
+  "tet"
+};
+
 unsigned const simplex_ndown[SIMPLICES][SIMPLICES] = {
   {1,0,0,0},
   {2,1,0,0},
