@@ -60,12 +60,17 @@ clean:
 
 test: test.o $(FRONT_OBJS)
 	$(FRONT_LINK) $^ $(FRONT_LIBS) -o $@
+myperf: myperf.o $(BACK_OBJS)
 cad_test: cad_test.o $(BACK_OBJS)
 quality: quality.o $(BACK_OBJS)
 libxmesh.a: $(BACK_OBJS)
 	ar cru $@ $^
 
 test.o: exe/test.c back.h basics.h
+	$(FRONT_COMPILE) -c $<
+myperf.o: exe/myperf.c exe/../view_mesh.h exe/../view.h exe/../simplex.h \
+  exe/../space.h exe/../image.h exe/../mesh.h exe/../mesh_bbox.h \
+  exe/../cad.h exe/../mesh_adapt.h exe/../flag.h
 	$(FRONT_COMPILE) -c $<
 cad_test.o: exe/cad_test.c exe/../cad.h
 	$(BACK_COMPILE) -c $<
