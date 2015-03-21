@@ -50,3 +50,51 @@ void vfield_set(vfield* f, ment e, point v)
   ASSERT(e.t == VERTEX);
   f->x[e.i] = v;
 }
+
+line vfield_verts_line(vfield* f, ment const v[])
+{
+  line l;
+  l.a = vfield_get(f, v[0]);
+  l.b = vfield_get(f, v[1]);
+  return l;
+}
+
+triangle vfield_verts_triangle(vfield* f, ment const v[])
+{
+  triangle t;
+  t.a = vfield_get(f, v[0]);
+  t.b = vfield_get(f, v[1]);
+  t.c = vfield_get(f, v[2]);
+  return t;
+}
+
+tet vfield_verts_tet(vfield* f, ment const v[])
+{
+  tet t;
+  t.a = vfield_get(f, v[0]);
+  t.b = vfield_get(f, v[1]);
+  t.c = vfield_get(f, v[2]);
+  t.d = vfield_get(f, v[3]);
+  return t;
+}
+
+line vfield_line(vfield* f, ment e)
+{
+  ment v[2];
+  ment_verts(f->m, e, v);
+  return vfield_verts_line(f, v);
+}
+
+triangle vfield_triangle(vfield* f, ment e)
+{
+  ment v[3];
+  ment_verts(f->m, e, v);
+  return vfield_verts_triangle(f, v);
+}
+
+tet vfield_tet(vfield* f, ment e)
+{
+  ment v[4];
+  ment_verts(f->m, e, v);
+  return vfield_verts_tet(f, v);
+}

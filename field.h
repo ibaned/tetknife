@@ -24,4 +24,12 @@ void vfield_dtor(vfield* f);
 point vfield_get(vfield* f, ment e);
 void vfield_set(vfield* f, ment e, point v);
 
+line vfield_verts_line(vfield* f, ment const v[]);
+triangle vfield_verts_triangle(vfield* f, ment const v[]);
+tet vfield_verts_tet(vfield* f, ment const v[]);
+
+line vfield_line(vfield* f, ment e);
+triangle vfield_triangle(vfield* f, ment e);
+tet vfield_tet(vfield* f, ment e);
+
 #endif
