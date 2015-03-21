@@ -29,15 +29,15 @@ space.o \
 basics.o
 
 ifeq "$(GUI)" "cocoa"
-GUI_OBJ += cocoa_main.o
+GUI_OBJ += main_cocoa.o
 GUI_LIBS = -framework Cocoa
 else ifeq "$(GUI)" "gtk"
 GTK_FLAGS = $(shell pkg-config --cflags gtk+-2.0)
 GTK_LIBS = $(shell pkg-config --libs gtk+-2.0)
-GUI_OBJ += gtk_main.o
+GUI_OBJ += main_gtk.o
 GUI_LIBS = $(GTK_LIBS)
 else ifeq "$(GUI)" "w32"
-GUI_OBJ += w32_main.o
+GUI_OBJ += main_w32.o
 GUI_LIBS = -lGid32
 endif
 
@@ -81,9 +81,9 @@ quality.o: exe/quality.c exe/../simplex.h exe/../space.h exe/../basics.h \
   exe/../mesh_geom.h exe/../mesh.h
 	$(BACK_COMPILE) -c $<
 
-cocoa_main.o: ext/cocoa_main.m front.h
+main_cocoa.o: ext/main_cocoa.m front.h
 	$(FRONT_COMPILE) -c $<
-gtk_main.o: ext/gtk_main.c ext/../front.h
+main_gtk.o: ext/main_gtk.c ext/../front.h
 	$(FRONT_COMPILE) $(GTK_FLAGS) -c $<
 
 basics.o: ext/basics.c basics.h
