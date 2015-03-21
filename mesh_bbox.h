@@ -14,4 +14,6 @@ void mesh_gen_bbox(mesh* m, bbox b, dim d,
     ment v[MAX_BBOX_VERTS], ment e[MAX_BBOX_SIMPLICES]);
 void classif_bbox_set(mesh* m, dim d, ment v[], ment e[], gent ge);
 
+bbox mesh_bbox(mesh* m);
+
 #endif

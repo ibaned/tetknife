@@ -86,3 +86,13 @@ void classif_bbox_set(mesh* m, dim d, ment v[], ment e[], gent ge)
   for (i = 0; i < bbox_simplices[d]; ++i)
     classif_set(m, e[i], ge);
 }
+
+bbox mesh_bbox(mesh* m)
+{
+  ment v;
+  bbox b;
+  b = bbox_new();
+  for (v = ment_f(m, VERTEX); ment_ok(v); v = ment_n(m, v))
+    b = bbox_add(b, mesh_point(m, v));
+  return b;
+}
