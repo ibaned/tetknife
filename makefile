@@ -61,6 +61,8 @@ test: test.o $(FRONT_OBJS)
 	$(FRONT_LINK) $^ $(FRONT_LIBS) -o $@
 cad_test: cad_test.o $(BACK_OBJS)
 quality: quality.o $(BACK_OBJS)
+libxmesh.a: $(BACK_OBJS)
+	ar cru $@ $^
 
 test.o: exe/test.c back.h basics.h
 	$(FRONT_COMPILE) -c $<
