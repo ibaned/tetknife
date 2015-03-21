@@ -1,48 +1,34 @@
 #include "mesh_geom.h"
+#include "field.h"
 
 line ment_line(mesh* m, ment e)
 {
-  ment v[2];
-  ment_verts(m, e, v);
-  return verts_line(m, v);
+  return vfield_line(mesh_points(m), e);
 }
 
 triangle ment_triangle(mesh* m, ment e)
 {
-  ment v[3];
-  ment_verts(m, e, v);
-  return verts_triangle(m, v);
+  return vfield_triangle(mesh_points(m), e);
 }
 
 tet ment_tet(mesh* m, ment e)
 {
-  ment v[4];
-  ment_verts(m, e, v);
-  return verts_tet(m, v);
+  return vfield_tet(mesh_points(m), e);
 }
 
 line verts_line(mesh* m, ment const v[])
 {
-  return line_new(mesh_point(m, v[0]), mesh_point(m, v[1]));
+  return vfield_verts_line(mesh_points(m), v);
 }
 
 triangle verts_triangle(mesh* m, ment const v[])
 {
-  triangle t;
-  t.a = mesh_point(m, v[0]);
-  t.b = mesh_point(m, v[1]);
-  t.c = mesh_point(m, v[2]);
-  return t;
+  return vfield_verts_triangle(mesh_points(m), v);
 }
 
 tet verts_tet(mesh* m, ment const v[])
 {
-  tet t;
-  t.a = mesh_point(m, v[0]);
-  t.b = mesh_point(m, v[1]);
-  t.c = mesh_point(m, v[2]);
-  t.d = mesh_point(m, v[3]);
-  return t;
+  return vfield_verts_tet(mesh_points(m), v);
 }
 
 /* Shewchuk, J. "What is a good linear finite element?

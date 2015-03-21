@@ -53,6 +53,9 @@ unsigned mesh_cap(mesh* m, simplex t) __attribute__((pure));
 struct fields;
 struct fields* mesh_fields(mesh* m);
 
+struct vfield;
+struct vfield* mesh_points(mesh* m);
+
 struct classif;
 struct classif* mesh_classif(mesh* m);
 void mesh_set_classif(mesh* m, struct classif* cl);

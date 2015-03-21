@@ -247,6 +247,11 @@ struct fields* mesh_fields(mesh* m)
   return &m->fs;
 }
 
+struct vfield* mesh_points(mesh* m)
+{
+  return &m->x;
+}
+
 struct classif* mesh_classif(mesh* m)
 {
   return m->cl;
