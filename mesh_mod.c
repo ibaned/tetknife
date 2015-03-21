@@ -111,7 +111,7 @@ void split_start(split* s, simplex t, ment v[], ment sv)
     for (i = 0; i < s->oe[rt].s.n; ++i)
       for (j = 0; j < nv; ++j)
         mset_add(s->ne + rt, rebuild(
-              s->m, s->oe[rt].e[i], v[i], sv, IGNORE_OVERLAP));
+              s->m, s->oe[rt].e[i], v[j], sv, CHECK_OVERLAP));
   }
 }
 
