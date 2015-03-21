@@ -15,7 +15,7 @@ static void find_best_edge_split(mesh* m, split* s, ment e, ment v[2])
     mesh_down(m, e, EDGE, i, v_);
     split_start(s, EDGE, v_, ment_null);
     q = split_quality(s);
-    if (q < mq) {
+    if (q > mq) {
       mq = q;
       v[0] = v_[0];
       v[1] = v_[1];
