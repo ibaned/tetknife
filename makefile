@@ -113,3 +113,5 @@ simplex.o: simplex.c simplex.h space.h
 space.o: space.c space.h basics.h
 stack.o: stack.c stack.h basics.h
 view.o: view.c view.h simplex.h space.h image.h draw.h basics.h
+view_mesh.o: view_mesh.c view_mesh.h view.h simplex.h space.h image.h \
+  mesh.h mesh_geom.h mesh_adj.h stack.h basics.h
