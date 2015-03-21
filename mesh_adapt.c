@@ -33,13 +33,11 @@ static void split_ment(mesh* m, split* s, ment e)
 
 void mesh_refine(mesh* m, mflag* f)
 {
-  simplex t;
   ment e;
   split* s;
   s = split_new(m);
-  for (t = EDGE; t < SIMPLICES; ++t)
-    for (e = ment_f(m, t); ment_ok(e); e = ment_n(m, e))
-      if (mflag_get(f, e))
-        split_ment(m, s, e);
+  for (e = ment_f(m, mesh_element(m)); ment_ok(e); e = ment_n(m, e))
+    if (mflag_get(f, e))
+      split_ment(m, s, e);
   split_free(s);
 }
