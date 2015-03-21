@@ -47,8 +47,8 @@ typedef struct {
 
 double tet_volume(tet t);
 
-point line_avg(line l);
-point triangle_avg(triangle t);
-point tet_avg(tet t);
+point line_centroid(line l);
+point triangle_centroid(triangle t);
+point tet_centroid(tet t);
 
 #endif

@@ -93,13 +93,13 @@ double tet_volume(tet t)
   return basis_det(tet_basis(t)) / 6.0;
 }
 
-point line_avg(line l)
+point line_centroid(line l)
 {
   return point_scale(point_add(l.a, l.b),
                      1.0 / 2.0);
 }
 
-point triangle_avg(triangle t)
+point triangle_centroid(triangle t)
 {
   return point_scale(point_add(t.a,
                      point_add(t.b,
@@ -107,7 +107,7 @@ point triangle_avg(triangle t)
                      1.0 / 3.0);
 }
 
-point tet_avg(tet t)
+point tet_centroid(tet t)
 {
   return point_scale(point_add(t.a,
                      point_add(t.b,

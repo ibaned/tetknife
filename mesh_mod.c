@@ -98,6 +98,8 @@ void split_start(split* s, simplex t, ment v[], ment sv)
   unsigned i, j;
   simplex rt;
   set_sv(s, sv);
+  if (s->vf == MADE_VERT)
+    mesh_transfer_point(s->m, t, v, sv);
   all_up(s->m, t, v, s->oe);
   if (s->vf == MADE_VERT)
     classif_transfer_vert(s->m, sv, s->oe);

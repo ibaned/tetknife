@@ -12,6 +12,8 @@ line verts_line(mesh* m, ment const v[]);
 triangle verts_triangle(mesh* m, ment const v[]);
 tet verts_tet(mesh* m, ment const v[]);
 
+point verts_centroid(mesh* m, simplex t, ment const v[]);
+
 double triangle_quality(mesh* m, ment e);
 double tet_quality(mesh* m, ment e);
 double ment_quality(mesh* m, ment e);
@@ -19,5 +21,7 @@ double ment_quality(mesh* m, ment e);
 double ment_size(mesh* m, ment e);
 
 double mset_min_quality(mesh* m, struct mset* s);
+
+void mesh_transfer_point(mesh* m, simplex t, ment const v[], ment sv);
 
 #endif

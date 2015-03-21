@@ -31,6 +31,23 @@ tet verts_tet(mesh* m, ment const v[])
   return vfield_verts_tet(mesh_points(m), v);
 }
 
+point verts_centroid(mesh* m, simplex t, ment const v[])
+{
+  switch (t) {
+    case VERTEX:
+      return mesh_point(m, v[0]);
+    case EDGE:
+      return line_centroid(verts_line(m, v));
+    case TRIANGLE:
+      return triangle_centroid(verts_triangle(m, v));
+    case TET:
+      return tet_centroid(verts_tet(m, v));
+    case SIMPLICES:
+      break;
+  };
+  die("bad simplex %d in verts_centroid\n", t);
+}
+
 /* Shewchuk, J. "What is a good linear finite element?
    interpolation, conditioning, anisotropy, and quality measures (preprint)."
    University of California at Berkeley 73 (2002).
@@ -127,3 +144,7 @@ double mset_min_quality(mesh* m, mset* s)
   return mq;
 }
 
+void mesh_transfer_point(mesh* m, simplex t, ment const v[], ment sv)
+{
+  mesh_set_point(m, sv, verts_centroid(m, t, v));
+}
