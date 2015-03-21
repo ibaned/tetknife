@@ -41,3 +41,20 @@ void mesh_refine(mesh* m, mflag* f)
       split_ment(m, s, e);
   split_free(s);
 }
+
+static mflag* flag_all(mesh* m)
+{
+  mflag* f;
+  ment e;
+  f = mflag_new(m);
+  for (e = ment_f(m, mesh_element(m)); ment_ok(e); e = ment_n(m, e))
+    mflag_set(f, e);
+  return f;
+}
+
+void mesh_refine_all(mesh* m)
+{
+  mflag* f = flag_all(m);
+  mesh_refine(m, f);
+  mflag_free(f);
+}

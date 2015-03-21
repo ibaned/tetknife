@@ -5,5 +5,6 @@
 #include "flag.h"
 
 void mesh_refine(mesh* m, mflag* f);
+void mesh_refine_all(mesh* m);
 
 #endif
