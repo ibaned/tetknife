@@ -177,6 +177,23 @@ basis basis_add(basis a, basis b)
                    point_add(a.z, b.z));
 }
 
+static double basis_trace(basis b)
+{
+  return b.x.x + b.y.y + b.z.z;
+}
+
+unsigned basis_eigenvals(basis m, double v[])
+{
+  double a, b, c, d;
+  a = -1;
+  b = basis_trace(m);
+  debug("trace %f\n", b);
+  c = - (b * b - basis_trace(basis_cat(m, m))) / 2.0;
+  d = basis_det(m);
+  debug("det %f\n", d);
+  return cubic_roots(a, b, c, d, v);
+}
+
 frame frame_new(basis b, point o)
 {
   frame f;

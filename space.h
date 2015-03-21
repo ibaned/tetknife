@@ -67,6 +67,8 @@ basis basis_cat(basis a, basis b);
 basis basis_rot(point u, double a);
 basis basis_add(basis a, basis b);
 
+unsigned basis_eigenvals(basis b, double v[]);
+
 frame frame_new(basis b, point c);
 point frame_eval(frame f, point x);
 frame frame_inv(frame f);
