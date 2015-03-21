@@ -1,6 +1,7 @@
 #include "../back.h"
 #include "../view_mesh.h"
 #include "../mesh_bbox.h"
+#include "../mesh_adapt.h"
 #include "../basics.h"
 
 #define WIDTH 640
@@ -77,6 +78,10 @@ void back_key_up(void)
     case 'p':
     case 'z':
       view_set_mode(global_view, VIEW_ROT);
+      return;
+    case 'r':
+      mesh_refine_all(global_mesh);
       break;
   };
+  render();
 }
