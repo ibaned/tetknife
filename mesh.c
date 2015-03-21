@@ -115,8 +115,11 @@ static muse muse_at(ment e, unsigned i)
 
 static void raise_dim(mesh* m)
 {
+  ment v;
   m->et++;
   REALLOC(m->fu[m->et], m->f[VERTEX].s.c);
+  for (v = ment_f(m, VERTEX); ment_ok(v); v = ment_n(m, v))
+    m->fu[m->et][v.i] = NULL_IDX;
 }
 
 ment ment_new(mesh* m, simplex t, ment const v[])
