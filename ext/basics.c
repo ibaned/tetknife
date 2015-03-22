@@ -118,7 +118,7 @@ unsigned cubic_roots(double a, double b, double c, double d, double x[])
     x[0] = creal(bx);
     return 1;
   } else {
-    for (i = 1; i < 3; ++i)
+    for (i = 0; i < 3; ++i)
       x[i] = creal(cx[i]);
     return 3;
   }
