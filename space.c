@@ -83,17 +83,6 @@ point point_norm(point p)
   return point_scale(p, 1.0 / point_mag(p));
 }
 
-int point_lex(point a, point b)
-{
-  if (a.x != b.x)
-    return a.x < b.x;
-  if (a.y != b.y)
-    return a.y < b.y;
-  if (a.z != b.z)
-    return a.z < b.z;
-  return 0;
-}
-
 double* point_arr(point* p)
 {
   return (double*)(&p->x);

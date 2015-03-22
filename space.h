@@ -53,7 +53,6 @@ point point_cross(point a, point b);
 point point_proj(point a, point b);
 point point_rej(point a, point b);
 point point_norm(point p);
-int point_lex(point a, point b);
 double* point_arr(point* p);
 
 basis basis_new(point x, point y, point z);
