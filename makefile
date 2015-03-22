@@ -39,7 +39,7 @@ GUI_OBJ += main_gtk.o
 GUI_LIBS = $(GTK_LIBS)
 else ifeq "$(GUI)" "w32"
 GUI_OBJ += main_w32.o
-GUI_LIBS = -lGid32
+GUI_LIBS = -lGdi32
 endif
 
 ifeq "$(BACK)" "direct"
@@ -89,6 +89,8 @@ main_cocoa.o: ext/main_cocoa.m front.h
 	$(FRONT_COMPILE) -c $<
 main_gtk.o: ext/main_gtk.c ext/../front.h
 	$(FRONT_COMPILE) $(GTK_FLAGS) -c $<
+main_w32.o: ext/main_w32.c ext/../front.h
+	$(FRONT_COMPILE) -c $<
 
 basics.o: ext/basics.c basics.h
 	$(BACK_COMPILE) -c $<
