@@ -3,6 +3,7 @@ CONFIG ?= default
 include $(CONFIG).mk
 
 BACK_OBJS = \
+rib.o \
 view_mesh.o \
 view.o \
 draw.o \
