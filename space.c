@@ -17,6 +17,7 @@ point const point_y = POINT_Y;
 point const point_z = POINT_Z;
 #define BASIS_IDENT {POINT_X,POINT_Y,POINT_Z}
 basis const basis_ident = BASIS_IDENT;
+basis const basis_zero = {POINT_ZERO,POINT_ZERO,POINT_ZERO};
 frame const frame_ident = {BASIS_IDENT,POINT_ZERO};
 
 point point_new(double x, double y, double z)
@@ -166,12 +167,19 @@ basis basis_add(basis a, basis b)
                    point_add(a.z, b.z));
 }
 
+basis basis_sub(basis a, basis b)
+{
+  return basis_new(point_sub(a.x, b.x),
+                   point_sub(a.y, b.y),
+                   point_sub(a.z, b.z));
+}
+
 static double basis_trace(basis b)
 {
   return b.x.x + b.y.y + b.z.z;
 }
 
-unsigned basis_eigenvals(basis m, double v[])
+unsigned basis_eigenvals(basis m, double w[])
 {
   double a, b, c, d;
   a = -1;
@@ -180,7 +188,31 @@ unsigned basis_eigenvals(basis m, double v[])
   c = - (b * b - basis_trace(basis_cat(m, m))) / 2.0;
   d = basis_det(m);
   debug("det %f\n", d);
-  return cubic_roots(a, b, c, d, v);
+  return cubic_roots(a, b, c, d, w);
+}
+
+point basis_eigenvec(basis m, double w)
+{
+  basis a;
+  point c[3];
+  unsigned best;
+  unsigned i;
+  a = basis_sub(m, basis_scale(basis_ident, w));
+  /* we have to come up with a vector in the null
+     space of (a), so the first try is to assume
+     (a) has rank 2 and find the biggest cross product
+     between its columns, giving the null space
+     vector */
+  c[0] = point_cross(a.x, a.y);
+  c[1] = point_cross(a.y, a.z);
+  c[2] = point_cross(a.x, a.z);
+  best = 0;
+  for (i = 1; i < 3; ++i)
+    if (point_mag(c[i]) > point_mag(c[best]))
+      best = i;
+  if (point_mag(c[best]) > epsilon)
+    return point_norm(c[best]);
+  die("basis_eigenvec: less than rank 2\n");
 }
 
 frame frame_new(basis b, point o)
@@ -250,3 +282,7 @@ bbox bbox_add(bbox b, point p)
   return b;
 }
 
+int plane_has(plane p, point x)
+{
+  return point_dot(p.n, x) >= p.r;
+}

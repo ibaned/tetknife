@@ -32,6 +32,11 @@ typedef struct {
   point max;
 } bbox;
 
+typedef struct {
+  point n;
+  double r;
+} plane;
+
 extern double const my_pi;
 extern double const epsilon;
 
@@ -40,6 +45,7 @@ extern point const point_x;
 extern point const point_y;
 extern point const point_z;
 extern basis const basis_ident;
+extern basis const basis_zero;
 extern frame const frame_ident;
 
 point point_new(double x, double y, double z);
@@ -65,8 +71,10 @@ basis basis_inv(basis b);
 basis basis_cat(basis a, basis b);
 basis basis_rot(point u, double a);
 basis basis_add(basis a, basis b);
+basis basis_sub(basis a, basis b);
 
-unsigned basis_eigenvals(basis b, double v[]);
+unsigned basis_eigenvals(basis b, double w[]);
+point basis_eigenvec(basis m, double w);
 
 frame frame_new(basis b, point c);
 point frame_eval(frame f, point x);
@@ -78,5 +86,7 @@ frame frame_scale(double s);
 
 bbox bbox_new(void);
 bbox bbox_add(bbox b, point p);
+
+int plane_has(plane p, point x);
 
 #endif
