@@ -8,7 +8,7 @@ static void render(HWND hwnd)
   int w2;
   unsigned char* p;
   unsigned char* q;
-  BITMAPINFOHEADER bmih = {};
+  BITMAPINFOHEADER bmih = {0};
   HDC hdc;
   HBITMAP hdib;
   VOID* pdib;
@@ -109,14 +109,16 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
     LPSTR lpCmdLine, int nCmdShow)
 {
-  front_start();
   char const class_name[] = "Xmesh Window Class";
-  WNDCLASS wc = {};
+  WNDCLASS wc = {0};
+  HWND hwnd;
+  MSG msg = {0};
+  front_start();
   wc.lpfnWndProc = WindowProc;
   wc.hInstance = hInstance;
   wc.lpszClassName = class_name;
   RegisterClass(&wc);
-  HWND hwnd = CreateWindowEx(
+  hwnd = CreateWindowEx(
       0,
       class_name,
       "Xmesh",
@@ -129,7 +131,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
   if (hwnd == NULL)
     return 0;
   ShowWindow(hwnd, nCmdShow);
-  MSG msg = {};
   while (GetMessage(&msg, NULL, 0, 0)) {
     TranslateMessage(&msg);
     DispatchMessage(&msg);
