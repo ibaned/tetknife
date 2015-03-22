@@ -1,13 +1,13 @@
 #include "rib.h"
 #include "basics.h"
 
-static point center_of_mass(unsigned n, rib_obj o[])
+static point center_of_mass(unsigned n, point o[])
 {
   point com;
   unsigned i;
   com = point_zero;
   for (i = 0; i < n; ++i)
-    com = point_add(com, o[i].p);
+    com = point_add(com, o[i]);
   return point_scale(com, 1.0 / n);
 }
 
@@ -15,20 +15,20 @@ static point center_of_mass(unsigned n, rib_obj o[])
 http://en.wikipedia.org/wiki/Moment_of_inertia#Angular_momentum
 */
 
-static basis inertia_contrib(rib_obj* o, point com)
+static basis inertia_contrib(point o, point com)
 {
   basis a;
-  a = basis_cross(point_sub(o->p, com));
+  a = basis_cross(point_sub(o, com));
   return basis_cat(a, a);
 }
 
-static basis inertia_matrix(unsigned n, rib_obj o[], point com)
+static basis inertia_matrix(unsigned n, point o[], point com)
 {
   basis a;
   unsigned i;
   a = basis_zero;
   for (i = 0; i < n; ++i)
-    a = basis_add(a, inertia_contrib(o + i, com));
+    a = basis_add(a, inertia_contrib(o[i], com));
   return basis_scale(a, -1.0);
 }
 
@@ -46,25 +46,25 @@ static point min_eigenvec(basis m)
   return basis_eigenvec(m, w[best]);
 }
 
-static unsigned count_in(unsigned n, rib_obj o[], plane p)
+static unsigned count_in(unsigned n, point o[], plane p)
 {
   unsigned i;
   unsigned nin = 0;
   for (i = 0; i < n; ++i)
-    if (plane_has(p, o[i].p))
+    if (plane_has(p, o[i]))
       ++nin;
   return nin;
 }
 
-static plane median_plane(unsigned n, rib_obj o[], point axis)
+static plane median_plane(unsigned n, point o[], point axis)
 {
   double d, min, max;
   plane p;
   unsigned i;
   unsigned nin;
-  min = max = point_dot(o[0].p, axis);
+  min = max = point_dot(o[0], axis);
   for (i = 1; i < n; ++i) {
-    d = point_dot(o[i].p, axis);
+    d = point_dot(o[i], axis);
     min = MIN(min, d);
     max = MAX(max, d);
   }
@@ -84,37 +84,41 @@ static plane median_plane(unsigned n, rib_obj o[], point axis)
   die("median plane still not found after 100 bisections\n");
 }
 
-static void partition(unsigned n, rib_obj o[], plane mp)
+static void partition(unsigned n, point o[], int idx[], plane mp)
 {
   unsigned i, j;
-  rib_obj so;
+  point so;
+  int si;
   j = 0;
   for (i = 0; i < n; ++i) {
-    if (plane_has(mp, o[i].p)) {
+    if (plane_has(mp, o[i])) {
       so = o[i];
       o[i] = o[j];
       o[j] = so;
+      si = idx[i];
+      idx[i] = idx[j];
+      idx[j] = si;
       ++j;
     }
   }
   ASSERT(j == n / 2);
 }
 
-static void bisect(unsigned n, rib_obj o[])
+static void bisect(unsigned n, point o[], int idx[])
 {
   /* holy lambdas, batman ! */
-  partition(n, o, median_plane(n, o, min_eigenvec(
+  partition(n, o, idx, median_plane(n, o, min_eigenvec(
           inertia_matrix(n, o, center_of_mass(n, o)))));
 }
 
-void rib_sort(unsigned n, rib_obj o[])
+void rib_sort(unsigned n, point o[], int idx[])
 {
   unsigned a, b;
   if (n <= 1)
     return;
   a = n / 2;
   b = n - a;
-  bisect(n, o);
-  rib_sort(a, o);
-  rib_sort(b, o + a);
+  bisect(n, o, idx);
+  rib_sort(a, o, idx);
+  rib_sort(b, o + a, idx + a);
 }
