@@ -2,6 +2,12 @@ CONFIG ?= default
 
 include $(CONFIG).mk
 
+ifeq "$(USE_MPI)" "yes"
+MPI_OBJ = my_mpi.o
+else
+MPI_OBJ = fake_mpi.o
+endif
+
 BACK_OBJS = \
 rib.o \
 view_mesh.o \
@@ -27,6 +33,7 @@ stack.o \
 param.o \
 simplex.o \
 space.o \
+$(MPI_OBJ) \
 basics.o
 
 ifeq "$(GUI)" "cocoa"
@@ -94,8 +101,10 @@ main_gtk.o: ext/main_gtk.c ext/../front.h
 	$(FRONT_COMPILE) $(GTK_FLAGS) -c $<
 main_w32.o: ext/main_w32.c ext/../front.h
 	$(FRONT_COMPILE) -c $<
-
 basics.o: ext/basics.c basics.h
+	$(BACK_COMPILE) -c $<
+my_mpi.o: ext/my_mpi.c ext/my_mpi_internal.h ext/../basics.h \
+  ext/../my_mpi.h
 	$(BACK_COMPILE) -c $<
 
 cad.o: cad.c cad.h space.h flex.h stack.h basics.h list.h flag.h mesh.h \
@@ -132,3 +141,4 @@ stack.o: stack.c stack.h basics.h
 view.o: view.c view.h simplex.h space.h image.h draw.h basics.h
 view_mesh.o: view_mesh.c view_mesh.h view.h simplex.h space.h image.h \
   mesh.h mesh_geom.h mesh_adj.h stack.h basics.h
+fake_mpi.o: fake_mpi.c my_mpi.h basics.h
