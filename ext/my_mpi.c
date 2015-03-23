@@ -1,8 +1,20 @@
-/* external header, nothing we can do */
-#pragma clang diagnostic ignored "-Wlong-long"
-#include "my_mpi_internal.h"
-
 #include "../my_mpi.h"
+#include "../basics.h"
+
+/* mpi.h has long long in it, which apparently
+   isn't part of older C/C++ standards */
+#pragma clang diagnostic ignored "-Wlong-long"
+#include <mpi.h>
+
+struct mpi {
+  MPI_Comm comm;
+};
+
+struct mpi_request {
+  MPI_Request r;
+};
+
+#define CALL(c) ASSERT(0 == (c))
 
 void mpi_init(void)
 {
@@ -104,16 +116,11 @@ mpi_request* mpi_irecv(mpi* m, void* data, unsigned size, int from)
   return r;
 }
 
-int mpi_done_internal(MPI_Request* r)
-{
-  int flag;
-  CALL(MPI_Test(r, &flag, MPI_STATUS_IGNORE));
-  return flag;
-}
-
 int mpi_done(mpi_request* r)
 {
-  if (mpi_done_internal(&r->r)) {
+  int flag;
+  CALL(MPI_Test(&r->r, &flag, MPI_STATUS_IGNORE));
+  if (flag) {
     my_free(r);
     return 1;
   }

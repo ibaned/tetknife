@@ -103,8 +103,7 @@ main_w32.o: ext/main_w32.c ext/../front.h
 	$(FRONT_COMPILE) -c $<
 basics.o: ext/basics.c basics.h
 	$(BACK_COMPILE) -c $<
-my_mpi.o: ext/my_mpi.c ext/my_mpi_internal.h ext/../basics.h \
-  ext/../my_mpi.h
+my_mpi.o: ext/my_mpi.c ext/../basics.h ext/../my_mpi.h
 	$(BACK_COMPILE) -c $<
 
 cad.o: cad.c cad.h space.h flex.h stack.h basics.h list.h flag.h mesh.h \
