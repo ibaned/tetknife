@@ -50,6 +50,15 @@ int stack_push(stack* s)
   return (int)(s->n++);
 }
 
+int stack_push_by(stack* s, unsigned n)
+{
+  int i;
+  ASSERT(stack_can_push(s, n));
+  i = (int)s->n;
+  s->n += n;
+  return i;
+}
+
 static int iter(stack* s, int i)
 {
   if ((unsigned)i == s->n)

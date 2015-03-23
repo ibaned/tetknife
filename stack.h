@@ -17,6 +17,7 @@ unsigned stack_grow_by(stack* s, unsigned n);
 int stack_can_hold(stack* s, unsigned n);
 unsigned stack_grow_to(stack* s, unsigned n);
 int stack_push(stack* s);
+int stack_push_by(stack* s, unsigned n);
 int stack_f(stack* s);
 int stack_n(stack* s, int i);
 
