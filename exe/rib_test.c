@@ -3,11 +3,15 @@
 
 int main()
 {
-  point p[2] = {{1,0,0},{0,0,0}};
-  int idx[2] = {0,1};
-  rib_sort(1, p, idx);
-  debug("after 1: %d\n", idx[0]);
-  rib_sort(2, p, idx);
-  debug("after 2: %d %d\n", idx[0], idx[1]);
+  point p[4] = {
+    {0,0,0},
+    {1,0,0},
+    {1,1,0},
+    {0,1,0}
+  };
+  int idx[4] = {0,1,2,3};
+  rib_sort(4, p, idx);
+  debug("after 2: %d %d %d %d\n",
+      idx[0], idx[1], idx[2], idx[3]);
   return 0;
 }
