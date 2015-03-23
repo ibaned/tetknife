@@ -65,6 +65,7 @@ myperf: myperf.o $(BACK_OBJS)
 cad_test: cad_test.o $(BACK_OBJS)
 quality: quality.o $(BACK_OBJS)
 cubic: cubic.o $(BACK_OBJS)
+rib_test: rib_test.o $(BACK_OBJS)
 libxmesh.a: $(BACK_OBJS)
 	ar cru $@ $^
 
@@ -83,6 +84,8 @@ quality.o: exe/quality.c exe/../simplex.h exe/../space.h exe/../basics.h \
   exe/../mesh_geom.h exe/../mesh.h
 	$(BACK_COMPILE) -c $<
 cubic.o: exe/cubic.c exe/../basics.h
+	$(BACK_COMPILE) -c $<
+rib_test.o: exe/rib_test.c exe/../rib.h exe/../space.h exe/../basics.h
 	$(BACK_COMPILE) -c $<
 
 main_cocoa.o: ext/main_cocoa.m front.h
