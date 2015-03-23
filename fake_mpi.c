@@ -53,7 +53,7 @@ mpi_request* mpi_isend(mpi* m, void* data, unsigned size, int to)
 {
   (void)m;
   (void)to;
-  MY_ASSERT(global_state == EMPTY);
+  ASSERT(global_state == EMPTY);
   global_data = data;
   global_size = size;
   global_state = FULL;
@@ -83,7 +83,7 @@ mpi_request* mpi_irecv(mpi* m,
 {
   (void)m;
   (void)from;
-  my_memmove(data, global_data, size);
+  my_memcpy(data, global_data, size);
   return (mpi_request*)1;
 }
 
