@@ -5,6 +5,7 @@
 #include <math.h>
 #include <float.h>
 #include <complex.h>
+#include <string.h>
 
 void print(char const* format, ...)
 {
@@ -134,4 +135,9 @@ void* my_bsearch(void const* key, void const* base, unsigned nel, unsigned width
     int (*compar)(void const*, void const*))
 {
   return bsearch(key, base, nel, width, compar);
+}
+
+void my_memcpy(void* dst, void const* src, unsigned n)
+{
+  memcpy(dst, src, n);
 }

@@ -40,5 +40,6 @@ void my_qsort(void* base, unsigned nel, unsigned width,
     int (*compar)(void const*, void const*));
 void* my_bsearch(void const* key, void const* base, unsigned nel, unsigned width,
     int (*compar)(void const*, void const*));
+void my_memcpy(void* dst, void const* src, unsigned n);
 
 #endif
