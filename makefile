@@ -116,10 +116,12 @@ charbits.o: charbits.c charbits.h
 classif.o: classif.c classif.h mesh.h simplex.h space.h cad.h list.h \
   field.h basics.h cad_geom.h param.h mesh_adj.h stack.h
 draw.o: draw.c draw.h image.h simplex.h space.h basics.h charbits.h
+fake_mpi.o: fake_mpi.c my_mpi.h basics.h
 field.o: field.c field.h mesh.h simplex.h space.h basics.h
 flag.o: flag.c flag.h cad.h space.h mesh.h simplex.h basics.h
 flex.o: flex.c flex.h stack.h basics.h
 front_back.o: front_back.c front.h back.h
+ibarrier.o: ibarrier.c ibarrier.h my_mpi.h
 image.o: image.c image.h basics.h
 list.o: list.c list.h basics.h
 mesh.o: mesh.c mesh.h simplex.h space.h flex.h stack.h basics.h list.h \
@@ -135,10 +137,10 @@ mesh_geom.o: mesh_geom.c mesh_geom.h mesh.h simplex.h space.h mesh_adj.h \
 mesh_mod.o: mesh_mod.c mesh_mod.h mesh.h simplex.h space.h mesh_adj.h \
   stack.h basics.h mesh_geom.h classif.h cad.h
 param.o: param.c param.h space.h basics.h
+rib.o: rib.c rib.h space.h basics.h
 simplex.o: simplex.c simplex.h space.h
 space.o: space.c space.h basics.h
 stack.o: stack.c stack.h basics.h
 view.o: view.c view.h simplex.h space.h image.h draw.h basics.h
 view_mesh.o: view_mesh.c view_mesh.h view.h simplex.h space.h image.h \
   mesh.h mesh_geom.h mesh_adj.h stack.h basics.h
-fake_mpi.o: fake_mpi.c my_mpi.h basics.h
