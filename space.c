@@ -89,6 +89,41 @@ double* point_arr(point* p)
   return (double*)(&p->x);
 }
 
+point point_perp(point p)
+{
+  double* a;
+  double* b;
+  unsigned tmp;
+  unsigned min = 0;
+  unsigned mid = 1;
+  unsigned max = 2;
+  point q;
+  a = point_arr(&p);
+  b = point_arr(&q);
+  /* custom bubble sort for three values */
+  if (ABS(a[max]) < ABS(a[min])) {
+    tmp = max;
+    max = min;
+    min = tmp;
+  }
+  if (ABS(a[mid]) < ABS(a[min])) {
+    tmp = mid;
+    mid = min;
+    min = tmp;
+  }
+  if (ABS(a[max]) < ABS(a[mid])) {
+    tmp = max;
+    max = mid;
+    mid = tmp;
+  }
+  ASSERT(ABS(a[min]) <= ABS(a[mid]));
+  ASSERT(ABS(a[mid]) <= ABS(a[max]));
+  b[mid] = -a[max];
+  b[max] = a[mid];
+  b[min] = 0;
+  return point_norm(q);
+}
+
 basis basis_new(point x, point y, point z)
 {
   basis b;
@@ -189,12 +224,18 @@ unsigned basis_eigenvals(basis m, double w[])
   return cubic_roots(a, b, c, d, w);
 }
 
+static point* basis_arr(basis* b)
+{
+  return (point*) (&b->x);
+}
+
 point basis_eigenvec(basis m, double w)
 {
   basis a;
   point c[3];
   unsigned best;
   unsigned i;
+  point* aa;
   a = basis_sub(m, basis_scale(basis_ident, w));
   /* we have to come up with a vector in the null
      space of (a), so the first try is to assume
@@ -210,7 +251,18 @@ point basis_eigenvec(basis m, double w)
       best = i;
   if (point_mag(c[best]) > epsilon)
     return point_norm(c[best]);
-  die("basis_eigenvec: less than rank 2\n");
+  /* okay, rank is less than 2; all basis vectors
+     are aligned. pick the biggest one and
+     get a vector orthogonal to that one */
+  best = 0;
+  aa = basis_arr(&a);
+  for (i = 1; i < 3; ++i)
+    if (point_mag(aa[i]) > point_mag(aa[best]))
+      best = i;
+  if (point_mag(aa[best]) > epsilon)
+    return point_perp(aa[best]);
+  /* welp, thats an all-zero matrix. toss a coin, folks. */
+  return point_x;
 }
 
 frame frame_new(basis b, point o)

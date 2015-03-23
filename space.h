@@ -60,6 +60,7 @@ point point_proj(point a, point b);
 point point_rej(point a, point b);
 point point_norm(point p);
 double* point_arr(point* p);
+point point_perp(point p);
 
 basis basis_new(point x, point y, point z);
 point basis_eval(basis b, point p);
