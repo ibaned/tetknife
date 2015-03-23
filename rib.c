@@ -104,7 +104,7 @@ static void partition(unsigned n, point o[], int idx[], plane mp)
   ASSERT(j == n / 2);
 }
 
-static void bisect(unsigned n, point o[], int idx[])
+void inertial_bisect(unsigned n, point o[], int idx[])
 {
   /* holy lambdas, batman ! */
   partition(n, o, idx, median_plane(n, o, min_eigenvec(
@@ -118,7 +118,7 @@ void rib_sort(unsigned n, point o[], int idx[])
     return;
   a = n / 2;
   b = n - a;
-  bisect(n, o, idx);
+  inertial_bisect(n, o, idx);
   rib_sort(a, o, idx);
   rib_sort(b, o + a, idx + a);
 }
