@@ -184,10 +184,8 @@ unsigned basis_eigenvals(basis m, double w[])
   double a, b, c, d;
   a = -1;
   b = basis_trace(m);
-  debug("trace %f\n", b);
   c = - (b * b - basis_trace(basis_cat(m, m))) / 2.0;
   d = basis_det(m);
-  debug("det %f\n", d);
   return cubic_roots(a, b, c, d, w);
 }
 
