@@ -33,6 +33,7 @@ stack.o \
 param.o \
 simplex.o \
 space.o \
+ibarrier.o \
 $(MPI_OBJ) \
 basics.o
 
