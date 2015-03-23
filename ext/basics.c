@@ -123,3 +123,15 @@ unsigned cubic_roots(double a, double b, double c, double d, double x[])
     return 3;
   }
 }
+
+void my_qsort(void* base, unsigned nel, unsigned width,
+    int (*compar)(void const*, void const*))
+{
+  qsort(base, nel, width, compar);
+}
+
+void* my_bsearch(void const* key, void const* base, unsigned nel, unsigned width,
+    int (*compar)(void const*, void const*))
+{
+  return bsearch(key, base, nel, width, compar);
+}

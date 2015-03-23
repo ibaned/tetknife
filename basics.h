@@ -36,4 +36,9 @@ extern double const my_dbl_max;
 
 unsigned cubic_roots(double a, double b, double c, double d, double x[]);
 
+void my_qsort(void* base, unsigned nel, unsigned width,
+    int (*compar)(void const*, void const*));
+void* my_bsearch(void const* key, void const* base, unsigned nel, unsigned width,
+    int (*compar)(void const*, void const*));
+
 #endif
