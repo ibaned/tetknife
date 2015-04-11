@@ -111,7 +111,7 @@ static msg* get_out_msg(int peer)
   return find_out_msg(peer);
 }
 
-void comm_pack(void* data, unsigned size, int to)
+void comm_pack(void const* data, unsigned size, int to)
 {
   msg* m;
   if (global_state == IDLE)
