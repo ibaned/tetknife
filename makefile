@@ -5,7 +5,7 @@ include $(CONFIG).mk
 ifeq "$(USE_MPI)" "yes"
 MPI_OBJ = my_mpi.o
 else
-MPI_OBJ = fake_mpi.o
+MPI_OBJ = serial_mpi.o
 endif
 
 BACK_OBJS = \
@@ -120,7 +120,7 @@ charbits.o: charbits.c charbits.h
 classif.o: classif.c classif.h mesh.h simplex.h space.h cad.h list.h \
   field.h basics.h cad_geom.h param.h mesh_adj.h stack.h
 draw.o: draw.c draw.h image.h simplex.h space.h basics.h charbits.h
-fake_mpi.o: fake_mpi.c my_mpi.h basics.h
+serial_mpi.o: serial_mpi.c my_mpi.h basics.h
 field.o: field.c field.h mesh.h simplex.h space.h basics.h
 flag.o: flag.c flag.h cad.h space.h mesh.h simplex.h basics.h
 flex.o: flex.c flex.h stack.h basics.h
