@@ -60,6 +60,7 @@ mesh* mesh_new(void)
   vfield_init(m, &m->x);
   m->cl = 0;
   m->fl = 0;
+  m->rs = 0;
   return m;
 }
 
@@ -71,6 +72,8 @@ void mesh_free(mesh* m)
     classif_free(m->cl);
   if (m->fl)
     mflag_free(m->fl);
+  if (m->rs)
+    remotes_free(m->rs);
   for (t = 0; t < SIMPLICES; ++t) {
     flex_dtor(&m->f[t]);
     my_free(m->d[t]);
@@ -95,6 +98,8 @@ static unsigned mesh_grow(mesh* m, simplex t)
     for (ut = EDGE; ut <= m->et; ++ut)
       REALLOC(m->fu[ut], c);
     fields_grow(&m->fs, c);
+    if (m->rs)
+      remotes_grow_verts(m, c);
   } else {
     wc = c * nverts(t);
     REALLOC(m->d[t], wc);
