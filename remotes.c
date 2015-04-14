@@ -176,7 +176,7 @@ rent rent_by_rank(mesh* m, ment e, int rank)
 
 int ment_shared_with(mesh* m, ment e, int rank)
 {
-  return rent_ok(rent_by_rank(m, e, rank));
+  return rank == comm_rank() || rent_ok(rent_by_rank(m, e, rank));
 }
 
 rent rent_new(mesh* m, ment me, rcopy rc)
@@ -186,6 +186,7 @@ rent rent_new(mesh* m, ment me, rcopy rc)
   struct peer* p;
   rent re;
   struct ent* e;
+  ASSERT(rc.rank != comm_rank());
   rs = mesh_remotes(m);
   rp = rpeer_by_rank(m, rc.rank);
   if (!rpeer_ok(rp)) {
