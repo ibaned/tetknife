@@ -4,8 +4,10 @@
 #include <stdlib.h>
 #include <math.h>
 #include <float.h>
-#include <complex.h>
 #include <string.h>
+#if __STDC_VERSION__ >= 199901L
+#include <complex.h>
+#endif
 
 void print(char const* format, ...)
 {
@@ -85,6 +87,7 @@ http://en.wikipedia.org/wiki/Cubic_function#The_nature_of_the_roots
 
 unsigned cubic_roots(double a, double b, double c, double d, double x[])
 {
+#if __STDC_VERSION__ >= 199901L
   double del, del0, del1;
   double t0;
   double complex t1;
@@ -123,6 +126,9 @@ unsigned cubic_roots(double a, double b, double c, double d, double x[])
       x[i] = creal(cx[i]);
     return 3;
   }
+#else
+  die("cubic_roots needs C99 complex number support\n");
+#endif
 }
 
 void my_qsort(void* base, unsigned nel, unsigned width,
