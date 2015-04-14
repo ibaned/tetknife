@@ -43,7 +43,7 @@ remotes* remotes_new(mesh* m)
   return rs;
 }
 
-static void rm_peer(remotes* rs, rpeer rp)
+static void peer_free(remotes* rs, rpeer rp)
 {
   struct peer* p;
   p = rs->p + rp.i;
@@ -56,7 +56,7 @@ void remotes_free(remotes* rs)
   my_free(rs->f);
   my_free(rs->o);
   while (rpeer_ok(rpeer_f(rs->m)))
-    rm_peer(rs, rpeer_f(rs->m));
+    peer_free(rs, rpeer_f(rs->m));
   my_free(rs->p);
   mesh_set_remotes(rs->m, 0);
   my_free(rs);
@@ -222,7 +222,7 @@ void rent_free(mesh* m, rent re)
     *pre = rent_of_n(m, re);
   flex_rm(&p->ef, re.i);
   if (p->ef.n == 0)
-    rm_peer(rs, re.p);
+    peer_free(rs, re.p);
 }
 
 rcopy ment_owner(mesh* m, ment e)
