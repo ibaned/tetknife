@@ -37,7 +37,7 @@ void mset_reserve(mset* s, unsigned n)
 
 unsigned muse_count(mesh* m, ment v, simplex t)
 {
-  int n = 0;
+  unsigned n = 0;
   muse u;
   for (u = muse_f(m, v, t); muse_ok(u); u = muse_n(m, u))
     ++n;
