@@ -64,6 +64,10 @@ struct mflag;
 struct mflag* mesh_flag(mesh* m);
 void mesh_set_flag(mesh* m, struct mflag* f);
 
+struct remotes;
+struct remotes* mesh_remotes(mesh* m);
+void mesh_set_remotes(mesh* m, struct remotes* rs);
+
 void mesh_merge_verts(mesh* m, ment v, ment into);
 
 #endif

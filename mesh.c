@@ -5,6 +5,7 @@
 #include "field.h"
 #include "classif.h"
 #include "flag.h"
+#include "remotes.h"
 
 struct mesh {
   flex f[SIMPLICES];
@@ -17,6 +18,7 @@ struct mesh {
   vfield x;
   classif* cl;
   mflag* fl;
+  remotes* rs;
 };
 
 ment const ment_null = { 0, NULL_IDX };
@@ -274,6 +276,16 @@ struct mflag* mesh_flag(mesh* m)
 void mesh_set_flag(mesh* m, struct mflag* f)
 {
   m->fl = f;
+}
+
+struct remotes* mesh_remotes(mesh* m)
+{
+  return m->rs;
+}
+
+void mesh_set_remotes(mesh* m, struct remotes* rs)
+{
+  m->rs = rs;
 }
 
 void mesh_merge_verts(mesh* m, ment v, ment into)

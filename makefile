@@ -25,6 +25,7 @@ cad_gen.o \
 cad_geom.o \
 cad.o \
 list.o \
+remotes.o \
 label.o \
 flag.o \
 field.o \
@@ -143,6 +144,7 @@ mesh_geom.o: mesh_geom.c mesh_geom.h mesh.h simplex.h space.h mesh_adj.h \
 mesh_mod.o: mesh_mod.c mesh_mod.h mesh.h simplex.h space.h mesh_adj.h \
   stack.h basics.h mesh_geom.h classif.h cad.h
 param.o: param.c param.h space.h basics.h
+remotes.o: remotes.c remotes.h mesh.h simplex.h space.h comm.h my_mpi.h
 rib.o: rib.c rib.h space.h basics.h
 serial_mpi.o: serial_mpi.c my_mpi.h basics.h
 simplex.o: simplex.c simplex.h space.h
