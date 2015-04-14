@@ -91,6 +91,7 @@ rpeer rpeer_by_rank(mesh* m, int rank)
 
 int rpeer_rank(mesh* m, rpeer rp)
 {
+  debug("rpeer_rank, rp.i = %d\n", rp.i);
   return mesh_remotes(m)->p[rp.i].rank;
 }
 
@@ -226,7 +227,15 @@ void rent_free(mesh* m, rent re)
 
 rcopy ment_owner(mesh* m, ment e)
 {
-  return rent_copy(m, rent_by_rank(m, e, mesh_remotes(m)->o[e.i]));
+  int orank;
+  rcopy rc;
+  orank = mesh_remotes(m)->o[e.i];
+  if (orank == comm_rank()) {
+    rc.rank = orank;
+    rc.ri = e.i;
+  } else
+    rc = rent_copy(m, rent_by_rank(m, e, orank));
+  return rc;
 }
 
 void ment_set_owner(mesh* m, ment e, int rank)
