@@ -16,6 +16,7 @@ void mset_add(mset* s, ment e);
 int mset_has(mset* s, ment e);
 void mset_reserve(mset* s, unsigned n);
 
+unsigned muse_count(mesh* m, ment v, simplex t);
 int ments_have(unsigned n, ment const es[], ment e);
 void mesh_up(mesh* m, simplex from, ment const dv[], simplex to, mset* s);
 ment mesh_find(mesh* m, simplex t, ment const v[]);

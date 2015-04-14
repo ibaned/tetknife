@@ -35,6 +35,15 @@ void mset_reserve(mset* s, unsigned n)
     REALLOC(s->e, stack_grow_to(&s->s, n));
 }
 
+unsigned muse_count(mesh* m, ment v, simplex t)
+{
+  int n = 0;
+  muse u;
+  for (u = muse_f(m, v, t); muse_ok(u); u = muse_n(m, u))
+    ++n;
+  return n;
+}
+
 int ments_have(unsigned n, ment const es[], ment e)
 {
   unsigned i;
