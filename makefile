@@ -79,39 +79,44 @@ quality: quality.o $(BACK_OBJS)
 cubic: cubic.o $(BACK_OBJS)
 rib_test: rib_test.o $(BACK_OBJS)
 commtest: commtest.o $(BACK_OBJS)
+migrtest: migrtest.o $(BACK_OBJS)
 libxmesh.a: $(BACK_OBJS)
 	ar cru $@ $^
 
-test.o: exe/test.c exe/../back.h exe/../view_mesh.h exe/../view.h \
-  exe/../simplex.h exe/../space.h exe/../image.h exe/../mesh.h \
-  exe/../mesh_bbox.h exe/../cad.h exe/../mesh_adapt.h exe/../flag.h \
-  exe/../mesh_geom.h exe/../mesh_adj.h exe/../stack.h exe/../basics.h
+test.o: exe/test.c back.h view_mesh.h view.h \
+  simplex.h space.h image.h mesh.h \
+  mesh_bbox.h cad.h mesh_adapt.h flag.h \
+  mesh_geom.h mesh_adj.h stack.h basics.h
 	$(FRONT_COMPILE) -c $<
-myperf.o: exe/myperf.c exe/../view_mesh.h exe/../view.h exe/../simplex.h \
-  exe/../space.h exe/../image.h exe/../mesh.h exe/../mesh_bbox.h \
-  exe/../cad.h exe/../mesh_adapt.h exe/../flag.h
+myperf.o: exe/myperf.c view_mesh.h view.h simplex.h \
+  space.h image.h mesh.h mesh_bbox.h \
+  cad.h mesh_adapt.h flag.h
 	$(FRONT_COMPILE) -c $<
-cad_test.o: exe/cad_test.c exe/../cad.h
+cad_test.o: exe/cad_test.c cad.h
 	$(BACK_COMPILE) -c $<
-quality.o: exe/quality.c exe/../simplex.h exe/../space.h exe/../basics.h \
-  exe/../mesh_geom.h exe/../mesh.h
+quality.o: exe/quality.c simplex.h space.h basics.h \
+  mesh_geom.h mesh.h
 	$(BACK_COMPILE) -c $<
-cubic.o: exe/cubic.c exe/../basics.h
+cubic.o: exe/cubic.c basics.h
 	$(BACK_COMPILE) -c $<
-rib_test.o: exe/rib_test.c exe/../rib.h exe/../space.h exe/../basics.h
+rib_test.o: exe/rib_test.c rib.h space.h basics.h
 	$(BACK_COMPILE) -c $<
-commtest.o: exe/commtest.c exe/../comm.h exe/../my_mpi.h exe/../basics.h
+commtest.o: exe/commtest.c comm.h my_mpi.h basics.h
+	$(BACK_COMPILE) -c $<
+migrtest.o: exe/migrtest.c migrate.h mesh.h \
+  simplex.h space.h label.h mesh_bbox.h \
+  cad.h comm.h my_mpi.h
 	$(BACK_COMPILE) -c $<
 
 main_cocoa.o: ext/main_cocoa.m front.h
 	$(FRONT_COMPILE) -c $<
-main_gtk.o: ext/main_gtk.c ext/../front.h
+main_gtk.o: ext/main_gtk.c front.h
 	$(FRONT_COMPILE) $(GTK_FLAGS) -c $<
-main_w32.o: ext/main_w32.c ext/../front.h
+main_w32.o: ext/main_w32.c front.h
 	$(FRONT_COMPILE) -c $<
 basics.o: ext/basics.c basics.h
 	$(BACK_COMPILE) -c $<
-my_mpi.o: ext/my_mpi.c ext/../basics.h ext/../my_mpi.h
+my_mpi.o: ext/my_mpi.c basics.h my_mpi.h
 	$(BACK_COMPILE) -c $<
 
 cad.o: cad.c cad.h space.h flex.h stack.h basics.h list.h flag.h mesh.h \
