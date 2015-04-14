@@ -57,4 +57,6 @@ void rent_set_index(mesh* m, rent re, int ri);
 
 void remotes_grow_verts(mesh* m, unsigned cap);
 
+void remotes_add_vert(mesh* m, ment v);
+
 #endif

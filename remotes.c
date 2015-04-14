@@ -23,13 +23,20 @@ struct remotes {
   struct peer* p;
 };
 
+#define RPEER_NULL { NULL_IDX }
+static rpeer const rpeer_null = RPEER_NULL;
+static rent const rent_null = { RPEER_NULL, NULL_IDX };
+
 remotes* remotes_new(mesh* m)
 {
   remotes* rs;
+  ment v;
   rs = my_malloc(sizeof(*rs));
   rs->m = m;
   mesh_set_remotes(m, rs);
   rs->f = my_malloc(sizeof(rent) * mesh_cap(m, VERTEX));
+  for (v = ment_f(m, VERTEX); ment_ok(v); v = ment_n(m, v))
+    rs->f[v.i] = rent_null;
   rs->o = my_malloc(sizeof(int) * mesh_cap(m, VERTEX));
   flex_init(&rs->pf);
   rs->p = 0;
@@ -54,9 +61,6 @@ void remotes_free(remotes* rs)
   mesh_set_remotes(rs->m, 0);
   my_free(rs);
 }
-
-#define RPEER_NULL { NULL_IDX }
-static rpeer const rpeer_null = RPEER_NULL;
 
 int rpeer_ok(rpeer p)
 {
@@ -159,8 +163,6 @@ unsigned rent_of_count(mesh* m, ment e)
   return n;
 }
 
-static rent const rent_null = { RPEER_NULL, NULL_IDX };
-
 rent rent_by_rank(mesh* m, ment e, int rank)
 {
   rent re;
@@ -248,4 +250,9 @@ void remotes_grow_verts(mesh* m, unsigned cap)
   rs = mesh_remotes(m);
   REALLOC(rs->f, cap);
   REALLOC(rs->o, cap);
+}
+
+void remotes_add_vert(mesh* m, ment v)
+{
+  mesh_remotes(m)->f[v.i] = rent_null;
 }

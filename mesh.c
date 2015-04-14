@@ -141,10 +141,12 @@ ment ment_new(mesh* m, simplex t, ment const v[])
   if (flex_full(&m->f[t]))
     mesh_grow(m, t);
   e.i = flex_add(&m->f[t]);
-  if (t == VERTEX)
+  if (t == VERTEX) {
     for (ut = EDGE; ut <= m->et; ++ut)
       m->fu[ut][e.i] = NULL_IDX;
-  else
+    if (m->rs)
+      remotes_add_vert(m, e);
+  } else
     for (i = 0; i < nverts(t); ++i) {
       u = muse_at(e, i);
       ASSERT(v[i].t == VERTEX);
