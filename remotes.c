@@ -35,9 +35,9 @@ remotes* remotes_new(mesh* m)
   rs->m = m;
   mesh_set_remotes(m, rs);
   rs->f = my_malloc(sizeof(rent) * mesh_cap(m, VERTEX));
-  for (v = ment_f(m, VERTEX); ment_ok(v); v = ment_n(m, v))
-    rs->f[v.i] = rent_null;
   rs->o = my_malloc(sizeof(int) * mesh_cap(m, VERTEX));
+  for (v = ment_f(m, VERTEX); ment_ok(v); v = ment_n(m, v))
+    remotes_add_vert(m, v);
   flex_init(&rs->pf);
   rs->p = 0;
   return rs;
@@ -255,4 +255,5 @@ void remotes_grow_verts(mesh* m, unsigned cap)
 void remotes_add_vert(mesh* m, ment v)
 {
   mesh_remotes(m)->f[v.i] = rent_null;
+  mesh_remotes(m)->o[v.i] = comm_rank();
 }
