@@ -135,8 +135,8 @@ ment ment_new(mesh* m, simplex t, ment const v[])
   muse u;
   unsigned i;
   simplex ut;
-  while (t > m->et)
-    raise_dim(m);
+  if (t > m->et)
+    mesh_set_elem(m, t);
   e.t = t;
   if (flex_full(&m->f[t]))
     mesh_grow(m, t);
@@ -174,6 +174,13 @@ void ment_free(mesh* m, ment e)
 simplex mesh_elem(mesh* m)
 {
   return m->et;
+}
+
+void mesh_set_elem(mesh* m, simplex et)
+{
+  ASSERT(et >= m->et);
+  while (et > m->et)
+    raise_dim(m);
 }
 
 ment ment_f(mesh* m, simplex t)
