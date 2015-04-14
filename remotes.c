@@ -215,7 +215,7 @@ void rent_free(mesh* m, rent re)
   p = rs->p + re.p.i;
   v = rent_of(m, re);
   for (pre = &rs->f[v.i]; !rent_eq(*pre, re);
-       pre = &((rs->p + pre->p.i)->e[pre->i].n))
+       pre = &(rs->p[pre->p.i].e[pre->i].n))
     *pre = rent_of_n(m, re);
   flex_rm(&p->ef, re.i);
   if (p->ef.n == 0)
@@ -235,6 +235,11 @@ void ment_set_owner(mesh* m, ment e, int rank)
 int ment_owned(mesh* m, ment e)
 {
   return mesh_remotes(m)->o[e.i] == comm_rank();
+}
+
+void rent_set_index(mesh* m, rent re, int ri)
+{
+  mesh_remotes(m)->p[re.p.i].e[re.i].ri = ri;
 }
 
 void remotes_grow_verts(mesh* m, unsigned cap)

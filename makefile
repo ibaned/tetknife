@@ -25,6 +25,7 @@ cad_gen.o \
 cad_geom.o \
 cad.o \
 list.o \
+migrate.o \
 remotes.o \
 label.o \
 flag.o \
@@ -143,6 +144,8 @@ mesh_geom.o: mesh_geom.c mesh_geom.h mesh.h simplex.h space.h mesh_adj.h \
   stack.h basics.h field.h
 mesh_mod.o: mesh_mod.c mesh_mod.h mesh.h simplex.h space.h mesh_adj.h \
   stack.h basics.h mesh_geom.h classif.h cad.h
+migrate.o: migrate.c migrate.h mesh.h simplex.h space.h label.h comm.h \
+  my_mpi.h
 param.o: param.c param.h space.h basics.h
 remotes.o: remotes.c remotes.h mesh.h simplex.h space.h flex.h stack.h \
   basics.h comm.h my_mpi.h
