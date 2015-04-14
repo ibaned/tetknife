@@ -5,7 +5,7 @@
 #include <math.h>
 #include <float.h>
 #include <string.h>
-#if __STDC_VERSION__ >= 199901L
+#if defined(__STDC_VERSION__) && ((__STDC_VERSION__) >= 199901L)
 #include <complex.h>
 #endif
 
@@ -87,7 +87,7 @@ http://en.wikipedia.org/wiki/Cubic_function#The_nature_of_the_roots
 
 unsigned cubic_roots(double a, double b, double c, double d, double x[])
 {
-#if __STDC_VERSION__ >= 199901L
+#if defined(__STDC_VERSION__) && ((__STDC_VERSION__) >= 199901L)
   double del, del0, del1;
   double t0;
   double complex t1;
@@ -127,6 +127,11 @@ unsigned cubic_roots(double a, double b, double c, double d, double x[])
     return 3;
   }
 #else
+  (void)a;
+  (void)b;
+  (void)c;
+  (void)d;
+  (void)x;
   die("cubic_roots needs C99 complex number support\n");
 #endif
 }
