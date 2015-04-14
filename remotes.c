@@ -47,6 +47,7 @@ static void peer_free(remotes* rs, rpeer rp)
 {
   struct peer* p;
   p = rs->p + rp.i;
+  flex_dtor(&p->ef);
   my_free(p->e);
   flex_rm(&rs->pf, rp.i);
 }
@@ -58,6 +59,7 @@ void remotes_free(remotes* rs)
   while (rpeer_ok(rpeer_f(rs->m)))
     peer_free(rs, rpeer_f(rs->m));
   my_free(rs->p);
+  flex_dtor(&rs->pf);
   mesh_set_remotes(rs->m, 0);
   my_free(rs);
 }
