@@ -91,7 +91,6 @@ rpeer rpeer_by_rank(mesh* m, int rank)
 
 int rpeer_rank(mesh* m, rpeer rp)
 {
-  debug("rpeer_rank, rp.i = %d\n", rp.i);
   return mesh_remotes(m)->p[rp.i].rank;
 }
 
@@ -192,6 +191,7 @@ rent rent_new(mesh* m, ment me, rcopy rc)
       REALLOC(rs->p, flex_grow(&rs->pf));
     rp.i = flex_add(&rs->pf);
     p = rs->p + rp.i;
+    p->rank = rc.rank;
     flex_init(&p->ef);
     p->e = 0;
   } else
