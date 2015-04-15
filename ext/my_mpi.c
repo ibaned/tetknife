@@ -131,3 +131,30 @@ void mpi_barrier(mpi* m)
 {
   CALL(MPI_Barrier(m->comm));
 }
+
+void mpi_add_doubles(mpi* m, double* x, unsigned n)
+{
+  CALL(MPI_Allreduce(MPI_IN_PLACE, x, (int)n, MPI_DOUBLE, MPI_SUM, m->comm));
+}
+
+void mpi_min_doubles(mpi* m, double* x, unsigned n)
+{
+  CALL(MPI_Allreduce(MPI_IN_PLACE, x, (int)n, MPI_DOUBLE, MPI_MIN, m->comm));
+}
+
+void mpi_max_doubles(mpi* m, double* x, unsigned n)
+{
+  CALL(MPI_Allreduce(MPI_IN_PLACE, x, (int)n, MPI_DOUBLE, MPI_MAX, m->comm));
+}
+
+unsigned long mpi_add_ulong(mpi* m, unsigned long x)
+{
+  CALL(MPI_Allreduce(MPI_IN_PLACE, &x, 1, MPI_UNSIGNED_LONG, MPI_SUM, m->comm));
+  return x;
+}
+
+unsigned long mpi_exscan_ulong(mpi* m, unsigned long x)
+{
+  CALL(MPI_Exscan(MPI_IN_PLACE, &x, 1, MPI_UNSIGNED_LONG, MPI_SUM, m->comm));
+  return x;
+}

@@ -97,3 +97,36 @@ void mpi_barrier(mpi* m)
 {
   (void)m;
 }
+
+void mpi_add_doubles(mpi* m, double* x, unsigned n)
+{
+  (void)m;
+  (void)x;
+  (void)n;
+}
+
+void mpi_min_doubles(mpi* m, double* x, unsigned n)
+{
+  (void)m;
+  (void)x;
+  (void)n;
+}
+
+void mpi_max_doubles(mpi* m, double* x, unsigned n)
+{
+  (void)m;
+  (void)x;
+  (void)n;
+}
+
+unsigned long mpi_add_ulong(mpi* m, unsigned long x)
+{
+  (void)m;
+  return x;
+}
+
+unsigned long mpi_exscan_ulong(mpi* m, unsigned long x)
+{
+  (void)m;
+  return x;
+}

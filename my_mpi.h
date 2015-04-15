@@ -20,4 +20,10 @@ mpi_request* mpi_irecv(mpi* m,
 int mpi_done(mpi_request* r);
 void mpi_barrier(mpi* m);
 
+void mpi_add_doubles(mpi* m, double* x, unsigned n);
+void mpi_min_doubles(mpi* m, double* x, unsigned n);
+void mpi_max_doubles(mpi* m, double* x, unsigned n);
+unsigned long mpi_add_ulong(mpi* m, unsigned long x);
+unsigned long mpi_exscan_ulong(mpi* m, unsigned long x);
+
 #endif
