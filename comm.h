@@ -6,6 +6,8 @@
 void comm_init(mpi* m);
 void comm_finalize(void);
 
+mpi* comm_mpi(void);
+
 int comm_rank(void);
 int comm_size(void);
 

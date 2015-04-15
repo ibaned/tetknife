@@ -68,6 +68,11 @@ void comm_finalize(void)
   global_state = UNINIT;
 }
 
+mpi* comm_mpi(void)
+{
+  return global_mpi;
+}
+
 static msg* add_msg(msgs* ms)
 {
   msg* m;
