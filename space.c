@@ -224,7 +224,7 @@ unsigned basis_eigenvals(basis m, double w[])
   return cubic_roots(a, b, c, d, w);
 }
 
-static point* basis_arr(basis* b)
+point* basis_arr(basis* b)
 {
   return (point*) (&b->x);
 }

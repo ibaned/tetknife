@@ -73,6 +73,7 @@ basis basis_cat(basis a, basis b);
 basis basis_rot(point u, double a);
 basis basis_add(basis a, basis b);
 basis basis_sub(basis a, basis b);
+point* basis_arr(basis* b);
 
 unsigned basis_eigenvals(basis b, double w[]);
 point basis_eigenvec(basis m, double w);
