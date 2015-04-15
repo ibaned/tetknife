@@ -221,8 +221,8 @@ void rent_free(mesh* m, rent re)
   p = rs->p + re.p.i;
   v = rent_of(m, re);
   for (pre = &rs->f[v.i]; !rent_eq(*pre, re);
-       pre = &(rs->p[pre->p.i].e[pre->i].n))
-    *pre = rent_of_n(m, re);
+       pre = &(rs->p[pre->p.i].e[pre->i].n));
+  *pre = rent_of_n(m, re);
   flex_rm(&p->ef, re.i);
   if (p->ef.n == 0)
     peer_free(rs, re.p);
