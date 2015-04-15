@@ -2,8 +2,8 @@
 #define RIB_H
 
 #include "space.h"
+#include "remotes.h"
 
-void inertial_bisect(unsigned n, point o[], int idx[]);
-void rib_sort(unsigned n, point o[], int idx[]);
+void inertial_bisection(unsigned* n, point** o, rcopy** idx);
 
 #endif
