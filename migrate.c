@@ -62,7 +62,7 @@ static rcopy unpack_remote(void)
 
 static void pack_vertex(mesh* m, ment v, int to);
 
-static void residence_to_new_copies(mesh* m)
+static void residence_to_new_verts(mesh* m)
 {
   ment v;
   unsigned ne;
@@ -101,7 +101,7 @@ static ment unpack_vertex(mesh* m)
   return v;
 }
 
-static void new_copies_to_reduce(mesh* m)
+static void new_verts_to_reduce(mesh* m)
 {
   rcopy rc;
   ment v;
@@ -175,9 +175,9 @@ void migrate(mesh* m, mlabel* l)
 {
   pack_residence(m, l);
   comm_exch();
-  residence_to_new_copies(m);
+  residence_to_new_verts(m);
   comm_exch();
-  new_copies_to_reduce(m);
+  new_verts_to_reduce(m);
   comm_exch();
   unpack_reduce(m);
   pack_bcast(m);
