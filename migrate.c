@@ -13,7 +13,7 @@ mlabel* migrate_mlabel_new(mesh* m)
   return l;
 }
 
-static void pack_residence(mesh* m, mlabel* l)
+static void pack_residence(mesh* m, mlabel* plan)
 {
   ment v;
   rcopy o;
@@ -28,7 +28,7 @@ static void pack_residence(mesh* m, mlabel* l)
     COMM_PACK(ne, o.rank);
     for (u = muse_f(m, v, mesh_elem(m)); muse_ok(u); u = muse_n(m, u)) {
       e = muse_of(u);
-      rank = (int) mlabel_get(l, e);
+      rank = (int) mlabel_get(plan, e);
       COMM_PACK(rank, o.rank);
     }
   }
@@ -171,9 +171,97 @@ static void unpack_bcast(mesh* m)
   }
 }
 
-void migrate(mesh* m, mlabel* l)
+static void pack_ref(mesh* m, ment v, int to)
 {
-  pack_residence(m, l);
+  rcopy rc;
+  rc = rent_copy(m, rent_by_rank(m, v, to));
+  pack_remote(rc);
+}
+
+static ment unpack_ref(void)
+{
+  return unpack_local();
+}
+
+static void pack_elem(mesh* m, ment e, int to)
+{
+  ment v[SIMPLEX_MAX_DOWN];
+  unsigned nv;
+  unsigned i;
+  nv = ment_verts(m, e, v);
+  COMM_PACK(e.t, to);
+  for (i = 0; i < nv; ++i)
+    pack_ref(m, v[i], to);
+}
+
+static ment unpack_elem(mesh* m)
+{
+  ment e;
+  ment v[SIMPLEX_MAX_DOWN];
+  unsigned nv;
+  unsigned i;
+  COMM_UNPACK(e.t);
+  nv = simplex_ndown[e.t][VERTEX];
+  for (i = 0; i < nv; ++i)
+    v[i] = unpack_ref();
+  return ment_new(m, e.t, v);
+}
+
+static void pack_and_free_elems(mesh* m, mlabel* plan)
+{
+  ment e;
+  int rank;
+  for (e = ment_f(m, mesh_elem(m)); ment_ok(e); e = ment_n(m, e)) {
+    rank = (int) mlabel_get(plan, e);
+    if (rank != comm_rank()) {
+      pack_elem(m, e, rank);
+      ment_free(m, e);
+    }
+  }
+}
+
+static void unpack_elems(mesh* m)
+{
+  while (comm_recv())
+    unpack_elem(m);
+}
+
+static void free_rents_and_pack(mesh* m, ment v)
+{
+  rent re;
+  while (rent_ok(re = rent_of_f(m, v))) {
+    pack_remote(rent_copy(m, re));
+    rent_free(m, re);
+  }
+}
+
+static void unpack_rent_free(mesh* m)
+{
+  ment v;
+  v = unpack_local();
+  rent_free(m, rent_by_rank(m, v, comm_from()));
+}
+
+static void free_verts_and_pack(mesh* m)
+{
+  ment v;
+  for (v = ment_f(m, VERTEX); ment_ok(v); v = ment_n(m, v)) {
+    if (muse_ok(muse_f(m, v, mesh_elem(m))))
+      continue;
+    free_rents_and_pack(m, v);
+    ment_free(m, v);
+  }
+}
+
+static void unpack_rent_frees(mesh* m)
+{
+  while (comm_recv())
+    unpack_rent_free(m);
+}
+
+void migrate(mesh* m, mlabel* plan)
+{
+  pack_residence(m, plan);
   comm_exch();
   residence_to_new_verts(m);
   comm_exch();
@@ -183,4 +271,10 @@ void migrate(mesh* m, mlabel* l)
   pack_bcast(m);
   comm_exch();
   unpack_bcast(m);
+  pack_and_free_elems(m, plan);
+  comm_exch();
+  unpack_elems(m);
+  free_verts_and_pack(m);
+  comm_exch();
+  unpack_rent_frees(m);
 }
