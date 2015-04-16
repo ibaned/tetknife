@@ -3,7 +3,7 @@
 #include "remotes.h"
 #include "mesh_adj.h"
 
-mlabel* migrate_mlabel_new(mesh* m)
+mlabel* migration_plan_new(mesh* m)
 {
   mlabel* l;
   ment e;

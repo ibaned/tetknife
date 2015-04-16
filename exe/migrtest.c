@@ -69,7 +69,7 @@ int main()
   else
     mesh_set_elem(m, TRIANGLE);
   remotes_new(m);
-  plan = migrate_mlabel_new(m);
+  plan = migration_plan_new(m);
   if (!comm_rank())
     mlabel_set(plan, be[0], 1);
   print_mesh(m, plan);
