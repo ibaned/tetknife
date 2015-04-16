@@ -68,7 +68,7 @@ static unsigned long count_total_in(unsigned n, point o[], plane p)
   return mpi_add_ulong(comm_mpi(), count_local_in(n, o, p));
 }
 
-static plane median_plane(unsigned n, point o[], point axis)
+static int find_median_radius(unsigned n, point o[], plane* pp)
 {
   double d, min, max;
   plane p;
@@ -76,9 +76,11 @@ static plane median_plane(unsigned n, point o[], point axis)
   unsigned long nin;
   unsigned long tn;
   static unsigned const maxiter = 60;
-  min = max = point_dot(o[0], axis);
-  for (i = 1; i < n; ++i) {
-    d = point_dot(o[i], axis);
+  p = *pp;
+  min = my_dbl_max;
+  max = -my_dbl_max;
+  for (i = 0; i < n; ++i) {
+    d = point_dot(o[i], p.n);
     min = MIN(min, d);
     max = MAX(max, d);
   }
@@ -86,19 +88,42 @@ static plane median_plane(unsigned n, point o[], point axis)
   mpi_max_doubles(comm_mpi(), &max, 1);
   d   = (max - min) * (1.0 / 4.0 + epsilon);
   p.r = (max + min) / 2.0;
-  p.n = axis;
   tn = mpi_add_ulong(comm_mpi(), n);
   for (i = 0; i < maxiter; ++i) {
     nin = count_total_in(n, o, p);
-    if (nin == tn / 2)
-      return p;
+    if (nin == tn / 2) {
+      *pp = p;
+      return 1;
+    }
     if (nin < tn / 2)
       p.r -= d;
     else
       p.r += d;
     d /= 2.0;
   }
-  die("median plane still not found after %u bisections\n", maxiter);
+  return 0;
+}
+
+static plane median_plane(unsigned n, point o[], point axis)
+{
+  plane p;
+  unsigned i;
+  double sign;
+  p.n = axis;
+  if (find_median_radius(n, o, &p))
+    return p;
+  for (i = 0; i < 8; ++i) {
+    sign = (i % 2) ? 1 : -1;
+    p.n.x = axis.x + sign * epsilon;
+    sign = ((i / 2) % 2) ? 1 : -1;
+    p.n.y = axis.y + sign * epsilon;
+    sign = ((i / 4) % 2) ? 1 : -1;
+    p.n.z = axis.z + sign * epsilon;
+    if (find_median_radius(n, o, &p))
+      return p;
+  }
+  die("RIB: even with random perturbations, no perfect median plane could be found\n"
+      "RIB: there may be points which are the same\n");
 }
 
 static void partition(unsigned* n, point** o, rcopy** rc, plane mp)
