@@ -4,7 +4,7 @@
 #include "space.h"
 #include "remotes.h"
 
-void inertial_bisection(unsigned* n, point** o, rcopy** idx);
 void recursive_inertial_bisection(unsigned* n, point** o, rcopy** idx);
+void mesh_balance_rib(mesh* m);
 
 #endif

@@ -1,6 +1,8 @@
 #include "rib.h"
 #include "basics.h"
 #include "comm.h"
+#include "migrate.h"
+#include "mesh_geom.h"
 
 static point center_of_mass(unsigned n, point o[])
 {
@@ -192,7 +194,7 @@ static plane bisection_plane(unsigned n, point o[])
   return median_plane(n, o, axis);
 }
 
-void inertial_bisection(unsigned* n, point** o, rcopy** idx)
+static void inertial_bisection(unsigned* n, point** o, rcopy** idx)
 {
   plane mp = bisection_plane(*n, *o);
   partition(n, o, idx, mp);
@@ -219,4 +221,47 @@ void recursive_inertial_bisection(unsigned* n, point** o, rcopy** idx)
   comm_finalize();
   comm_init(ompi);
   mpi_free(ompi);
+}
+
+static void prepare_rib_input(mesh* m, unsigned* n, point** o, rcopy** idx)
+{
+  ment e;
+  unsigned i;
+  *n = ment_count(m, mesh_elem(m));
+  *o = my_malloc(sizeof(point) * (*n));
+  *idx = my_malloc(sizeof(rcopy) * (*n));
+  i = 0;
+  for (e = ment_f(m, mesh_elem(m)); ment_ok(e); e = ment_n(m, e)) {
+    (*o)[i] = ment_centroid(m, e);
+    (*idx)[i].rank = comm_rank();
+    (*idx)[i].ri = e.i;
+  }
+}
+
+static mlabel* plan_from_rib(mesh* m, unsigned n, rcopy idx[])
+{
+  mlabel* plan;
+  unsigned i;
+  plan = migration_plan_new(m);
+  for (i = 0; i < n; ++i)
+    pack_remote(idx[i]);
+  comm_exch();
+  while (comm_recv())
+    mlabel_set(plan, unpack_local(mesh_elem(m)), comm_from());
+  return plan;
+}
+
+void mesh_balance_rib(mesh* m)
+{
+  unsigned n;
+  point* o;
+  rcopy* idx;
+  mlabel* plan;
+  prepare_rib_input(m, &n, &o, &idx);
+  recursive_inertial_bisection(&n, &o, &idx);
+  plan = plan_from_rib(m, n, idx);
+  my_free(o);
+  my_free(idx);
+  migrate(m, plan);
+  mlabel_free(plan);
 }
