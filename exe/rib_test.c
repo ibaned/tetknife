@@ -40,6 +40,8 @@ int main()
     }
     mpi_barrier(comm_mpi());
   }
+  my_free(o);
+  my_free(rc);
   comm_finalize();
   mpi_finalize();
   return 0;
