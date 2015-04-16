@@ -5,5 +5,6 @@
 #include "remotes.h"
 
 void inertial_bisection(unsigned* n, point** o, rcopy** idx);
+void recursive_inertial_bisection(unsigned* n, point** o, rcopy** idx);
 
 #endif

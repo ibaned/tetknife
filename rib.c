@@ -199,3 +199,26 @@ void inertial_bisection(unsigned* n, point** o, rcopy** idx)
   plane mp = bisection_plane(*n, *o);
   partition(n, o, idx, mp);
 }
+
+void recursive_inertial_bisection(unsigned* n, point** o, rcopy** idx)
+{
+  int osize;
+  int orank;
+  int size;
+  mpi* ompi;
+  mpi* submpi;
+  osize = comm_size();
+  orank = comm_rank();
+  ompi = mpi_copy(comm_mpi());
+  for (size = osize; size != 1; size /= 2) {
+    ASSERT(size % 2 == 0);
+    submpi = mpi_split(ompi, orank / size, orank % size);
+    comm_finalize();
+    comm_init(submpi);
+    inertial_bisection(n, o, idx);
+    mpi_free(submpi);
+  }
+  comm_finalize();
+  comm_init(ompi);
+  mpi_free(ompi);
+}
