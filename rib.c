@@ -107,7 +107,6 @@ static void partition(unsigned* n, point** o, rcopy** rc, plane mp)
   point* no;
   rcopy* prc;
   rcopy* nrc;
-  unsigned long tn;
   unsigned lin;
   unsigned long tin;
   unsigned lout;
@@ -128,7 +127,6 @@ static void partition(unsigned* n, point** o, rcopy** rc, plane mp)
   pn = *n;
   po = *o;
   prc = *rc;
-  tn = mpi_add_ulong(comm_mpi(), pn);
   lin = count_local_in(pn, po, mp);
   lout = pn - lin;
   tin = mpi_add_ulong(comm_mpi(), lin);
