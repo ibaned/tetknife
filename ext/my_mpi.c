@@ -156,5 +156,7 @@ unsigned long mpi_add_ulong(mpi* m, unsigned long x)
 unsigned long mpi_exscan_ulong(mpi* m, unsigned long x)
 {
   CALL(MPI_Exscan(MPI_IN_PLACE, &x, 1, MPI_UNSIGNED_LONG, MPI_SUM, m->comm));
+  if (mpi_rank(m) == 0)
+    return 0; /* wtf, mpi ?!?  rank 0 gets uninit data from exscan */
   return x;
 }
