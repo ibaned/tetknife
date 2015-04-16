@@ -13,6 +13,7 @@ triangle verts_triangle(mesh* m, ment const v[]);
 tet verts_tet(mesh* m, ment const v[]);
 
 point verts_centroid(mesh* m, simplex t, ment const v[]);
+point ment_centroid(mesh* m, ment e);
 
 double triangle_quality(mesh* m, ment e);
 double tet_quality(mesh* m, ment e);

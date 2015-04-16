@@ -48,6 +48,13 @@ point verts_centroid(mesh* m, simplex t, ment const v[])
   die("bad simplex %d in verts_centroid\n", t);
 }
 
+point ment_centroid(mesh* m, ment e)
+{
+  ment v[SIMPLEX_MAX_DOWN];
+  ment_verts(m, e, v);
+  return verts_centroid(m, e.t, v);
+}
+
 /* Shewchuk, J. "What is a good linear finite element?
    interpolation, conditioning, anisotropy, and quality measures (preprint)."
    University of California at Berkeley 73 (2002).
