@@ -128,5 +128,6 @@ unsigned long mpi_add_ulong(mpi* m, unsigned long x)
 unsigned long mpi_exscan_ulong(mpi* m, unsigned long x)
 {
   (void)m;
+  (void)x;
   return 0;
 }
