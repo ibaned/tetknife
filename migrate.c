@@ -34,19 +34,6 @@ static void pack_residence(mesh* m, mlabel* plan)
   }
 }
 
-static void pack_remote(rcopy rc)
-{
-  COMM_PACK(rc.ri, rc.rank);
-}
-
-static ment unpack_local(void)
-{
-  ment v;
-  v.t = VERTEX;
-  COMM_UNPACK(v.i);
-  return v;
-}
-
 static void pack_local(ment v, int to)
 {
   COMM_PACK(v.i, to);
@@ -120,7 +107,7 @@ static void unpack_reduce(mesh* m)
   rcopy rc;
   ment v;
   while (comm_recv()) {
-    v = unpack_local();
+    v = unpack_local(VERTEX);
     rc = unpack_remote();
     rent_set_index(m, rent_by_rank(m, v, rc.rank), rc.ri);
   }
@@ -160,7 +147,7 @@ static void unpack_bcast(mesh* m)
   unsigned i;
   rcopy rc;
   while (comm_recv()) {
-    v = unpack_local();
+    v = unpack_local(VERTEX);
     COMM_UNPACK(nr);
     for (i = 0; i < nr; ++i) {
       COMM_UNPACK(rc.rank);
@@ -180,7 +167,7 @@ static void pack_ref(mesh* m, ment v, int to)
 
 static ment unpack_ref(void)
 {
-  return unpack_local();
+  return unpack_local(VERTEX);
 }
 
 static void pack_elem(mesh* m, ment e, int to)
@@ -238,7 +225,7 @@ static void free_rents_and_pack(mesh* m, ment v)
 static void unpack_rent_free(mesh* m)
 {
   ment v;
-  v = unpack_local();
+  v = unpack_local(VERTEX);
   rent_free(m, rent_by_rank(m, v, comm_from()));
 }
 

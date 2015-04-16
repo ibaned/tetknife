@@ -269,3 +269,16 @@ void remotes_add_vert(mesh* m, ment v)
   mesh_remotes(m)->f[v.i] = rent_null;
   mesh_remotes(m)->o[v.i] = comm_rank();
 }
+
+void pack_remote(rcopy rc)
+{
+  COMM_PACK(rc.ri, rc.rank);
+}
+
+ment unpack_local(simplex t)
+{
+  ment v;
+  v.t = t;
+  COMM_UNPACK(v.i);
+  return v;
+}

@@ -59,4 +59,7 @@ void remotes_grow_verts(mesh* m, unsigned cap);
 
 void remotes_add_vert(mesh* m, ment v);
 
+void pack_remote(rcopy rc);
+ment unpack_local(simplex t);
+
 #endif
