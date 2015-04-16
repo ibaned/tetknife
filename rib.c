@@ -130,10 +130,10 @@ static void partition(unsigned* n, point** o, rcopy** rc, plane mp)
   prc = *rc;
   tn = mpi_add_ulong(comm_mpi(), pn);
   lin = count_local_in(pn, po, mp);
-  tin = mpi_add_ulong(comm_mpi(), lin);
   lout = pn - lin;
+  tin = mpi_add_ulong(comm_mpi(), lin);
   tout = mpi_add_ulong(comm_mpi(), lout);
-  ranks_in = size / 2 + 1;
+  ranks_in = size / 2;
   rank_is_in = (rank < ranks_in);
   ranks_out = size - ranks_in;
   if (rank_is_in) {
@@ -161,8 +161,8 @@ static void partition(unsigned* n, point** o, rcopy** rc, plane mp)
     } else {
       dest_i = out_i++;
       dest_rank = (int) (dest_i / quo);
-      ASSERT(dest_rank < (int)ranks_out);
       dest_rank += ranks_in;
+      ASSERT((dest_rank - (int)ranks_in) < (int)ranks_out);
     }
     COMM_PACK(dest_i, dest_rank);
     COMM_PACK(po[i], dest_rank);
@@ -182,8 +182,8 @@ static void partition(unsigned* n, point** o, rcopy** rc, plane mp)
   my_free(po);
   my_free(prc);
   *n = nn;
-  *o = po;
-  *rc = prc;
+  *o = no;
+  *rc = nrc;
 }
 
 static plane bisection_plane(unsigned n, point o[])
