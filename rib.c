@@ -235,7 +235,9 @@ static void prepare_rib_input(mesh* m, unsigned* n, point** o, rcopy** idx)
     (*o)[i] = ment_centroid(m, e);
     (*idx)[i].rank = comm_rank();
     (*idx)[i].ri = e.i;
+    ++i;
   }
+  ASSERT(i == *n);
 }
 
 static mlabel* plan_from_rib(mesh* m, unsigned n, rcopy idx[])
