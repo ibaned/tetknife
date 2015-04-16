@@ -3,6 +3,8 @@
 #include "../comm.h"
 #include "../remotes.h"
 #include "../basics.h"
+#include "../rib.h"
+#include "../mesh_adapt.h"
 
 static void print_elem(mesh* m, ment e, mlabel* plan)
 {
@@ -60,21 +62,18 @@ int main()
   ment bv[MAX_BBOX_VERTS];
   ment be[MAX_BBOX_SIMPLICES];
   mesh* m;
-  mlabel* plan;
   mpi_init();
   comm_init(mpi_world());
   m = mesh_new();
-  if (!comm_rank())
+  if (!comm_rank()) {
     mesh_gen_bbox(m, b, DIM2, bv, be);
-  else
+    mesh_refine_all(m);
+  } else {
     mesh_set_elem(m, TRIANGLE);
+  }
   remotes_new(m);
-  plan = migration_plan_new(m);
-  if (!comm_rank())
-    mlabel_set(plan, be[0], 1);
-  print_mesh(m, plan);
-  migrate(m, plan);
-  mlabel_free(plan);
+  print_mesh(m, 0);
+  mesh_balance_rib(m);
   print_mesh(m, 0);
   mesh_free(m);
   comm_finalize();
