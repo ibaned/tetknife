@@ -1,7 +1,7 @@
 #options are "cocoa", "w32", and "gtk"
 CC = mpicc
-CFLAGS = -std=c89 -O2 -g -Weverything -Wpedantic -Werror
+CFLAGS = -std=c99 -O2 -g -Weverything -Wpedantic -Werror
 GUI = none
 BACK = direct
-TARGETS = commtest migrtest
+TARGETS = commtest migrtest rib_test
 USE_MPI = yes
