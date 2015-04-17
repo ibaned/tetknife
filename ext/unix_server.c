@@ -39,7 +39,7 @@ server* server_new(int port)
 void server_accept(server* s)
 {
   s->fd = accept(s->listenfd, NULL, NULL);
-  ASSERT(s->fd == -1);
+  ASSERT(s->fd != -1);
   close(s->listenfd);
   s->listenfd = -1;
 }
