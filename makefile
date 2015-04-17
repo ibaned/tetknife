@@ -48,6 +48,7 @@ comm.o \
 ibarrier.o \
 $(MPI_OBJ) \
 $(CLIENT_OBJ) \
+my_endian.o \
 basics.o
 
 ifeq "$(GUI)" "cocoa"
@@ -177,6 +178,7 @@ mesh_mod.o: mesh_mod.c mesh_mod.h mesh.h simplex.h space.h mesh_adj.h \
   stack.h basics.h mesh_geom.h classif.h cad.h
 migrate.o: migrate.c migrate.h mesh.h simplex.h space.h label.h comm.h \
   my_mpi.h remotes.h mesh_adj.h stack.h basics.h
+my_endian.o: my_endian.c my_endian.h
 param.o: param.c param.h space.h basics.h
 remotes.o: remotes.c remotes.h mesh.h simplex.h space.h flex.h stack.h \
   basics.h comm.h my_mpi.h
