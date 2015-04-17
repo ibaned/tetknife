@@ -11,9 +11,6 @@ endif
 ifeq "$(BACK)" "socket"
 CLIENT_OBJ = $(SOCKET)_client.o
 SERVER_OBJ = $(SOCKET)_server.o
-else
-CLIENT_OBJ = ""
-SERVER_OBJ = ""
 endif
 
 BACK_OBJS = \
