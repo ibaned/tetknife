@@ -1,9 +1,6 @@
 #include "space.h"
 #include "basics.h"
 
-/* calm down, clang. its ok. */
-#pragma clang diagnostic ignored "-Wfloat-equal"
-
 double const my_pi = 3.14159265358979323846;
 double const epsilon = 1e-10;
 
