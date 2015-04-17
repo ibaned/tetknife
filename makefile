@@ -114,6 +114,10 @@ main_gtk.o: ext/main_gtk.c front.h
 	$(FRONT_COMPILE) $(GTK_FLAGS) -c $<
 main_w32.o: ext/main_w32.c front.h
 	$(FRONT_COMPILE) -c $<
+unix_server.o: ext/unix_server.c server.h basics.h ext/unix_rw.h
+	$(FRONT_COMPILE) -c $<
+unix_client.o: ext/unix_client.c client.h basics.h ext/unix_rw.h
+	$(BACK_COMPILE) -c $<
 basics.o: ext/basics.c basics.h
 	$(BACK_COMPILE) -c $<
 my_mpi.o: ext/my_mpi.c basics.h my_mpi.h
