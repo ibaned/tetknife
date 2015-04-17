@@ -1,9 +1,6 @@
 #include "../my_mpi.h"
 #include "../basics.h"
 
-/* mpi.h has long long in it, which apparently
-   isn't part of older C/C++ standards */
-#pragma clang diagnostic ignored "-Wlong-long"
 #include <mpi.h>
 
 struct mpi {
