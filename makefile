@@ -8,6 +8,14 @@ else
 MPI_OBJ = serial_mpi.o
 endif
 
+ifeq "$(BACK)" "socket"
+CLIENT_OBJ = $(SOCKET)_client.o
+SERVER_OBJ = $(SOCKET)_server.o
+else
+CLIENT_OBJ = ""
+SERVER_OBJ = ""
+endif
+
 BACK_OBJS = \
 rib.o \
 view_mesh.o \
@@ -39,6 +47,7 @@ space.o \
 comm.o \
 ibarrier.o \
 $(MPI_OBJ) \
+$(CLIENT_OBJ) \
 basics.o
 
 ifeq "$(GUI)" "cocoa"
@@ -58,9 +67,13 @@ ifeq "$(BACK)" "direct"
 FRONT_CC = $(CC)
 FRONT_OBJS = $(GUI_OBJ) front_back.o $(BACK_OBJS)
 FRONT_LIBS = $(GUI_LIBS) $(LDLIBS)
+else ifeq "$(BACK)" "socket"
+FRONT_CC ?= $(CC)
+FRONT_OBJS = $(SERVER_OBJ) front_basics.o
+FRONT_LIBS = $(LDLIBS)
+endif
 FRONT_LDFLAGS = $(LDFLAGS)
 FRONT_CFLAGS = $(CFLAGS)
-endif
 
 FRONT_LINK = $(FRONT_CC) $(FRONT_LDFLAGS)
 FRONT_COMPILE = $(FRONT_CC) $(FRONT_CFLAGS)
@@ -80,6 +93,9 @@ cubic: cubic.o $(BACK_OBJS)
 rib_test: rib_test.o $(BACK_OBJS)
 commtest: commtest.o $(BACK_OBJS)
 migrtest: migrtest.o $(BACK_OBJS)
+client_test: client_test.o $(BACK_OBJS)
+server_test: server_test.o $(FRONT_OBJS)
+	$(FRONT_LINK) $^ $(FRONT_LIBS) -o $@
 libxmesh.a: $(BACK_OBJS)
 	ar cru $@ $^
 
@@ -107,6 +123,10 @@ migrtest.o: exe/migrtest.c migrate.h mesh.h \
   simplex.h space.h label.h mesh_bbox.h \
   cad.h comm.h my_mpi.h
 	$(BACK_COMPILE) -c $<
+client_test.o: exe/client_test.c client.h basics.h
+	$(BACK_COMPILE) -c $<
+server_test.o: exe/server_test.c server.h basics.h
+	$(FRONT_COMPILE) -c $<
 
 main_cocoa.o: ext/main_cocoa.m front.h
 	$(FRONT_COMPILE) -c $<
@@ -120,6 +140,8 @@ unix_client.o: ext/unix_client.c client.h basics.h ext/unix_rw.h
 	$(BACK_COMPILE) -c $<
 basics.o: ext/basics.c basics.h
 	$(BACK_COMPILE) -c $<
+front_basics.o: ext/basics.c basics.h
+	$(FRONT_COMPILE) -c $< -o $@
 my_mpi.o: ext/my_mpi.c basics.h my_mpi.h
 	$(BACK_COMPILE) -c $<
 
