@@ -136,6 +136,10 @@ server_posix.o: ext/server_posix.c server.h basics.h ext/rw_posix.h
 	$(FRONT_COMPILE) -c $<
 client_posix.o: ext/client_posix.c client.h basics.h ext/rw_posix.h
 	$(BACK_COMPILE) -c $<
+client_w32.o: ext/client_w32.c client.h basics.h ext/socket_w32.h
+	$(BACK_COMPILE) -c $<
+server_w32.o: ext/server_w32.c server.h basics.h ext/socket_w32.h
+	$(BACK_COMPILE) -c $<
 basics.o: ext/basics.c basics.h
 	$(BACK_COMPILE) -c $<
 front_basics.o: ext/basics.c basics.h
