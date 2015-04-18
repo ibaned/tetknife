@@ -94,7 +94,7 @@ front_image.o \
 $(SERVER_OBJ) \
 front_endian.o \
 front_basics.o
-FRONT_LIBS = $(GUI_LIBS)
+FRONT_LIBS += $(GUI_LIBS)
 FRONT_LDFLAGS ?= $(LDFLAGS)
 FRONT_CFLAGS ?= $(CFLAGS)
 else
@@ -111,6 +111,8 @@ all: $(TARGETS)
 clean:
 	rm -f *.o $(TARGETS)
 
+xmesh: $(FRONT_OBJS)
+	$(FRONT_LINK) $^ $(FRONT_LIBS) -o $@
 test: test.o $(GUI_BACK_OBJS)
 	$(BACK_LINK) $^ $(GUI_BACK_LIBS) -o $@
 myperf: myperf.o $(BACK_OBJS)
@@ -191,6 +193,8 @@ ibarrier.o: ibarrier.c ibarrier.h my_mpi.h
 image.o: image.c image.h basics.h
 label.o: label.c label.h mesh.h simplex.h space.h basics.h
 list.o: list.c list.h basics.h
+main_socket_back.o: main_socket_back.c back.h client.h my_endian.h \
+  basics.h socket_codes.h
 mesh.o: mesh.c mesh.h simplex.h space.h flex.h stack.h basics.h list.h \
   field.h classif.h cad.h flag.h remotes.h
 mesh_adapt.o: mesh_adapt.c mesh_adapt.h mesh.h simplex.h space.h flag.h \
@@ -205,7 +209,7 @@ mesh_mod.o: mesh_mod.c mesh_mod.h mesh.h simplex.h space.h mesh_adj.h \
   stack.h basics.h mesh_geom.h classif.h cad.h
 migrate.o: migrate.c migrate.h mesh.h simplex.h space.h label.h comm.h \
   my_mpi.h remotes.h mesh_adj.h stack.h basics.h
-my_endian.o: my_endian.c my_endian.h
+my_endian.o: my_endian.c my_endian.h basics.h
 param.o: param.c param.h space.h basics.h
 remotes.o: remotes.c remotes.h mesh.h simplex.h space.h flex.h stack.h \
   basics.h comm.h my_mpi.h
@@ -213,6 +217,8 @@ rib.o: rib.c rib.h space.h remotes.h mesh.h simplex.h basics.h comm.h \
   my_mpi.h migrate.h label.h mesh_geom.h mesh_adj.h stack.h
 serial_mpi.o: serial_mpi.c my_mpi.h basics.h
 simplex.o: simplex.c simplex.h space.h
+socket_front.o: socket_front.c front.h server.h image.h my_endian.h \
+  basics.h socket_codes.h
 space.o: space.c space.h basics.h
 stack.o: stack.c stack.h basics.h
 view.o: view.c view.h simplex.h space.h image.h draw.h basics.h

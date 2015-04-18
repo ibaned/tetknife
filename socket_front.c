@@ -7,12 +7,14 @@
 
 static server* the_server = 0;
 static image the_image = {0,0,0};
+static int initialized = 0;
 
 static unsigned recv_unsigned(server* s)
 {
   unsigned x;
-  ASSERT(server_try_send(s, &x, sizeof(x)));
-  return my_htonl(x);
+  ASSERT(server_try_recv(s, &x, sizeof(x)));
+  x = my_htonl(x);
+  return x;
 }
 
 static void recv_image(server* s, image* im)
@@ -20,8 +22,9 @@ static void recv_image(server* s, image* im)
   unsigned w, h;
   w = recv_unsigned(s);
   h = recv_unsigned(s);
-  if (!im) {
+  if (!initialized) {
     image_init(im, w, h);
+    initialized = 1;
   } else {
     ASSERT(w == im->w);
     ASSERT(h == im->h);
@@ -42,7 +45,7 @@ static void send_code(server* s, socket_code c)
 
 static void send_double(server* s, double x)
 {
-  x = my_htonl(x);
+  x = my_htond(x);
   ASSERT(server_try_send(s, &x, sizeof(x)));
 }
 
@@ -64,7 +67,7 @@ void front_stop(void)
 
 unsigned char* front_pixels(void)
 {
-  return the_image.p[0];
+  return (unsigned char*) the_image.p[0];
 }
 
 unsigned front_width(void)
@@ -86,7 +89,7 @@ void front_mouse_down(double x, double y)
 
 void front_mouse_up(double x, double y)
 {
-  send_code(the_server, SOCKET_MOUSE_DOWN);
+  send_code(the_server, SOCKET_MOUSE_UP);
   send_double(the_server, x);
   send_double(the_server, y);
   recv_image(the_server, &the_image);

@@ -23,7 +23,7 @@ static void send_image(client* c)
 static char recv_char(client* c)
 {
   char x;
-  ASSERT(client_try_send(c, &x, sizeof(x)));
+  ASSERT(client_try_recv(c, &x, sizeof(x)));
   return x;
 }
 
@@ -37,8 +37,9 @@ static socket_code recv_code(client* c)
 static double recv_double(client* c)
 {
   double x;
-  ASSERT(client_try_send(c, &x, sizeof(x)));
-  return my_htond(x);
+  ASSERT(client_try_recv(c, &x, sizeof(x)));
+  x = my_htond(x);
+  return x;
 }
 
 int main()
