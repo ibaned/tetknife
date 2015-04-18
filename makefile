@@ -9,8 +9,8 @@ MPI_OBJ = serial_mpi.o
 endif
 
 ifeq "$(BACK)" "socket"
-CLIENT_OBJ = $(SOCKET)_client.o
-SERVER_OBJ = $(SOCKET)_server.o
+CLIENT_OBJ = client_$(SOCKET).o
+SERVER_OBJ = server_$(SOCKET).o
 endif
 
 BACK_OBJS = \
@@ -132,9 +132,9 @@ main_gtk.o: ext/main_gtk.c front.h
 	$(FRONT_COMPILE) $(GTK_FLAGS) -c $<
 main_w32.o: ext/main_w32.c front.h
 	$(FRONT_COMPILE) -c $<
-unix_server.o: ext/unix_server.c server.h basics.h ext/unix_rw.h
+server_posix.o: ext/server_posix.c server.h basics.h ext/rw_posix.h
 	$(FRONT_COMPILE) -c $<
-unix_client.o: ext/unix_client.c client.h basics.h ext/unix_rw.h
+client_posix.o: ext/client_posix.c client.h basics.h ext/rw_posix.h
 	$(BACK_COMPILE) -c $<
 basics.o: ext/basics.c basics.h
 	$(BACK_COMPILE) -c $<
