@@ -1,8 +1,7 @@
-#options are "cocoa", "w32", and "gtk"
 CC = clang
 CFLAGS = -std=c89 -O2 -g -Weverything -Wpedantic -Werror
-GUI = none
+GUI = cocoa
 BACK = socket
 SOCKET = posix
 USE_MPI = no
-TARGETS = client_test server_test
+TARGETS = test cad_test quality

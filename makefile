@@ -2,17 +2,6 @@ CONFIG ?= default
 
 include $(CONFIG).mk
 
-ifeq "$(USE_MPI)" "yes"
-MPI_OBJ = my_mpi.o
-else
-MPI_OBJ = serial_mpi.o
-endif
-
-ifeq "$(BACK)" "socket"
-CLIENT_OBJ = client_$(SOCKET).o
-SERVER_OBJ = server_$(SOCKET).o
-endif
-
 BACK_OBJS = \
 rib.o \
 view_mesh.o \
@@ -43,38 +32,78 @@ simplex.o \
 space.o \
 comm.o \
 ibarrier.o \
-$(MPI_OBJ) \
-$(CLIENT_OBJ) \
 my_endian.o \
 basics.o
 
+ifeq "$(USE_MPI)" "yes"
+BACK_OBJS += my_mpi.o
+else ifeq "$(USE_MPI)" "no"
+BACK_OBJS += serial_mpi.o
+else
+$(error USE_MPI must be either "yes" or "no")
+endif
+
 ifeq "$(GUI)" "cocoa"
-GUI_OBJ += main_cocoa.o
+GUI_OBJ = main_cocoa.o
 GUI_LIBS = -framework Cocoa
 else ifeq "$(GUI)" "gtk"
 GTK_FLAGS = $(shell pkg-config --cflags gtk+-2.0)
 GTK_LIBS = $(shell pkg-config --libs gtk+-2.0)
-GUI_OBJ += main_gtk.o
+GUI_OBJ = main_gtk.o
 GUI_LIBS = $(GTK_LIBS)
 else ifeq "$(GUI)" "w32"
-GUI_OBJ += main_w32.o
+GUI_OBJ = main_w32.o
 GUI_LIBS = -lGdi32
+else ifeq "$(GUI)" "none"
+  ifeq "$(BACK)" "socket"
+  $(error GUI cant be "none" when BACK is "socket")
+  endif
+else
+$(error GUI must be "cocoa", "gtk", "w32", or "none")
 endif
 
 ifeq "$(BACK)" "direct"
+GUI_BACK_OBJS = $(GUI_OBJ) front_back.o $(BACK_OBJS)
+GUI_BACK_LIBS = $(GUI_LIBS) $(LDLIBS)
 FRONT_CC = $(CC)
-FRONT_OBJS = $(GUI_OBJ) front_back.o $(BACK_OBJS)
-FRONT_LIBS = $(GUI_LIBS) $(LDLIBS)
-else ifeq "$(BACK)" "socket"
-FRONT_CC ?= $(CC)
-FRONT_OBJS = $(SERVER_OBJ) front_basics.o
-FRONT_LIBS = $(LDLIBS)
-endif
 FRONT_LDFLAGS = $(LDFLAGS)
 FRONT_CFLAGS = $(CFLAGS)
+  ifneq "$(SOCKET)" "none"
+  $(error SOCKET must be "none" when BACK is "direct")
+  endif
+else ifeq "$(BACK)" "socket"
+  ifeq "$(SOCKET)" "posix"
+    SERVER_OBJ = server_posix.o
+    CLIENT_OBJ = client_posix.o
+  else ifeq "$(SOCKET)" "w32"
+    SERVER_OBJ = server_w32.o
+    CLIENT_OBJ = client_w32.o
+  else
+  $(error SOCKET must be either "posix" or "w32")
+  endif
+GUI_BACK_OBJS = \
+$(CLIENT_OBJ) \
+main_socket_back.o \
+$(BACK_OBJS)
+GUI_BACK_LIBS = $(LDLIBS)
+FRONT_CC ?= $(CC)
+FRONT_OBJS = \
+$(GUI_OBJ) \
+socket_front.o \
+front_image.o \
+$(SERVER_OBJ) \
+front_endian.o \
+front_basics.o
+FRONT_LIBS = $(GUI_LIBS)
+FRONT_LDFLAGS ?= $(LDFLAGS)
+FRONT_CFLAGS ?= $(CFLAGS)
+else
+$(error BACK must be either "direct" or "socket")
+endif
 
 FRONT_LINK = $(FRONT_CC) $(FRONT_LDFLAGS)
 FRONT_COMPILE = $(FRONT_CC) $(FRONT_CFLAGS)
+BACK_LINK = $(CC) $(LDFLAGS)
 BACK_COMPILE = $(CC) $(CFLAGS)
 
 all: $(TARGETS)
@@ -82,8 +111,8 @@ all: $(TARGETS)
 clean:
 	rm -f *.o $(TARGETS)
 
-test: test.o $(FRONT_OBJS)
-	$(FRONT_LINK) $^ $(FRONT_LIBS) -o $@
+test: test.o $(GUI_BACK_OBJS)
+	$(BACK_LINK) $^ $(GUI_BACK_LIBS) -o $@
 myperf: myperf.o $(BACK_OBJS)
 cad_test: cad_test.o $(BACK_OBJS)
 quality: quality.o $(BACK_OBJS)
@@ -91,9 +120,6 @@ cubic: cubic.o $(BACK_OBJS)
 rib_test: rib_test.o $(BACK_OBJS)
 commtest: commtest.o $(BACK_OBJS)
 migrtest: migrtest.o $(BACK_OBJS)
-client_test: client_test.o $(BACK_OBJS)
-server_test: server_test.o $(FRONT_OBJS)
-	$(FRONT_LINK) $^ $(FRONT_LIBS) -o $@
 libxmesh.a: $(BACK_OBJS)
 	ar cru $@ $^
 
@@ -101,11 +127,11 @@ test.o: exe/test.c back.h view_mesh.h view.h \
   simplex.h space.h image.h mesh.h \
   mesh_bbox.h cad.h mesh_adapt.h flag.h \
   mesh_geom.h mesh_adj.h stack.h basics.h
-	$(FRONT_COMPILE) -c $<
+	$(BACK_COMPILE) -c $<
 myperf.o: exe/myperf.c view_mesh.h view.h simplex.h \
   space.h image.h mesh.h mesh_bbox.h \
   cad.h mesh_adapt.h flag.h
-	$(FRONT_COMPILE) -c $<
+	$(BACK_COMPILE) -c $<
 cad_test.o: exe/cad_test.c cad.h
 	$(BACK_COMPILE) -c $<
 quality.o: exe/quality.c simplex.h space.h basics.h \
@@ -121,10 +147,6 @@ migrtest.o: exe/migrtest.c migrate.h mesh.h \
   simplex.h space.h label.h mesh_bbox.h \
   cad.h comm.h my_mpi.h
 	$(BACK_COMPILE) -c $<
-client_test.o: exe/client_test.c client.h basics.h
-	$(BACK_COMPILE) -c $<
-server_test.o: exe/server_test.c server.h basics.h
-	$(FRONT_COMPILE) -c $<
 
 main_cocoa.o: ext/main_cocoa.m front.h
 	$(FRONT_COMPILE) -c $<
@@ -143,6 +165,10 @@ client_w32.o: ext/client_w32.c client.h basics.h ext/socket_w32.h
 basics.o: ext/basics.c basics.h
 	$(BACK_COMPILE) -c $<
 front_basics.o: ext/basics.c basics.h
+	$(FRONT_COMPILE) -c $< -o $@
+front_endian.o: my_endian.c my_endian.h
+	$(FRONT_COMPILE) -c $< -o $@
+front_image.o: image.c image.h basics.h
 	$(FRONT_COMPILE) -c $< -o $@
 my_mpi.o: ext/my_mpi.c basics.h my_mpi.h
 	$(BACK_COMPILE) -c $<
