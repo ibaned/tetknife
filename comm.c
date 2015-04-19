@@ -177,7 +177,11 @@ void comm_exch(void)
   unsigned i;
   if (!(global_state == PACK || global_state == IDLE))
     die("%d called exch in state %d\n", comm_rank(), global_state);
+  /* prevents race condition of sending next phase while
+     stragglers still receiving in previous phase */
+  mpi_barrier(global_mpi);
   o = &global_out;
+  /* the heart: non-blocking consensus algorithm */
   for (i = 0; i < o->n; ++i)
     o->m[i].r = mpi_issend(global_mpi,
         o->m[i].data, o->m[i].s.n, o->m[i].peer);
@@ -187,6 +191,8 @@ void comm_exch(void)
   ibarrier_begin(global_ibarrier_mpi);
   while (!ibarrier_done())
     try_recv();
+  /* end non-blocking consensus algorithm */
+  /* sort for parallel determinism */
   sort_msgs(&global_in);
   global_state = UNPACK;
   global_idx = 0;
