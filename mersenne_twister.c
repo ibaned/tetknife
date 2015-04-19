@@ -27,6 +27,7 @@ static int mti = N + 1; /* mti == N + 1 means mt is not initialized */
 
 void mersenne_twister_seed(unsigned seed)
 {
+  ASSERT(seed);
   /* setting initial seeds to mt[N] using
      the generator Line 25 of Table 1 in
      [KNUTH 1981, The Art of Computer Programming
