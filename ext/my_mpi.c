@@ -163,3 +163,9 @@ int mpi_max_int(mpi* m, int x)
   CALL(MPI_Allreduce(MPI_IN_PLACE, &x, 1, MPI_INT, MPI_MAX, m->comm));
   return x;
 }
+
+unsigned mpi_max_unsigned(mpi* m, unsigned x)
+{
+  CALL(MPI_Allreduce(MPI_IN_PLACE, &x, 1, MPI_UNSIGNED, MPI_MAX, m->comm));
+  return x;
+}

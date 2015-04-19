@@ -26,5 +26,6 @@ void mpi_max_doubles(mpi* m, double* x, unsigned n);
 unsigned long mpi_add_ulong(mpi* m, unsigned long x);
 unsigned long mpi_exscan_ulong(mpi* m, unsigned long x);
 int mpi_max_int(mpi* m, int x);
+unsigned mpi_max_unsigned(mpi* m, unsigned x);
 
 #endif
