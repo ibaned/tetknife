@@ -2,6 +2,7 @@
 #include "comm.h"
 #include "mersenne_twister.h"
 #include "basics.h"
+#include "remotes.h"
 
 /* Luby, Michael.
    "A simple parallel algorithm for the maximal independent set problem."
@@ -110,4 +111,21 @@ unsigned luby_color(unsigned nneigh, int const neigh[])
     ++color;
   }
   return mycolor;
+}
+
+unsigned luby_color_mesh_parts(mesh* m)
+{
+  unsigned nneigh;
+  int* neigh;
+  unsigned i;
+  unsigned color;
+  rpeer rp;
+  nneigh = rpeer_count(m);
+  neigh = my_malloc(sizeof(int) * nneigh);
+  i = 0;
+  for (rp = rpeer_f(m); rpeer_ok(rp); rp = rpeer_n(m, rp))
+    neigh[i++] = rpeer_rank(m, rp);
+  color = luby_color(nneigh, neigh);
+  my_free(neigh);
+  return color;
 }
