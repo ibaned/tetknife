@@ -5,6 +5,7 @@
 #include "../basics.h"
 #include "../rib.h"
 #include "../mesh_adapt.h"
+#include "../luby.h"
 
 static void print_elem(mesh* m, ment e, mlabel* plan)
 {
@@ -62,6 +63,7 @@ int main()
   ment bv[MAX_BBOX_VERTS];
   ment be[MAX_BBOX_SIMPLICES];
   mesh* m;
+  unsigned c;
   mpi_init();
   comm_init(mpi_world());
   m = mesh_new();
@@ -75,6 +77,8 @@ int main()
   print_mesh(m, 0);
   mesh_balance_rib(m);
   print_mesh(m, 0);
+  c = luby_color_mesh_parts(m);
+  debug("rank %d colored %d\n", comm_rank(), c);
   mesh_free(m);
   comm_finalize();
   mpi_finalize();
