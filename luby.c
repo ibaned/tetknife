@@ -20,7 +20,6 @@ int luby_mis(unsigned nneigh, int const neigh[], int in_Vp)
   int is_min;
   int neigh_in_Ip;
   int in_Y;
-  debug("%d luby_mis\n", comm_rank());
   /* this is the weakest part of our implementation:
      the seed process. luckily, it is more a theoretical
      weakness than a practical one */
@@ -31,7 +30,6 @@ int luby_mis(unsigned nneigh, int const neigh[], int in_Vp)
     /* also, for very large problems,
        2^32 might be less than |V|^4 */
     pi = mersenne_twister();
-    debug("%d pi %u\n", comm_rank(), pi);
     /* is_min(i) = \pi(i) < \min_{j \in adj(i)} \pi{j} */ 
     for (i = 0; i < nneigh; ++i) {
       COMM_PACK(in_Vp, neigh[i]);
@@ -47,11 +45,8 @@ int luby_mis(unsigned nneigh, int const neigh[], int in_Vp)
     }
     /* Ip = { i \in V' | is_min(i) } */
     in_Ip = in_Vp && is_min;
-    debug("%d in_Ip %d in_Vp %d is_min %d\n",
-        comm_rank(), in_Ip, in_Vp, is_min);
     /* I = I \cup I' */
     in_I = in_I || in_Ip;
-    debug("%d in_I %d\n", comm_rank(), in_I);
     /* Y = I' \cup N(I') */
     for (i = 0; i < nneigh; ++i)
       COMM_PACK(in_Ip, neigh[i]);
@@ -62,12 +57,12 @@ int luby_mis(unsigned nneigh, int const neigh[], int in_Vp)
       if (in_Vp && neigh_in_Ip)
         in_Y = 1;
     }
-    debug("%d in_Y %d\n", comm_rank(), in_Y);
     /* V' = V' - Y */
     in_Vp = in_Vp && (!in_Y);
-    debug("%d in_Vp %d\n", comm_rank(), in_Vp);
   }
-  /* optional verification round */
+  /* optional verification round.
+     keep this around until this
+     comment is quite old */
   for (i = 0; i < nneigh; ++i)
     COMM_PACK(in_I, neigh[i]);
   comm_exch();
@@ -92,6 +87,7 @@ int luby_mis(unsigned nneigh, int const neigh[], int in_Vp)
   if ((!any_neigh_in_I) && (!in_I))
     die("luby_mis: bug: not maximal. %d could have been taken but wasn't\n",
         comm_rank());
+  /* end verification */
   return in_I;
 }
 
