@@ -54,7 +54,7 @@ int luby_mis(unsigned nneigh, int const neigh[], int in_Vp)
     debug("%d in_I %d\n", comm_rank(), in_I);
     /* Y = I' \cup N(I') */
     for (i = 0; i < nneigh; ++i)
-      COMM_PACK(pi, in_Ip);
+      COMM_PACK(in_Ip, neigh[i]);
     comm_exch();
     in_Y = in_Ip;
     while (comm_recv()) {
