@@ -1,5 +1,5 @@
-#ifndef SIMPLIFY_H
-#define SIMPLIFY_H
+#ifndef MESH_BBOX_H
+#define MESH_BBOX_H
 
 #include "mesh.h"
 #include "cad.h"
