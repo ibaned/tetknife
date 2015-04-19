@@ -96,6 +96,15 @@ int rpeer_rank(mesh* m, rpeer rp)
   return mesh_remotes(m)->p[rp.i].rank;
 }
 
+unsigned rpeer_count(mesh* m)
+{
+  remotes* rs;
+  rs = mesh_remotes(m);
+  if (!rs)
+    return 0;
+  return rs->pf.n;
+}
+
 int rent_ok(rent re)
 {
   return IDX_OK(re.i);

@@ -30,6 +30,8 @@ rpeer rpeer_n(mesh* m, rpeer rp) __attribute__((pure));
 rpeer rpeer_by_rank(mesh* m, int rank);
 int rpeer_rank(mesh* m, rpeer rp);
 
+unsigned rpeer_count(mesh* m);
+
 int rent_ok(rent re) __attribute__((const));
 int rent_eq(rent a, rent b) __attribute__((const));
 
