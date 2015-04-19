@@ -1,4 +1,4 @@
-#include "mis_luby.h"
+#include "luby.h"
 #include "comm.h"
 #include "mersenne_twister.h"
 #include "basics.h"
@@ -7,12 +7,11 @@
    "A simple parallel algorithm for the maximal independent set problem."
    SIAM journal on computing 15.4 (1986): 1036-1053. */
 
-int luby_mis(unsigned nneigh, int const neigh[])
+int luby_mis(unsigned nneigh, int const neigh[], int in_Vp)
 {
   unsigned pi;
   unsigned neighpi;
   unsigned i;
-  int in_Vp;
   int neigh_in_Vp;
   int in_I;
   int neigh_in_I;
@@ -21,17 +20,18 @@ int luby_mis(unsigned nneigh, int const neigh[])
   int is_min;
   int neigh_in_Ip;
   int in_Y;
+  debug("%d luby_mis\n", comm_rank());
   /* this is the weakest part of our implementation:
      the seed process. luckily, it is more a theoretical
      weakness than a practical one */
   mersenne_twister_seed((unsigned)(comm_rank() + 1));
-  in_Vp = 1; /* V' = V */
   in_I = 0; /* I = empty */
   /* while V' != empty */
   while (mpi_max_int(comm_mpi(), in_Vp)) {
     /* also, for very large problems,
        2^32 might be less than |V|^4 */
     pi = mersenne_twister();
+    debug("%d pi %u\n", comm_rank(), pi);
     /* is_min(i) = \pi(i) < \min_{j \in adj(i)} \pi{j} */ 
     for (i = 0; i < nneigh; ++i) {
       COMM_PACK(in_Vp, neigh[i]);
@@ -47,8 +47,11 @@ int luby_mis(unsigned nneigh, int const neigh[])
     }
     /* Ip = { i \in V' | is_min(i) } */
     in_Ip = in_Vp && is_min;
+    debug("%d in_Ip %d in_Vp %d is_min %d\n",
+        comm_rank(), in_Ip, in_Vp, is_min);
     /* I = I \cup I' */
     in_I = in_I || in_Ip;
+    debug("%d in_I %d\n", comm_rank(), in_I);
     /* Y = I' \cup N(I') */
     for (i = 0; i < nneigh; ++i)
       COMM_PACK(pi, in_Ip);
@@ -59,8 +62,10 @@ int luby_mis(unsigned nneigh, int const neigh[])
       if (in_Vp && neigh_in_Ip)
         in_Y = 1;
     }
+    debug("%d in_Y %d\n", comm_rank(), in_Y);
     /* V' = V' - Y */
     in_Vp = in_Vp && (!in_Y);
+    debug("%d in_Vp %d\n", comm_rank(), in_Vp);
   }
   /* optional verification round */
   for (i = 0; i < nneigh; ++i)
@@ -69,20 +74,23 @@ int luby_mis(unsigned nneigh, int const neigh[])
   any_neigh_in_I = 0;
   while (comm_recv()) {
     COMM_UNPACK(neigh_in_I);
-    for (i = 0; i < nneigh; ++i)
+    for (i = 0; i < nneigh; ++i) {
       if (neigh[i] == comm_from())
         break;
+      if (neigh[i] == comm_rank())
+        die("luby_mis: %d is neighbor with self\n", comm_rank());
+    }
     if (i == nneigh)
-      die("mis_luby: graph not symmetric. %d unexpected neighbor %d\n",
+      die("luby_mis: graph not symmetric. %d unexpected neighbor %d\n",
           comm_rank(), comm_from());
     if (in_I && neigh_in_I)
-      die("mis_luby: bug: not independent. %d and %d adjacent and in set\n",
+      die("luby_mis: bug: not independent. %d and %d adjacent and in set\n",
           comm_rank(), comm_from());
     if (neigh_in_I)
       any_neigh_in_I = 1;
   }
   if ((!any_neigh_in_I) && (!in_I))
-    die("mis_luby: bug: not maximal. %d could have been taken but wasn't\n",
+    die("luby_mis: bug: not maximal. %d could have been taken but wasn't\n",
         comm_rank());
   return in_I;
 }
@@ -96,7 +104,7 @@ unsigned luby_color(unsigned nneigh, int const neigh[])
   colored = 0;
   color = 0;
   while (mpi_max_int(comm_mpi(), !colored)) {
-    in_set = luby_mis(nneigh, neigh);
+    in_set = luby_mis(nneigh, neigh, !colored);
     if (in_set) {
       mycolor = color;
       colored = 1;

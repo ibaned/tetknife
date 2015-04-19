@@ -28,7 +28,7 @@ mesh.o \
 flex.o \
 stack.o \
 param.o \
-mis_luby.o \
+luby.o \
 mersenne_twister.o \
 simplex.o \
 space.o \
@@ -125,6 +125,7 @@ rib_test: rib_test.o $(BACK_OBJS)
 commtest: commtest.o $(BACK_OBJS)
 migrtest: migrtest.o $(BACK_OBJS)
 mersenne_test: mersenne_test.o $(BACK_OBJS)
+luby_test: luby_test.o $(BACK_OBJS)
 libxmesh.a: $(BACK_OBJS)
 	ar cru $@ $^
 
@@ -153,6 +154,8 @@ migrtest.o: exe/migrtest.c migrate.h mesh.h \
   cad.h comm.h my_mpi.h
 	$(BACK_COMPILE) -c $<
 mersenne_test.o: exe/mersenne_test.c mersenne_twister.h basics.h
+	$(BACK_COMPILE) -c $<
+luby_test.o: exe/luby_test.c luby.h
 	$(BACK_COMPILE) -c $<
 
 main_cocoa.o: ext/main_cocoa.m front.h
@@ -215,7 +218,7 @@ mesh_mod.o: mesh_mod.c mesh_mod.h mesh.h simplex.h space.h mesh_adj.h \
   stack.h basics.h mesh_geom.h classif.h cad.h
 migrate.o: migrate.c migrate.h mesh.h simplex.h space.h label.h comm.h \
   my_mpi.h remotes.h mesh_adj.h stack.h basics.h
-mis_luby.o: mis_luby.c mis_luby.h comm.h my_mpi.h mersenne_twister.h \
+luby.o: luby.c luby.h comm.h my_mpi.h mersenne_twister.h \
   basics.h
 my_endian.o: my_endian.c my_endian.h
 param.o: param.c param.h space.h basics.h
