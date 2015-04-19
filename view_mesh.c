@@ -1,9 +1,6 @@
 #include "view_mesh.h"
 #include "mesh_adj.h"
 #include "mesh_geom.h"
-#include "mersenne_twister.h"
-#include "luby.h"
-#include "comm.h"
 
 static void view_elem_faces(view* v, mesh* m, ment e, color c)
 {
@@ -47,22 +44,9 @@ static void view_mesh_faces(view* v, mesh* m, color c)
     view_elem_faces(v, m, e, c);
 }
 
-void view_mesh_parts(view* v, mesh* m)
+void view_mesh_parts(view* v, mesh* m, color c)
 {
-  unsigned ci;
-  unsigned ncolors;
-  color* colors;
-  unsigned i;
-  ci = luby_color_mesh_parts(m);
-  ncolors = mpi_max_unsigned(comm_mpi(), ci) + 1;
-  colors = my_malloc(sizeof(color) * ncolors);
-  /* as long as all ranks give the same seed,
-     they should get the same color array */
-  mersenne_twister_seed(42);
-  for (i = 0; i < ncolors; ++i)
-    colors[i] = mersenne_twister_color();
-  my_free(colors);
   view_clear(v, black);
-  view_mesh_faces(v, m, colors[ci]);
+  view_mesh_faces(v, m, c);
   view_mesh_edges(v, m, white);
 }
