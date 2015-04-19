@@ -131,3 +131,9 @@ unsigned long mpi_exscan_ulong(mpi* m, unsigned long x)
   (void)x;
   return 0;
 }
+
+int mpi_max_int(mpi* m, int x)
+{
+  (void)m;
+  return x;
+}

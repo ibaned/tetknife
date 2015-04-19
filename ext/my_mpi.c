@@ -157,3 +157,9 @@ unsigned long mpi_exscan_ulong(mpi* m, unsigned long x)
     return 0; /* wtf, mpi ?!?  rank 0 gets uninit data from exscan */
   return x;
 }
+
+int mpi_max_int(mpi* m, int x)
+{
+  CALL(MPI_Allreduce(MPI_IN_PLACE, &x, 1, MPI_INT, MPI_MAX, m->comm));
+  return x;
+}
