@@ -12,6 +12,7 @@ int luby_mis(unsigned nneigh, int const neigh[], int in_Vp)
   unsigned pi;
   unsigned neighpi;
   unsigned i;
+  int in_original_Vp;
   int neigh_in_Vp;
   int in_I;
   int neigh_in_I;
@@ -25,6 +26,7 @@ int luby_mis(unsigned nneigh, int const neigh[], int in_Vp)
      weakness than a practical one */
   mersenne_twister_seed((unsigned)(comm_rank() + 1));
   in_I = 0; /* I = empty */
+  in_original_Vp = in_Vp;
   /* while V' != empty */
   while (mpi_max_int(comm_mpi(), in_Vp)) {
     /* also, for very large problems,
@@ -84,7 +86,7 @@ int luby_mis(unsigned nneigh, int const neigh[], int in_Vp)
     if (neigh_in_I)
       any_neigh_in_I = 1;
   }
-  if ((!any_neigh_in_I) && (!in_I))
+  if ((!any_neigh_in_I) && (!in_I) && in_original_Vp)
     die("luby_mis: bug: not maximal. %d could have been taken but wasn't\n",
         comm_rank());
   /* end verification */
