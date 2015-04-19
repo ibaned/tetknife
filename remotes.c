@@ -71,8 +71,12 @@ int rpeer_ok(rpeer p)
 
 rpeer rpeer_f(mesh* m)
 {
+  remotes* rs;
   rpeer rp;
-  rp.i = flex_f(&mesh_remotes(m)->pf);
+  rs = mesh_remotes(m);
+  if (!rs)
+    return rpeer_null;
+  rp.i = flex_f(&rs->pf);
   return rp;
 }
 
