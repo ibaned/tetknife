@@ -132,9 +132,7 @@ unsigned luby_color_mesh_parts(mesh* m)
 
 color luby_color_from_index(unsigned ci)
 {
-  unsigned ncolors;
   unsigned i;
-  ncolors = mpi_max_unsigned(comm_mpi(), ci) + 1;
   /* as long as all ranks give the same seed,
      they should get the same color array */
   mersenne_twister_seed(42);
