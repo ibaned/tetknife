@@ -376,10 +376,12 @@ static void drawing_reduce_op(void* inout, void const* in)
   ioz = inout;
   iz = in;
   ioc = (color*)(((char*)inout) + sizez);
-  ic = (color*)(((char*)in) + sizez);
+  ic = (color const*)(((char const*)in) + sizez);
   for (i = 0; i < global_npixels; ++i)
-    if (iz[i] <= ioz[i])
+    if (iz[i] < ioz[i]) {
+      ioz[i] = iz[i];
       ioc[i] = ic[i];
+    }
 }
 
 void drawing_reduce(drawing* d)
