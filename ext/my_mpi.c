@@ -191,3 +191,8 @@ void mpi_reduce(mpi* m, void* data, unsigned size, mpi_reduce_fn f)
   MPI_Op_free(&op);
   MPI_Type_free(&dt);
 }
+
+void mpi_bcast(mpi* m, void* data, unsigned size)
+{
+  CALL(MPI_Bcast(data, (int)size, MPI_BYTE, 0, m->comm)); 
+}

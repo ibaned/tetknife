@@ -30,5 +30,6 @@ unsigned mpi_max_unsigned(mpi* m, unsigned x);
 
 typedef void (*mpi_reduce_fn)(void* inout, void const* in);
 void mpi_reduce(mpi* m, void* data, unsigned size, mpi_reduce_fn f);
+void mpi_bcast(mpi* m, void* data, unsigned size);
 
 #endif

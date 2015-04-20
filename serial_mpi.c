@@ -151,3 +151,10 @@ void mpi_reduce(mpi* m, void* data, unsigned size, mpi_reduce_fn f)
   (void)size;
   (void)f;
 }
+
+void mpi_bcast(mpi* m, void* data, unsigned size)
+{
+  (void)m;
+  (void)data;
+  (void)size;
+}
