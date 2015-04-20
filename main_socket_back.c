@@ -106,7 +106,8 @@ int main()
     }
 done:
   back_stop();
-  client_free(the_client);
+  if (comm_rank() == 0)
+    client_free(the_client);
   comm_finalize();
   mpi_finalize();
   return 0;
