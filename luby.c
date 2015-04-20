@@ -130,13 +130,48 @@ unsigned luby_color_mesh_parts(mesh* m)
   return color;
 }
 
+/*
+http://en.wikipedia.org/wiki/HSL_and_HSV#Converting_to_RGB
+*/
+color color_from_hsv(double h, double s, double v)
+{
+  double c;
+  double hp;
+  double x;
+  double a;
+  point cp;
+  double m;
+  color col;
+  c = s * v;
+  hp = h / 60;
+  a = my_fmod(hp, 2) - 1;
+  x = c * (1 - ABS(a));
+  if (0 <= hp && hp < 1)
+    cp = point_new(c, x, 0);
+  else if (1 <= hp && hp < 2)
+    cp = point_new(x, c, 0);
+  else if (2 <= hp && hp < 3)
+    cp = point_new(0, c, x);
+  else if (3 <= hp && hp < 4)
+    cp = point_new(0, x, c);
+  else if (4 <= hp && hp < 5)
+    cp = point_new(x, 0, c);
+  else if (5 <= hp && hp < 6)
+    cp = point_new(c, 0, x);
+  else
+    die("color_from_hsv hue = %f out of range [0,360)\n", h);
+  m = v - c;
+  col.r = (unsigned char) ((cp.x + m) * 255);
+  col.g = (unsigned char) ((cp.y + m) * 255);
+  col.b = (unsigned char) ((cp.z + m) * 255);
+  return col;
+}
+
 color luby_color_from_index(unsigned ci)
 {
-  unsigned i;
-  /* as long as all ranks give the same seed,
-     they should get the same color array */
-  mersenne_twister_seed(42);
-  for (i = 0; i < ci; ++i)
-    mersenne_twister_color();
-  return mersenne_twister_color();
+  unsigned nc;
+  double hue;
+  nc = mpi_max_unsigned(comm_mpi(), ci) + 1;
+  hue = (ci * 360.) / nc;
+  return color_from_hsv(hue, 1, 1);
 }

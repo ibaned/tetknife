@@ -7,6 +7,9 @@
 int luby_mis(unsigned nneigh, int const neigh[], int in_Vp);
 unsigned luby_color(unsigned nneigh, int const neigh[]);
 unsigned luby_color_mesh_parts(mesh* m);
+
+color color_from_hsv(double h, double s, double v);
+
 color luby_color_from_index(unsigned ci);
 
 #endif
