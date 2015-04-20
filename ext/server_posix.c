@@ -30,7 +30,8 @@ server* server_new(int port)
   servaddr.sin_addr.s_addr = INADDR_ANY;
   servaddr.sin_port = htons(port);
   err = bind(s->listenfd, (struct sockaddr*) &servaddr, sizeof(servaddr));
-  ASSERT(!err);
+  if (err)
+    die("server_new couldn't bind to port %d\n", port);
   err = listen(s->listenfd, 1);
   ASSERT(err != -1);
   return s;
