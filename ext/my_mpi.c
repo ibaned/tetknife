@@ -187,7 +187,10 @@ void mpi_reduce(mpi* m, void* data, unsigned size, mpi_reduce_fn f)
   MPI_Type_commit(&dt);
   the_reduce_fn = f;
   MPI_Op_create(reduce_op, 1, &op);
-  MPI_Reduce(MPI_IN_PLACE, data, 1, dt, op, 0, m->comm);
+  if (mpi_rank(m) == 0)
+    MPI_Reduce(MPI_IN_PLACE, data, 1, dt, op, 0, m->comm);
+  else
+    MPI_Reduce(data, data, 1, dt, op, 0, m->comm);
   MPI_Op_free(&op);
   MPI_Type_free(&dt);
 }
