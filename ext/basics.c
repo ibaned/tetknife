@@ -79,6 +79,11 @@ double my_pow(double x, double e)
   return pow(x, e);
 }
 
+double my_fmod(double x, double y)
+{
+  return fmod(x, y);
+}
+
 double const my_dbl_max = DBL_MAX;
 
 /*
