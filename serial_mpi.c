@@ -143,3 +143,11 @@ unsigned mpi_max_unsigned(mpi* m, unsigned x)
   (void)m;
   return x;
 }
+
+void mpi_reduce(mpi* m, void* data, unsigned size, mpi_reduce_fn f)
+{
+  (void)m;
+  (void)data;
+  (void)size;
+  (void)f;
+}

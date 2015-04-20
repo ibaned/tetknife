@@ -28,4 +28,7 @@ unsigned long mpi_exscan_ulong(mpi* m, unsigned long x);
 int mpi_max_int(mpi* m, int x);
 unsigned mpi_max_unsigned(mpi* m, unsigned x);
 
+typedef void (*mpi_reduce_fn)(void* inout, void const* in);
+void mpi_reduce(mpi* m, void* data, unsigned size, mpi_reduce_fn f);
+
 #endif

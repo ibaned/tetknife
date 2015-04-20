@@ -169,3 +169,25 @@ unsigned mpi_max_unsigned(mpi* m, unsigned x)
   CALL(MPI_Allreduce(MPI_IN_PLACE, &x, 1, MPI_UNSIGNED, MPI_MAX, m->comm));
   return x;
 }
+
+static mpi_reduce_fn the_reduce_fn;
+
+static void reduce_op(void* a, void* b, int* len, MPI_Datatype* dt)
+{
+  (void)len;
+  (void)dt;
+  the_reduce_fn(b, a);
+}
+
+void mpi_reduce(mpi* m, void* data, unsigned size, mpi_reduce_fn f)
+{
+  MPI_Datatype dt;
+  MPI_Op op;
+  MPI_Type_contiguous((int) size, MPI_BYTE, &dt);
+  MPI_Type_commit(&dt);
+  the_reduce_fn = f;
+  MPI_Op_create(reduce_op, 1, &op);
+  MPI_Reduce(MPI_IN_PLACE, data, 1, dt, op, 0, m->comm);
+  MPI_Op_free(&op);
+  MPI_Type_free(&dt);
+}
