@@ -117,6 +117,8 @@ xmesh: $(FRONT_OBJS)
 	$(FRONT_LINK) $^ $(FRONT_LIBS) -o $@
 test: test.o $(GUI_BACK_OBJS)
 	$(BACK_LINK) $^ $(GUI_BACK_LIBS) -o $@
+reduce_test: reduce_test.o $(GUI_BACK_OBJS)
+	$(BACK_LINK) $^ $(GUI_BACK_LIBS) -o $@
 myperf: myperf.o $(BACK_OBJS)
 cad_test: cad_test.o $(BACK_OBJS)
 quality: quality.o $(BACK_OBJS)
@@ -133,6 +135,10 @@ test.o: exe/test.c back.h view_mesh.h view.h \
   simplex.h space.h image.h mesh.h \
   mesh_bbox.h cad.h mesh_adapt.h flag.h \
   mesh_geom.h mesh_adj.h stack.h basics.h
+	$(BACK_COMPILE) -c $<
+reduce_test.o: exe/reduce_test.c back.h draw.h \
+  image.h simplex.h space.h comm.h \
+  my_mpi.h luby.h mesh.h
 	$(BACK_COMPILE) -c $<
 myperf.o: exe/myperf.c view_mesh.h view.h simplex.h \
   space.h image.h mesh.h mesh_bbox.h \
