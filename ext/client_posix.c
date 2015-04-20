@@ -1,6 +1,12 @@
 #include "../client.h"
 #include "../basics.h"
 
+/* seriously, guys. I just want to sleep for less
+   than one second. figure it out. this is already
+   just a hack to workaround sometime broken... */
+#define _POSIX_C_SOURCE 200809L
+#include <time.h>
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -28,7 +34,7 @@ client* client_new(char const* servname, int port)
   ASSERT(serv != NULL);
   memset(&servaddr, 0, sizeof(servaddr));
   servaddr.sin_family = AF_INET;
-  memcpy(&servaddr.sin_addr.s_addr, serv->h_addr, serv->h_length);
+  memcpy(&servaddr.sin_addr.s_addr, serv->h_addr_list[0], serv->h_length);
   servaddr.sin_port = htons(port);
   err = connect(c->fd, (struct sockaddr*) &servaddr, sizeof(servaddr));
   ASSERT(err >= 0);
@@ -53,5 +59,8 @@ int client_try_recv(client* c, void* data, unsigned size)
 
 void client_sleep(unsigned msecs)
 {
-  usleep((useconds_t) msecs);
+  struct timespec ts;
+  ts.tv_sec = msecs / 1000;
+  ts.tv_nsec = (msecs % 1000) * 1000;
+  nanosleep(&ts, NULL);
 }
