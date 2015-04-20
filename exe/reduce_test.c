@@ -12,21 +12,21 @@ void back_start(void)
   triangle t;
   drawing_init(&global_drawing, WIDTH, HEIGHT);
   if (comm_rank() == 0) {
-    t.a = point_new(3,4,-5);
-    t.b = point_new(200,10,-5);
-    t.c = point_new(7,200,-4);
+    t.a = point_new(0,0,0);
+    t.b = point_new(200,0,-10);
+    t.c = point_new(0,200,0);
   } else if (comm_rank() == 1) {
-    t.a = point_new(8,9,-2);
-    t.b = point_new(200,3,-4);
-    t.c = point_new(8,8,-200);
+    t.a = point_new(0,0,0);
+    t.b = point_new(200,0,0);
+    t.c = point_new(200,200,-10);
   } else if (comm_rank() == 2) {
-    t.a = point_new(8,20,-11);
-    t.b = point_new(8,200,-7);
-    t.c = point_new(9,10,-200);
+    t.a = point_new(200,0,0);
+    t.b = point_new(200,200,0);
+    t.c = point_new(0,200,-10);
   } else if (comm_rank() == 3) {
-    t.a = point_new(200,4,-5);
-    t.b = point_new(9,200,-1);
-    t.c = point_new(10,11,-200);
+    t.a = point_new(200,200,0);
+    t.b = point_new(0,200,0);
+    t.c = point_new(0,0,-10);
   }
   drawing_clear(&global_drawing, black);
   draw_triangle(&global_drawing, t, luby_color_from_index((unsigned)comm_rank()));
