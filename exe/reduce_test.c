@@ -25,8 +25,8 @@ void back_start(void)
     t.c = point_new(9,10,-200);
   } else if (comm_rank() == 3) {
     t.a = point_new(200,4,-5);
-    t.a = point_new(9,200,-1);
-    t.a = point_new(10,11,-200);
+    t.b = point_new(9,200,-1);
+    t.c = point_new(10,11,-200);
   }
   drawing_clear(&global_drawing, black);
   draw_triangle(&global_drawing, t, luby_color_from_index((unsigned)comm_rank()));
