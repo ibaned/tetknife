@@ -1,6 +1,7 @@
 #include "draw.h"
 #include "basics.h"
 #include "charbits.h"
+#include "comm.h"
 
 static double const line_offset = 4.0;
 static double const tri_offset = 8.0;
@@ -359,4 +360,43 @@ void draw_text(drawing* dr, const char* s, point where, color c)
       p.x += CHARBITS_WIDTH;
     }
   }
+}
+
+static unsigned global_npixels;
+
+static void drawing_reduce_op(void* inout, void const* in)
+{
+  unsigned sizez;
+  color* ioc;
+  color const* ic;
+  double* ioz;
+  double const* iz;
+  unsigned i;
+  sizez = global_npixels * sizeof(double);
+  ioz = inout;
+  iz = in;
+  ioc = (color*)(((char*)inout) + sizez);
+  ic = (color*)(((char*)in) + sizez);
+  for (i = 0; i < global_npixels; ++i)
+    if (iz[i] <= ioz[i])
+      ioc[i] = ic[i];
+}
+
+void drawing_reduce(drawing* d)
+{
+  char* data;
+  unsigned size;
+  unsigned sizez;
+  global_npixels = d->im.w * d->im.h;
+  /* we put the Z buffer in first because doubles
+     require 8-byte alignment, which they wouldn't
+     necessarily get if packed after the end
+     of the colors */
+  sizez = global_npixels * sizeof(double);
+  size = sizez + global_npixels * sizeof(color);
+  data = my_malloc(size);
+  my_memcpy(data, d->z[0], sizez);
+  my_memcpy(data + sizez, d->im.p[0], size - sizez);
+  mpi_reduce(comm_mpi(), data, size, drawing_reduce_op);
+  my_free(data);
 }

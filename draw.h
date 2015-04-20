@@ -19,4 +19,6 @@ void draw_line(drawing* d, line l, color c);
 void draw_triangle(drawing* d, triangle t, color c);
 void draw_text(drawing* dr, const char* s, point p, color c);
 
+void drawing_reduce(drawing* d);
+
 #endif
