@@ -51,3 +51,7 @@ int client_try_recv(client* c, void* data, unsigned size)
   return try_read(c->fd, data, size);
 }
 
+void client_sleep(unsigned msecs)
+{
+  usleep((useconds_t) msecs);
+}

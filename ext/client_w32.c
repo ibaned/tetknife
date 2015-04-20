@@ -50,3 +50,8 @@ int client_try_recv(client* c, void* data, unsigned size)
 {
   return try_recv(c->s, data, size);
 }
+
+void client_sleep(unsigned msecs)
+{
+  die("client_sleep not yet implemented for Windows\n");
+}
