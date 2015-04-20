@@ -1,5 +1,6 @@
 #include "mesh_bbox.h"
 #include "classif.h"
+#include "comm.h"
 
 unsigned const bbox_verts[DIMS] = {
   1,
@@ -112,5 +113,7 @@ bbox mesh_bbox(mesh* m)
   b = bbox_new();
   for (v = ment_f(m, VERTEX); ment_ok(v); v = ment_n(m, v))
     b = bbox_add(b, mesh_point(m, v));
+  mpi_min_doubles(comm_mpi(), point_arr(&b.min), 3);
+  mpi_max_doubles(comm_mpi(), point_arr(&b.max), 3);
   return b;
 }
