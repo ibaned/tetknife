@@ -398,5 +398,9 @@ void drawing_reduce(drawing* d)
   my_memcpy(data, d->z[0], sizez);
   my_memcpy(data + sizez, d->im.p[0], size - sizez);
   mpi_reduce(comm_mpi(), data, size, drawing_reduce_op);
+  if (comm_rank() == 0) {
+    my_memcpy(d->z[0], data, sizez);
+    my_memcpy(d->im.p[0], data + sizez, size - sizez);
+  }
   my_free(data);
 }
