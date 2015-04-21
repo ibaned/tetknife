@@ -1,4 +1,4 @@
-CONFIG ?= default
+CONFIG ?= config
 
 include $(CONFIG).mk
 
