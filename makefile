@@ -57,9 +57,6 @@ else ifeq "$(GUI)" "w32"
 GUI_OBJ = main_w32.o
 GUI_LIBS = -lGdi32
 else ifeq "$(GUI)" "none"
-  ifeq "$(BACK)" "socket"
-  $(error GUI cant be "none" when BACK is "socket")
-  endif
 else
 $(error GUI must be "cocoa", "gtk", "w32", or "none")
 endif
