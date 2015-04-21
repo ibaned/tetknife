@@ -6,7 +6,7 @@ The code is organized first as follows:
 
 1) a "backend" full of tools written only
 in pure C89, which do not include any
-header files outside of xmesh.
+header files outside of the project.
 
 2) several "frontends" for graphical programs,
 namely three OS-specific implementations of
