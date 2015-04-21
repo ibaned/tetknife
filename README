@@ -1,11 +1,8 @@
-Xmesh - the eXtreme meshing tools
-
-"Xmesh" is a cool name not yet taken on Github for
-a pile of code dealing with meshes.
+the minimalist meshing tools
 
 OVERALL STRUCTURE
 
-The Xmesh code is organized first as follows:
+The code is organized first as follows:
 
 1) a "backend" full of tools written only
 in pure C89, which do not include any
@@ -34,7 +31,7 @@ backend program that runs the user code.
 
 5) interfaces to external libraries.
 these are files that need to include
-headers outside Xmesh.
+headers outside the project.
 all such files are kept in the
 ext/ subdirectory.
 the frontends are part of this group,
@@ -50,12 +47,12 @@ Read the code.
 
 BUILDING IT
 
-Xmesh uses a single makefile for its
+This project uses a single makefile for its
 build system, and in turn requires
 only a "config.mk" file to define
 its build configuration.
 There are many examples of such configurations,
-all "*.mk" files in Xmesh are such examples.
+all "*.mk" files in here are such examples.
 After creating your "config.mk" file,
 just run `make`.
 You also have the option of defining
