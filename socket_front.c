@@ -55,6 +55,7 @@ void front_start(void)
   the_server = server_new(port);
   print("waiting on port %d ...\n", port);
   server_accept(the_server);
+  print("got a connection\n");
   recv_image(the_server, &the_image);
 }
 
