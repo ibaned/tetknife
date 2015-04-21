@@ -27,17 +27,26 @@ client* client_new(char const* servname, int port)
   int err;
   struct hostent* serv;
   struct sockaddr_in servaddr;
+  char* errs;
   c = my_malloc(sizeof(*c));
   c->fd = socket(AF_INET, SOCK_STREAM, 0);
   ASSERT(c->fd != -1);
+  errno = 0;
   serv = gethostbyname(servname);
-  ASSERT(serv != NULL);
+  if (!serv) {
+    errs = strerror(errno);
+    die("gethostbyname failed: %s\n", errs);
+  }
   memset(&servaddr, 0, sizeof(servaddr));
   servaddr.sin_family = AF_INET;
   memcpy(&servaddr.sin_addr.s_addr, serv->h_addr_list[0], serv->h_length);
   servaddr.sin_port = htons(port);
+  errno = 0;
   err = connect(c->fd, (struct sockaddr*) &servaddr, sizeof(servaddr));
-  ASSERT(err >= 0);
+  if (err) {
+    errs = strerror(errno);
+    die("connect failed: %s\n", errs);
+  }
   return c;
 }
 
