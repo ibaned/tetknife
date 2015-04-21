@@ -4,7 +4,7 @@
 #include "mesh.h"
 #include "image.h"
 
-int luby_mis(unsigned nneigh, int const neigh[], int in_Vp);
+int luby_mis(unsigned nneigh, int const neigh[], int in_V);
 unsigned luby_color(unsigned nneigh, int const neigh[]);
 unsigned luby_color_mesh_parts(mesh* m);
 
