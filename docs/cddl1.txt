@@ -1,6 +1,9 @@
-Unless otherwise noted, all files in this distribution are released
-under the Common Development and Distribution License (CDDL).
-Exceptions are noted within the associated source files.
+the followings files in this distribution are part of
+the FlameGraph project and are released
+under the Common Development and Distribution License (CDDL):
+
+../prof/flamegraph.pl
+../prof/stackcollapse-perf.pl
 
 --------------------------------------------------------------------
 
