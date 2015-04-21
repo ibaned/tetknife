@@ -36,7 +36,7 @@ void die(char const* format, ...)
 
 void my_assert_fail(char const* cond, char const* file, int line)
 {
-  die("xmesh assert fail: '%s' %s:%i\n", cond, file, line);
+  die("assert fail: '%s' %s:%i\n", cond, file, line);
 }
 
 void* my_malloc(unsigned long bytes)

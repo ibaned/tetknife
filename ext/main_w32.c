@@ -109,7 +109,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
     LPSTR lpCmdLine, int nCmdShow)
 {
-  char const class_name[] = "Xmesh Window Class";
+  char const class_name[] = "My Window Class";
   WNDCLASS wc = {0};
   HWND hwnd;
   MSG msg = {0};
@@ -121,7 +121,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
   hwnd = CreateWindowEx(
       0,
       class_name,
-      "Xmesh",
+      "TheWindow",
       WS_OVERLAPPEDWINDOW,
       20, 20, 640, 480,
       NULL,
