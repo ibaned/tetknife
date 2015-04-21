@@ -113,7 +113,7 @@ all: $(TARGETS)
 clean:
 	rm -f *.o $(TARGETS)
 
-xmesh: $(FRONT_OBJS)
+viewer: $(FRONT_OBJS)
 	$(FRONT_LINK) $^ $(FRONT_LIBS) -o $@
 test: test.o $(GUI_BACK_OBJS)
 	$(BACK_LINK) $^ $(GUI_BACK_LIBS) -o $@
@@ -128,8 +128,6 @@ commtest: commtest.o $(BACK_OBJS)
 migrtest: migrtest.o $(BACK_OBJS)
 mersenne_test: mersenne_test.o $(BACK_OBJS)
 luby_test: luby_test.o $(BACK_OBJS)
-libxmesh.a: $(BACK_OBJS)
-	ar cru $@ $^
 
 test.o: exe/test.c back.h view_mesh.h view.h \
   simplex.h space.h image.h mesh.h \
