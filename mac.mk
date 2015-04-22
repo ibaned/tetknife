@@ -1,7 +1,8 @@
-CC = clang
-CFLAGS = -std=c89 -O2 -g -Weverything -Wpedantic -Werror
+CC = mpicc
+FRONT_CC = clang
+CFLAGS = -O2 -g -Weverything -Wpedantic
 GUI = cocoa
-BACK = direct
-USE_MPI = no
-SOCKET = none
-TARGETS = test cad_test quality
+BACK = socket
+SOCKET = posix
+USE_MPI = yes
+TARGETS = viewer full_test

@@ -1,6 +1,6 @@
 #include "rw_posix.h"
 
-int server_posix_listen(int port)
+static int server_posix_listen(int port)
 {
   int listenfd;
   int err;
@@ -21,7 +21,7 @@ int server_posix_listen(int port)
   return listenfd;
 }
 
-int server_posix_accept(int listenfd)
+static int server_posix_accept(int listenfd)
 {
   int fd;
   fd = accept(listenfd, NULL, NULL);
