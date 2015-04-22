@@ -1,49 +1,20 @@
 #include "../server.h"
 #include "../basics.h"
 
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h> 
-#include <unistd.h>
-#include <errno.h>
-#include <string.h>
-
-#include "rw_posix.h"
-
-struct server {
-  int listenfd;
-  int fd;
-};
+#include "server_posix.h"
 
 server* server_new(int port)
 {
   server* s;
-  int err;
-  struct sockaddr_in servaddr;
   s = my_malloc(sizeof(*s));
-  s->listenfd = socket(AF_INET, SOCK_STREAM, 0);
+  s->listenfd = server_posix_listen(port);
   s->fd = -1;
-  ASSERT(s->listenfd != -1);
-  memset(&servaddr, 0, sizeof(servaddr));
-  servaddr.sin_family = AF_INET;
-  servaddr.sin_addr.s_addr = INADDR_ANY;
-  servaddr.sin_port = htons(port);
-  err = bind(s->listenfd, (struct sockaddr*) &servaddr, sizeof(servaddr));
-  if (err) {
-    die("server_new couldn't bind to port %d\n"
-        "wait around a bit or check if its in use\n", port);
-  }
-  err = listen(s->listenfd, 1);
-  ASSERT(err != -1);
   return s;
 }
 
 void server_accept(server* s)
 {
-  s->fd = accept(s->listenfd, NULL, NULL);
-  ASSERT(s->fd != -1);
-  close(s->listenfd);
+  s->fd = server_posix_accept(s->listenfd);
   s->listenfd = -1;
 }
 

@@ -1,3 +1,11 @@
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h> 
+#include <unistd.h>
+#include <errno.h>
+#include <string.h>
+
 static int try_write_some(int fd, void const** data, unsigned* size)
 {
   char const* p;
@@ -53,3 +61,8 @@ static int try_read(int fd, void* data, unsigned size)
       return 0;
   return 1;
 }
+
+struct server {
+  int listenfd;
+  int fd;
+};
