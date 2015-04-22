@@ -203,3 +203,8 @@ image* view_image(view* v)
 {
   return &v->d.im;
 }
+
+void view_reduce(view* v)
+{
+  drawing_reduce(&v->d);
+}

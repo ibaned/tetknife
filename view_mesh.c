@@ -49,4 +49,5 @@ void view_mesh_parts(view* v, mesh* m, color c)
   view_clear(v, black);
   view_mesh_faces(v, m, c);
   view_mesh_edges(v, m, white);
+  view_reduce(v);
 }

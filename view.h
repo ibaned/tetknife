@@ -33,4 +33,6 @@ void view_text(view* v, const char* s, point p, color c);
 
 image* view_image(view* v);
 
+void view_reduce(view* v);
+
 #endif
