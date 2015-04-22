@@ -31,19 +31,22 @@ static int try_relaying(int fromfd, int tofd, void* buf)
   return 1;
 }
 
-int main()
+int main(int argc, char** argv)
 {
-  static int const servport = 4243;
+  int servport = 4243;
   int listenfd;
   int serverfd;
   int clientfd;
   void* buf;
+  if (argc != 4)
+    die("usage: %s <listen port> <connect hostname> <connect port>\n", argv[0]);
+  servport = my_atoi(argv[1]);
   listenfd = server_posix_listen(servport);
   print("listening on port %d ...\n", servport);
   serverfd = server_posix_accept(listenfd);
   print("got a connection\n");
   make_nonblocking(serverfd);
-  clientfd = client_posix_connect("127.0.0.1", 4242);
+  clientfd = client_posix_connect(argv[2], my_atoi(argv[3]));
   make_nonblocking(clientfd);
   buf = my_malloc(BUF_SIZE);
   while (1) {

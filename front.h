@@ -1,7 +1,7 @@
 #ifndef FRONT_H
 #define FRONT_H
 
-void front_start(void);
+void front_start(int argc, char** argv);
 void front_stop(void);
 
 unsigned char* front_pixels(void);

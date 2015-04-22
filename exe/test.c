@@ -35,11 +35,13 @@ static void render(void)
   view_mesh_wireframe(global_view, global_mesh);
 }
 
-void back_start(void)
+void back_start(int argc, char** argv)
 {
   bbox b = {{0,0,0},{1,1,1}};
   ment bv[MAX_BBOX_VERTS];
   ment be[MAX_BBOX_SIMPLICES];
+  (void)argc;
+  (void)argv;
   global_view = view_new(WIDTH, HEIGHT);
   global_mesh = mesh_new();
   mesh_gen_bbox(global_mesh, b, DIM3, bv, be);

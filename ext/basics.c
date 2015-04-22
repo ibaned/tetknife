@@ -157,3 +157,8 @@ void my_memcpy(void* dst, void const* src, unsigned n)
 {
   memcpy(dst, src, n);
 }
+
+int my_atoi(char const* s)
+{
+  return atoi(s);
+}

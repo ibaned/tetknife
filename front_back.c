@@ -1,9 +1,9 @@
 #include "front.h"
 #include "back.h"
 
-void front_start(void)
+void front_start(int argc, char** argv)
 {
-  back_start();
+  back_start(argc, argv);
 }
 
 void front_stop(void)

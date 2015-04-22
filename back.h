@@ -1,7 +1,7 @@
 #ifndef BACK_H
 #define BACK_H
 
-void back_start(void);
+void back_start(int argc, char** argv);
 void back_stop(void);
 
 unsigned char* back_pixels(void);

@@ -109,7 +109,7 @@ static NSPoint getMouse(id nsimv, NSEvent* event)
 
 @end
 
-int main()
+int main(int argc, char** argv)
 {
   id menubar;
   id appMenuItem;
@@ -123,7 +123,7 @@ int main()
   id deleg;
   NSUInteger mask;
   NSRect rect;
-  front_start();
+  front_start(argc, argv);
   [NSApplication sharedApplication];
   [NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
   menubar = [NSMenu new];

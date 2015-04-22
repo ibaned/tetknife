@@ -7,9 +7,11 @@
 #define HEIGHT 480
 static drawing global_drawing;
 
-void back_start(void)
+void back_start(int argc, char** argv)
 {
   triangle t;
+  (void)argc;
+  (void)argv;
   drawing_init(&global_drawing, WIDTH, HEIGHT);
   if (comm_rank() == 0) {
     t.a = point_new(0,0,0);

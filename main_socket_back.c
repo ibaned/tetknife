@@ -76,14 +76,16 @@ static double recv_double(client* c)
   return x;
 }
 
-int main()
+int main(int argc, char** argv)
 {
   client* the_client = 0;
+  if (argc < 3)
+    die("usage: %s <connect hostname> <connect port> ...\n", argv[0]);
   mpi_init();
   comm_init(mpi_world());
   if (comm_rank() == 0)
-    the_client = client_new("127.0.0.1", 4243);
-  back_start();
+    the_client = client_new(argv[1], my_atoi(argv[2]));
+  back_start(argc - 2, argv + 2);
   send_image(the_client);
   while (1)
     switch (recv_code(the_client)) {

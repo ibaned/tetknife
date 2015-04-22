@@ -49,9 +49,12 @@ static void send_double(server* s, double x)
   ASSERT(server_try_send(s, &x, sizeof(x)));
 }
 
-void front_start(void)
+void front_start(int argc, char** argv)
 {
-  static int const port = 4242;
+  int port;
+  if (argc != 2)
+    die("usage: %s <listen port>\n", argv[0]);
+  port = my_atoi(argv[1]);
   the_server = server_new(port);
   print("listening on port %d ...\n", port);
   server_accept(the_server);
