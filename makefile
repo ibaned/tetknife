@@ -184,9 +184,11 @@ main_gtk.o: ext/main_gtk.c front.h
 	$(FRONT_COMPILE) $(GTK_FLAGS) -c $<
 main_w32.o: ext/main_w32.c front.h
 	$(FRONT_COMPILE) -c $<
-server_posix.o: ext/server_posix.c server.h basics.h ext/rw_posix.h
+server_posix.o: ext/server_posix.c server.h basics.h \
+  ext/server_posix.h ext/rw_posix.h
 	$(FRONT_COMPILE) -c $<
-client_posix.o: ext/client_posix.c client.h basics.h ext/rw_posix.h
+client_posix.o: ext/client_posix.c client.h basics.h \
+  ext/client_posix.h ext/rw_posix.h
 	$(BACK_COMPILE) -c $<
 relay_posix.o: ext/relay_posix.c basics.h ext/client_posix.h \
   ext/rw_posix.h ext/server_posix.h
@@ -208,7 +210,7 @@ front_image.o: image.c image.h basics.h
 socket_front.o: socket_front.c front.h server.h image.h my_endian.h \
   basics.h socket_codes.h
 	$(FRONT_COMPILE) -c $< -o $@
-my_mpi.o: ext/my_mpi.c basics.h my_mpi.h
+my_mpi.o: ext/my_mpi.c my_mpi.h basics.h
 	$(BACK_COMPILE) -c $<
 
 cad.o: cad.c cad.h space.h flex.h stack.h basics.h list.h flag.h mesh.h \
