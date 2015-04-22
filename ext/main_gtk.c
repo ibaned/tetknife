@@ -47,8 +47,8 @@ int main(int argc, char** argv)
   int event_mask;
   int width;
   int height;
-  front_start();
   gtk_init(&argc, &argv);
+  front_start(argc, argv);
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   g_signal_connect(window, "destroy", G_CALLBACK(close_window), NULL);
   width = front_width();
