@@ -94,6 +94,7 @@ front_image.o \
 $(SERVER_OBJ) \
 front_endian.o \
 front_basics.o
+FRONT_LIBS ?= $(LDLIBS)
 FRONT_LIBS += $(GUI_LIBS)
 FRONT_LDFLAGS ?= $(LDFLAGS)
 FRONT_CFLAGS ?= $(CFLAGS)
