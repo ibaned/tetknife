@@ -1,41 +1,55 @@
-static int try_write(int fd, void const* data, unsigned size)
+static int try_write_some(int fd, void const** data, unsigned* size)
 {
   char const* p;
   ssize_t step;
-  p = data;
-  while (size) {
-    errno = 0;
-    step = write(fd, p, size);
-    if (step == -1) {
-      if (errno == EAGAIN)
-        continue;
-      else
-        return 0;
-    } else {
-      size -= step;
-      p += step;
-    }
+  p = *data;
+  errno = 0;
+  step = write(fd, p, *size);
+  if (step == -1) {
+    if (errno == EAGAIN)
+      return 1;
+    else
+      return 0;
+  } else {
+    *size -= step;
+    p += step;
+    *data = p;
   }
+  return 1;
+}
+
+static int try_read_some(int fd, void** data, unsigned* size)
+{
+  char* p;
+  ssize_t step;
+  p = *data;
+  errno = 0;
+  step = read(fd, p, *size);
+  if (step == -1) {
+    if (errno == EAGAIN)
+      return 1;
+    else
+      return 0;
+  } else {
+    *size -= step;
+    p += step;
+    *data = p;
+  }
+  return 1;
+}
+
+static int try_write(int fd, void const* data, unsigned size)
+{
+  while (size)
+    if (!try_write_some(fd, &data, &size))
+      return 0;
   return 1;
 }
 
 static int try_read(int fd, void* data, unsigned size)
 {
-  char* p;
-  ssize_t step;
-  p = data;
-  while (size) {
-    errno = 0;
-    step = read(fd, p, size);
-    if (step == -1) {
-      if (errno == EAGAIN)
-        continue;
-      else
-        return 0;
-    } else {
-      size -= step;
-      p += step;
-    }
-  }
+  while (size)
+    if (!try_read_some(fd, &data, &size))
+      return 0;
   return 1;
 }
