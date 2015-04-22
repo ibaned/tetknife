@@ -1,4 +1,18 @@
+/* seriously, guys. I just want to sleep for less
+   than one second. figure it out. this is already
+   just a hack to workaround sometime broken... */
+#define _POSIX_C_SOURCE 200809L
+#include <time.h>
+
 #include "rw_posix.h"
+
+static void client_posix_sleep(unsigned msecs)
+{
+  struct timespec ts;
+  ts.tv_sec = msecs / 1000;
+  ts.tv_nsec = (msecs % 1000) * 1000;
+  nanosleep(&ts, NULL);
+}
 
 int client_posix_connect(char const* servname, int port)
 {
@@ -17,7 +31,7 @@ int client_posix_connect(char const* servname, int port)
     if (errno == EAGAIN) {
       debug("gethostbyname temporarily unavailable\n"
             "trying again in 1 second...\n");
-      client_sleep(1000);
+      client_posix_sleep(1000);
       continue;
     }
     errs = strerror(errno);

@@ -1,12 +1,6 @@
 #include "../client.h"
 #include "../basics.h"
 
-/* seriously, guys. I just want to sleep for less
-   than one second. figure it out. this is already
-   just a hack to workaround sometime broken... */
-#define _POSIX_C_SOURCE 200809L
-#include <time.h>
-
 #include "client_posix.h"
 
 struct client {
@@ -39,8 +33,5 @@ int client_try_recv(client* c, void* data, unsigned size)
 
 void client_sleep(unsigned msecs)
 {
-  struct timespec ts;
-  ts.tv_sec = msecs / 1000;
-  ts.tv_nsec = (msecs % 1000) * 1000;
-  nanosleep(&ts, NULL);
+  client_posix_sleep(msecs);
 }

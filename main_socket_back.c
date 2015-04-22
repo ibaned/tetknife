@@ -82,7 +82,7 @@ int main()
   mpi_init();
   comm_init(mpi_world());
   if (comm_rank() == 0)
-    the_client = client_new("127.0.0.1", 4242);
+    the_client = client_new("127.0.0.1", 4243);
   back_start();
   send_image(the_client);
   while (1)

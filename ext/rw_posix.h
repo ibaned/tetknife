@@ -1,3 +1,6 @@
+#ifndef RW_POSIX_H
+#define RW_POSIX_H
+
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -54,6 +57,7 @@ static int try_write(int fd, void const* data, unsigned size)
   return 1;
 }
 
+#ifndef SILENCE_TRY_READ_UNUSED_WARNING
 static int try_read(int fd, void* data, unsigned size)
 {
   while (size)
@@ -61,8 +65,11 @@ static int try_read(int fd, void* data, unsigned size)
       return 0;
   return 1;
 }
+#endif
 
 struct server {
   int listenfd;
   int fd;
 };
+
+#endif

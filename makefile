@@ -74,6 +74,7 @@ else ifeq "$(BACK)" "socket"
   ifeq "$(SOCKET)" "posix"
     SERVER_OBJ = server_posix.o
     CLIENT_OBJ = client_posix.o
+    RELAY_OBJ = relay_posix.o
   else ifeq "$(SOCKET)" "w32"
     SERVER_OBJ = server_w32.o
     CLIENT_OBJ = client_w32.o
@@ -96,6 +97,11 @@ front_basics.o
 FRONT_LIBS += $(GUI_LIBS)
 FRONT_LDFLAGS ?= $(LDFLAGS)
 FRONT_CFLAGS ?= $(CFLAGS)
+MID_CC ?= $(CC)
+MID_OBJS = \
+$(RELAY_OBJ) \
+mid_basics.o
+MID_CFLAGS ?= $(CFLAGS)
 else
 $(error BACK must be either "direct" or "socket")
 endif
@@ -104,6 +110,8 @@ FRONT_LINK = $(FRONT_CC) $(FRONT_LDFLAGS)
 FRONT_COMPILE = $(FRONT_CC) $(FRONT_CFLAGS)
 BACK_LINK = $(CC) $(LDFLAGS)
 BACK_COMPILE = $(CC) $(CFLAGS)
+MID_LINK = $(MID_CC) $(MID_LDFLAGS)
+MID_COMPILE = $(MID_CC) $(MID_CFLAGS)
 
 all: $(TARGETS)
 
@@ -112,6 +120,8 @@ clean:
 
 viewer: $(FRONT_OBJS)
 	$(FRONT_LINK) $^ $(FRONT_LIBS) -o $@
+relay: $(MID_OBJS)
+	$(MID_LINK) $^ $(MID_LIBS) -o $@
 test: test.o $(GUI_BACK_OBJS)
 	$(BACK_LINK) $^ $(GUI_BACK_LIBS) -o $@
 reduce_test: reduce_test.o $(GUI_BACK_OBJS)
@@ -169,6 +179,9 @@ server_posix.o: ext/server_posix.c server.h basics.h ext/rw_posix.h
 	$(FRONT_COMPILE) -c $<
 client_posix.o: ext/client_posix.c client.h basics.h ext/rw_posix.h
 	$(BACK_COMPILE) -c $<
+relay_posix.o: ext/relay_posix.c basics.h ext/client_posix.h \
+  ext/rw_posix.h ext/server_posix.h
+	$(MID_COMPILE) -c $<
 server_w32.o: ext/server_w32.c server.h basics.h ext/socket_w32.h
 	$(FRONT_COMPILE) -c $<
 client_w32.o: ext/client_w32.c client.h basics.h ext/socket_w32.h
@@ -177,6 +190,8 @@ basics.o: ext/basics.c basics.h
 	$(BACK_COMPILE) -c $<
 front_basics.o: ext/basics.c basics.h
 	$(FRONT_COMPILE) -c $< -o $@
+mid_basics.o: ext/basics.c basics.h
+	$(MID_COMPILE) -c $< -o $@
 front_endian.o: my_endian.c my_endian.h
 	$(FRONT_COMPILE) -c $< -o $@
 front_image.o: image.c image.h basics.h
