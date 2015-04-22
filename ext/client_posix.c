@@ -31,9 +31,17 @@ client* client_new(char const* servname, int port)
   c = my_malloc(sizeof(*c));
   c->fd = socket(AF_INET, SOCK_STREAM, 0);
   ASSERT(c->fd != -1);
-  errno = 0;
-  serv = gethostbyname(servname);
-  if (!serv) {
+  while (1) {
+    errno = 0;
+    serv = gethostbyname(servname);
+    if (serv)
+      break;
+    if (errno == EAGAIN) {
+      debug("gethostbyname temporarily unavailable\n"
+            "trying again in 1 second...\n");
+      client_sleep(1000);
+      continue;
+    }
     errs = strerror(errno);
     die("gethostbyname failed: %s\n", errs);
   }
