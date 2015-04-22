@@ -14,7 +14,7 @@ static void client_posix_sleep(unsigned msecs)
   nanosleep(&ts, NULL);
 }
 
-int client_posix_connect(char const* servname, int port)
+static int client_posix_connect(char const* servname, int port)
 {
   int fd;
   int err;
