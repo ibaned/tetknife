@@ -181,6 +181,9 @@ front_endian.o: my_endian.c my_endian.h
 	$(FRONT_COMPILE) -c $< -o $@
 front_image.o: image.c image.h basics.h
 	$(FRONT_COMPILE) -c $< -o $@
+socket_front.o: socket_front.c front.h server.h image.h my_endian.h \
+  basics.h socket_codes.h
+	$(FRONT_COMPILE) -c $< -o $@
 my_mpi.o: ext/my_mpi.c basics.h my_mpi.h
 	$(BACK_COMPILE) -c $<
 
@@ -229,8 +232,6 @@ rib.o: rib.c rib.h space.h remotes.h mesh.h simplex.h basics.h comm.h \
   my_mpi.h migrate.h label.h mesh_geom.h mesh_adj.h stack.h
 serial_mpi.o: serial_mpi.c my_mpi.h basics.h
 simplex.o: simplex.c simplex.h space.h
-socket_front.o: socket_front.c front.h server.h image.h my_endian.h \
-  basics.h socket_codes.h
 space.o: space.c space.h basics.h
 stack.o: stack.c stack.h basics.h
 view.o: view.c view.h simplex.h space.h image.h draw.h basics.h
