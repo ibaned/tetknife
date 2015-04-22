@@ -79,6 +79,7 @@ static double recv_double(client* c)
 int main(int argc, char** argv)
 {
   client* the_client = 0;
+  double x, y;
   if (argc < 3)
     die("usage: %s <connect hostname> <connect port> ...\n", argv[0]);
   mpi_init();
@@ -90,10 +91,14 @@ int main(int argc, char** argv)
   while (1)
     switch (recv_code(the_client)) {
       case SOCKET_MOUSE_DOWN:
-        back_mouse_down(recv_double(the_client), recv_double(the_client));
+        x = recv_double(the_client);
+        y = recv_double(the_client);
+        back_mouse_down(x, y);
         break;
       case SOCKET_MOUSE_UP:
-        back_mouse_up(recv_double(the_client), recv_double(the_client));
+        x = recv_double(the_client);
+        y = recv_double(the_client);
+        back_mouse_up(x, y);
         send_image(the_client);
         break;
       case SOCKET_KEY_DOWN:
