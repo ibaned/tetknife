@@ -122,7 +122,7 @@ viewer: $(FRONT_OBJS)
 	$(FRONT_LINK) $^ $(FRONT_LIBS) -o $@
 relay: $(MID_OBJS)
 	$(MID_LINK) $^ $(MID_LIBS) -o $@
-test: test.o $(GUI_BACK_OBJS)
+refine_test: refine_test.o $(GUI_BACK_OBJS)
 	$(BACK_LINK) $^ $(GUI_BACK_LIBS) -o $@
 reduce_test: reduce_test.o $(GUI_BACK_OBJS)
 	$(BACK_LINK) $^ $(GUI_BACK_LIBS) -o $@
@@ -136,7 +136,7 @@ migrtest: migrtest.o $(BACK_OBJS)
 mersenne_test: mersenne_test.o $(BACK_OBJS)
 luby_test: luby_test.o $(BACK_OBJS)
 
-test.o: exe/test.c back.h view_mesh.h view.h \
+refine_test.o: exe/refine_test.c back.h view_mesh.h view.h \
   simplex.h space.h image.h mesh.h \
   mesh_bbox.h cad.h mesh_adapt.h flag.h \
   mesh_geom.h mesh_adj.h stack.h basics.h
