@@ -220,7 +220,8 @@ charbits.o: charbits.c charbits.h
 classif.o: classif.c classif.h mesh.h simplex.h space.h cad.h list.h \
   field.h basics.h cad_geom.h param.h mesh_adj.h stack.h
 comm.o: comm.c comm.h my_mpi.h ibarrier.h basics.h stack.h
-draw.o: draw.c draw.h image.h simplex.h space.h basics.h charbits.h
+draw.o: draw.c draw.h image.h simplex.h space.h basics.h charbits.h \
+  comm.h my_mpi.h
 field.o: field.c field.h mesh.h simplex.h space.h basics.h
 flag.o: flag.c flag.h cad.h space.h mesh.h simplex.h basics.h
 flex.o: flex.c flex.h stack.h basics.h
@@ -229,9 +230,12 @@ ibarrier.o: ibarrier.c ibarrier.h my_mpi.h
 image.o: image.c image.h basics.h
 label.o: label.c label.h mesh.h simplex.h space.h basics.h
 list.o: list.c list.h basics.h
+luby.o: luby.c luby.h mesh.h simplex.h space.h image.h comm.h my_mpi.h \
+  mersenne_twister.h basics.h remotes.h
 main_socket_back.o: main_socket_back.c back.h client.h my_endian.h \
-  basics.h socket_codes.h
-mersenne_twister.o: mersenne_twister.c mersenne_twister.h basics.h
+  basics.h socket_codes.h comm.h my_mpi.h ibarrier.h
+mersenne_twister.o: mersenne_twister.c mersenne_twister.h image.h \
+  basics.h
 mesh.o: mesh.c mesh.h simplex.h space.h flex.h stack.h basics.h list.h \
   field.h classif.h cad.h flag.h remotes.h
 mesh_adapt.o: mesh_adapt.c mesh_adapt.h mesh.h simplex.h space.h flag.h \
@@ -239,15 +243,13 @@ mesh_adapt.o: mesh_adapt.c mesh_adapt.h mesh.h simplex.h space.h flag.h \
 mesh_adj.o: mesh_adj.c mesh_adj.h mesh.h simplex.h space.h stack.h \
   basics.h
 mesh_bbox.o: mesh_bbox.c mesh_bbox.h mesh.h simplex.h space.h cad.h \
-  classif.h
+  classif.h comm.h my_mpi.h
 mesh_geom.o: mesh_geom.c mesh_geom.h mesh.h simplex.h space.h mesh_adj.h \
   stack.h basics.h field.h
 mesh_mod.o: mesh_mod.c mesh_mod.h mesh.h simplex.h space.h mesh_adj.h \
   stack.h basics.h mesh_geom.h classif.h cad.h
 migrate.o: migrate.c migrate.h mesh.h simplex.h space.h label.h comm.h \
   my_mpi.h remotes.h mesh_adj.h stack.h basics.h
-luby.o: luby.c luby.h comm.h my_mpi.h mersenne_twister.h \
-  basics.h
 my_endian.o: my_endian.c my_endian.h
 param.o: param.c param.h space.h basics.h
 remotes.o: remotes.c remotes.h mesh.h simplex.h space.h flex.h stack.h \
@@ -256,8 +258,10 @@ rib.o: rib.c rib.h space.h remotes.h mesh.h simplex.h basics.h comm.h \
   my_mpi.h migrate.h label.h mesh_geom.h mesh_adj.h stack.h
 serial_mpi.o: serial_mpi.c my_mpi.h basics.h
 simplex.o: simplex.c simplex.h space.h
+socket_front.o: socket_front.c front.h server.h image.h my_endian.h \
+  basics.h socket_codes.h
 space.o: space.c space.h basics.h
 stack.o: stack.c stack.h basics.h
 view.o: view.c view.h simplex.h space.h image.h draw.h basics.h
 view_mesh.o: view_mesh.c view_mesh.h view.h simplex.h space.h image.h \
-  mesh.h mesh_geom.h mesh_adj.h stack.h basics.h
+  mesh.h mesh_adj.h stack.h basics.h mesh_geom.h
