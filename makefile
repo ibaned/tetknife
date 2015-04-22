@@ -124,6 +124,8 @@ relay: $(MID_OBJS)
 	$(MID_LINK) $^ $(MID_LIBS) -o $@
 refine_test: refine_test.o $(GUI_BACK_OBJS)
 	$(BACK_LINK) $^ $(GUI_BACK_LIBS) -o $@
+full_test: full_test.o $(GUI_BACK_OBJS)
+	$(BACK_LINK) $^ $(GUI_BACK_LIBS) -o $@
 reduce_test: reduce_test.o $(GUI_BACK_OBJS)
 	$(BACK_LINK) $^ $(GUI_BACK_LIBS) -o $@
 myperf: myperf.o $(BACK_OBJS)
@@ -136,6 +138,12 @@ migrtest: migrtest.o $(BACK_OBJS)
 mersenne_test: mersenne_test.o $(BACK_OBJS)
 luby_test: luby_test.o $(BACK_OBJS)
 
+full_test.o: exe/full_test.c back.h view_mesh.h \
+  view.h simplex.h space.h image.h \
+  mesh.h mesh_bbox.h cad.h mesh_adapt.h \
+  flag.h mesh_geom.h mesh_adj.h stack.h \
+  basics.h
+	$(BACK_COMPILE) -c $<
 refine_test.o: exe/refine_test.c back.h view_mesh.h view.h \
   simplex.h space.h image.h mesh.h \
   mesh_bbox.h cad.h mesh_adapt.h flag.h \
