@@ -264,4 +264,5 @@ void migrate(mesh* m, mlabel* plan)
   free_verts_and_pack(m);
   comm_exch();
   unpack_rent_frees(m);
+  remotes_decide_owners(m);
 }
