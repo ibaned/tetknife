@@ -110,10 +110,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
     LPSTR lpCmdLine, int nCmdShow)
 {
   char const class_name[] = "My Window Class";
+  int my_argc;
+  char* my_argv[3];
   WNDCLASS wc = {0};
   HWND hwnd;
   MSG msg = {0};
-  front_start();
+  /* so far this may work for one argument */
+  my_argc = (strlen(lpCmdLine) == 0 ? 1 : 2);
+  my_argv[0] = "viewer";
+  my_argv[1] = lpCmdLine;
+  my_argv[2] = NULL;
+  front_start(my_argc, my_argv);
   wc.lpfnWndProc = WindowProc;
   wc.hInstance = hInstance;
   wc.lpszClassName = class_name;
@@ -121,7 +128,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
   hwnd = CreateWindowEx(
       0,
       class_name,
-      "TheWindow",
+      "viewer",
       WS_OVERLAPPEDWINDOW,
       20, 20, 640, 480,
       NULL,
