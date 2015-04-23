@@ -39,6 +39,14 @@ void my_assert_fail(char const* cond, char const* file, int line)
   die("assert fail: '%s' %s:%i\n", cond, file, line);
 }
 
+void my_sprintf(char* buf, char const* format, ...)
+{
+  va_list ap;
+  va_start(ap, format);
+  vsprintf(buf, format, ap);
+  va_end(ap);
+}
+
 void* my_malloc(unsigned long bytes)
 {
   return malloc(bytes);

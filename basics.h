@@ -12,6 +12,8 @@ void my_assert_fail(char const* cond, char const* file, int line)
 
 #define ASSERT(c) ((c)?((void)0):my_assert_fail(#c,__FILE__,__LINE__))
 
+void my_sprintf(char* buf, char const* format, ...);
+
 void* my_malloc(unsigned long bytes);
 void* my_realloc(void* p, unsigned long bytes);
 void my_free(void* p);
