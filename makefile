@@ -19,6 +19,7 @@ cad_gen.o \
 cad_geom.o \
 cad.o \
 list.o \
+cavity_op.o \
 migrate.o \
 remotes.o \
 label.o \
@@ -219,6 +220,8 @@ cad.o: cad.c cad.h space.h flex.h stack.h basics.h list.h flag.h mesh.h \
 cad_gen.o: cad_gen.c cad_gen.h cad.h space.h cad_geom.h param.h
 cad_geom.o: cad_geom.c cad_geom.h cad.h space.h param.h flex.h stack.h \
   basics.h simplex.h
+cavity_op.o: cavity_op.c cavity_op.h mesh.h simplex.h space.h mesh_adj.h \
+  stack.h basics.h remotes.h migrate.h label.h
 charbits.o: charbits.c charbits.h
 classif.o: classif.c classif.h mesh.h simplex.h space.h cad.h list.h \
   field.h basics.h cad_geom.h param.h mesh_adj.h stack.h
