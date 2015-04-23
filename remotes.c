@@ -10,7 +10,7 @@ struct ent {
 
 struct peer {
   int rank;
-  int padding_;
+  unsigned nelem;
   flex ef;
   struct ent* e;
 };
@@ -21,6 +21,8 @@ struct remotes {
   int* o;
   flex pf;
   struct peer* p;
+  unsigned nelem;
+  int padding_;
 };
 
 #define RPEER_NULL { NULL_IDX }
@@ -294,4 +296,72 @@ ment unpack_local(simplex t)
   v.t = t;
   COMM_UNPACK(v.i);
   return v;
+}
+
+static void exch_nelem(mesh* m)
+{
+  remotes* rs;
+  rpeer rp;
+  unsigned nelem;
+  rs = mesh_remotes(m);
+  rs->nelem = ment_count(m, mesh_elem(m));
+  for (rp = rpeer_f(m); rpeer_ok(rp); rp = rpeer_n(m, rp))
+    COMM_PACK(rs->nelem, rpeer_rank(m, rp));
+  comm_exch();
+  while (comm_recv()) {
+    COMM_UNPACK(nelem);
+    rp = rpeer_by_rank(m, comm_from());
+    rs->p[rp.i].nelem = nelem;
+  }
+}
+
+static int fast_less(int rank_a, int rank_b,
+    unsigned nelem_a, unsigned nelem_b)
+{
+  if (nelem_a != nelem_b)
+    return nelem_a < nelem_b;
+  return rank_a < rank_b;
+}
+
+void remotes_decide_owners(mesh* m)
+{
+  remotes* rs;
+  ment v;
+  rent re;
+  int owner;
+  unsigned onelem;
+  int rank;
+  unsigned nelem;
+  exch_nelem(m);
+  rs = mesh_remotes(m);
+  for (v = ment_f(m, VERTEX); ment_ok(v); v = ment_n(m, v)) {
+    owner = comm_rank();
+    onelem = rs->nelem;
+    for (re = rent_of_f(m, v); rent_ok(re); re = rent_of_n(m, re)) {
+      rank = rpeer_rank(m, re.p);
+      nelem = rs->p[re.p.i].nelem;
+      if (fast_less(rank, owner, nelem, onelem)) {
+        owner = rank;
+        onelem = nelem;
+      }
+    }
+    ment_set_owner(m, v, owner);
+  }
+}
+
+static unsigned get_nelem(mesh* m, int rank)
+{
+  remotes* rs;
+  rpeer rp;
+  rs = mesh_remotes(m);
+  if (rank == comm_rank())
+    return rs->nelem;
+  rp = rpeer_by_rank(m, rank);
+  return rs->p[rp.i].nelem;
+}
+
+int remotes_less(mesh* m, int rank_a, int rank_b)
+{
+  return fast_less(rank_a, rank_b,
+      get_nelem(m, rank_a), get_nelem(m, rank_b));
 }

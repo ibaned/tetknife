@@ -64,4 +64,7 @@ void remotes_add_vert(mesh* m, ment v);
 void pack_remote(rcopy rc);
 ment unpack_local(simplex t);
 
+void remotes_decide_owners(mesh* m);
+int remotes_less(mesh* m, int rank_a, int rank_b);
+
 #endif
