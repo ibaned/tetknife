@@ -182,11 +182,13 @@ static void partition(unsigned* n, point** o, rcopy** rc, plane mp)
     if (plane_has(mp, po[i])) {
       dest_i = in_i++;
       dest_rank = (int) (dest_i / quo);
+      dest_rank = MIN(dest_rank, (int)ranks_in - 1);
       ASSERT(dest_rank < (int)ranks_in);
     } else {
       dest_i = out_i++;
       dest_rank = (int) (dest_i / quo);
       dest_rank += ranks_in;
+      dest_rank = MIN(dest_rank, comm_size() - 1);
       ASSERT((dest_rank - (int)ranks_in) < (int)ranks_out);
     }
     COMM_PACK(dest_i, dest_rank);
