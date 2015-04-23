@@ -143,7 +143,8 @@ full_test.o: exe/full_test.c back.h view_mesh.h \
   view.h simplex.h space.h image.h \
   mesh.h mesh_bbox.h cad.h mesh_adapt.h \
   flag.h mesh_geom.h mesh_adj.h stack.h \
-  basics.h
+  basics.h comm.h my_mpi.h remotes.h \
+  rib.h
 	$(BACK_COMPILE) -c $<
 refine_test.o: exe/refine_test.c back.h view_mesh.h view.h \
   simplex.h space.h image.h mesh.h \
@@ -266,4 +267,4 @@ space.o: space.c space.h basics.h
 stack.o: stack.c stack.h basics.h
 view.o: view.c view.h simplex.h space.h image.h draw.h basics.h
 view_mesh.o: view_mesh.c view_mesh.h view.h simplex.h space.h image.h \
-  mesh.h mesh_adj.h stack.h basics.h mesh_geom.h
+  mesh.h mesh_adj.h stack.h basics.h mesh_geom.h luby.h

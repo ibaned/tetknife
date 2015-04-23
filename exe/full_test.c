@@ -6,7 +6,6 @@
 #include "../basics.h"
 #include "../comm.h"
 #include "../remotes.h"
-#include "../luby.h"
 #include "../rib.h"
 
 #define WIDTH 640
@@ -14,11 +13,10 @@
 static view* global_view;
 static mesh* global_mesh;
 static char global_key;
-static color global_color;
 
 static void render(void)
 {
-  view_mesh_parts(global_view, global_mesh, global_color);
+  view_mesh_parts(global_view, global_mesh);
 }
 
 void back_start(int argc, char** argv)
@@ -35,8 +33,6 @@ void back_start(int argc, char** argv)
   else
     mesh_set_elem(global_mesh, TRIANGLE);
   remotes_new(global_mesh);
-  global_color = luby_color_from_index(
-      luby_color_mesh_parts(global_mesh));
   view_focus(global_view, mesh_bbox(global_mesh));
   render();
 }
@@ -98,8 +94,6 @@ void back_key_up(void)
       break;
     case 'b':
       mesh_balance_rib(global_mesh);
-      global_color = luby_color_from_index(
-          luby_color_mesh_parts(global_mesh));
       break;
   };
   render();

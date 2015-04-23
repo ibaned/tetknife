@@ -1,6 +1,7 @@
 #include "view_mesh.h"
 #include "mesh_adj.h"
 #include "mesh_geom.h"
+#include "luby.h"
 
 static void view_elem_faces(view* v, mesh* m, ment e, color c)
 {
@@ -44,8 +45,10 @@ static void view_mesh_faces(view* v, mesh* m, color c)
     view_elem_faces(v, m, e, c);
 }
 
-void view_mesh_parts(view* v, mesh* m, color c)
+void view_mesh_parts(view* v, mesh* m)
 {
+  color c = luby_color_from_index(
+      luby_color_mesh_parts(m));
   view_clear(v, black);
   view_mesh_faces(v, m, c);
   view_mesh_edges(v, m, white);
