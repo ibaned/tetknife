@@ -1,8 +1,9 @@
-#options are "cocoa", "w32", and "gtk"
 CC = gcc
-CFLAGS = -std=c89 -O2 -g -Wall -Wpedantic -Wno-unknown-pragmas -Werror
+CFLAGS = -std=c99 -O2 -g -Wall -Wpedantic
 LDFLAGS =
-LDLIBS = -lm
+LDLIBS = -lm -lWs2_32
 GUI = w32
-BACK = direct
-TARGETS = test cad_test quality myperf
+BACK = socket
+SOCKET = w32
+USE_MPI = no
+TARGETS = viewer full_test
