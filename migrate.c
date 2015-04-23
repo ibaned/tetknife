@@ -2,6 +2,7 @@
 #include "comm.h"
 #include "remotes.h"
 #include "mesh_adj.h"
+#include "flag.h"
 
 mlabel* migration_plan_new(mesh* m)
 {
@@ -71,11 +72,33 @@ static void residence_to_new_verts(mesh* m)
   }
 }
 
+static void pack_common(mesh* m, ment e, int to)
+{
+  int fv;
+  if (mesh_flag(m)) {
+    fv = mflag_get(mesh_flag(m), e);
+    COMM_PACK(fv, to);
+  }
+}
+
+static void unpack_common(mesh* m, ment e)
+{
+  int fv;
+  if (mesh_flag(m)) {
+    COMM_UNPACK(fv);
+    if (fv)
+      mflag_set(mesh_flag(m), e);
+    else
+      mflag_clear(mesh_flag(m), e);
+  }
+}
+
 static void pack_vertex(mesh* m, ment v, int to)
 {
   point x;
   x = mesh_point(m, v);
   COMM_PACK(x, to);
+  pack_common(m, v, to);
 }
 
 static ment unpack_vertex(mesh* m)
@@ -85,6 +108,7 @@ static ment unpack_vertex(mesh* m)
   COMM_UNPACK(x);
   v = ment_new(m, VERTEX, 0);
   mesh_set_point(m, v, x);
+  unpack_common(m, v);
   return v;
 }
 
@@ -179,6 +203,7 @@ static void pack_elem(mesh* m, ment e, int to)
   COMM_PACK(e.t, to);
   for (i = 0; i < nv; ++i)
     pack_ref(m, v[i], to);
+  pack_common(m, e, to);
 }
 
 static ment unpack_elem(mesh* m)
@@ -191,7 +216,9 @@ static ment unpack_elem(mesh* m)
   nv = simplex_ndown[e.t][VERTEX];
   for (i = 0; i < nv; ++i)
     v[i] = unpack_ref();
-  return ment_new(m, e.t, v);
+  e = ment_new(m, e.t, v);
+  unpack_common(m, e);
+  return e;
 }
 
 static void pack_and_free_elems(mesh* m, mlabel* plan)
