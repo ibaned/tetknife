@@ -194,6 +194,11 @@ int ment_shared_with(mesh* m, ment e, int rank)
   return rank == comm_rank() || rent_ok(rent_by_rank(m, e, rank));
 }
 
+int ment_shared(mesh* m, ment e)
+{
+  return rent_ok(rent_of_f(m, e));
+}
+
 rent rent_new(mesh* m, ment me, rcopy rc)
 {
   remotes* rs;

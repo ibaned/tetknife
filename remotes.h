@@ -47,6 +47,7 @@ unsigned rent_of_count(mesh* m, ment e);
 
 rent rent_by_rank(mesh* m, ment e, int rank);
 int ment_shared_with(mesh* m, ment e, int rank);
+int ment_shared(mesh* m, ment e);
 
 rent rent_new(mesh* m, ment e, rcopy rc);
 void rent_free(mesh* m, rent re);
