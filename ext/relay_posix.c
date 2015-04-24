@@ -33,7 +33,7 @@ static int try_relaying(int fromfd, int tofd, void* buf)
 
 int main(int argc, char** argv)
 {
-  int servport = 4243;
+  int servport;
   int listenfd;
   int serverfd;
   int clientfd;
@@ -42,7 +42,6 @@ int main(int argc, char** argv)
     die("usage: %s <listen port> <connect hostname> <connect port>\n", argv[0]);
   servport = my_atoi(argv[1]);
   listenfd = server_posix_listen(servport);
-  print("listening on port %d ...\n", servport);
   serverfd = server_posix_accept(listenfd);
   print("got a connection\n");
   make_nonblocking(serverfd);

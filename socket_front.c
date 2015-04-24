@@ -56,7 +56,6 @@ void front_start(int argc, char** argv)
     die("usage: %s <listen port>\n", argv[0]);
   port = my_atoi(argv[1]);
   the_server = server_new(port);
-  print("listening on port %d ...\n", port);
   server_accept(the_server);
   print("got a connection\n");
   recv_image(the_server, &the_image);
