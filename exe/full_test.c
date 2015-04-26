@@ -7,12 +7,14 @@
 #include "../comm.h"
 #include "../remotes.h"
 #include "../rib.h"
+#include "../cavity_op.h"
 
 #define WIDTH 640
 #define HEIGHT 480
 static view* global_view;
 static mesh* global_mesh;
 static char global_key;
+static mflag* global_flag = 0;
 
 static void render(void)
 {
@@ -82,6 +84,31 @@ void back_key_down(char k)
   global_key = k;
 }
 
+static void the_op(ment e, cavity_env* env)
+{
+  if (mflag_get(global_flag, e))
+    if (cavity_check_verts(env, 1, &e))
+      mflag_clear(global_flag, e);
+}
+
+static void cavity_test(void)
+{
+  ment v;
+  if (!global_flag) {
+    global_flag = mflag_new(global_mesh);
+    for (v = ment_f(global_mesh, VERTEX); ment_ok(v);
+         v = ment_n(global_mesh, v))
+      mflag_set(global_flag, v);
+  }
+  cavity_exec(global_mesh, the_op, VERTEX);
+  if (!mpi_max_unsigned(mpi_world(),
+        mflag_count(global_flag, VERTEX))) {
+    mflag_free(global_flag);
+    global_flag = 0;
+    debug("done\n");
+  }
+}
+
 void back_key_up(void)
 {
   switch (global_key) {
@@ -94,6 +121,9 @@ void back_key_up(void)
       break;
     case 'b':
       mesh_balance_rib(global_mesh);
+      break;
+    case 'c':
+      cavity_test();
       break;
   };
   render();
