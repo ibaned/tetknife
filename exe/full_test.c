@@ -33,7 +33,7 @@ void back_start(int argc, char** argv)
   if (!comm_rank())
     mesh_gen_bbox(global_mesh, b, DIM3, bv, be);
   else
-    mesh_set_elem(global_mesh, TRIANGLE);
+    mesh_set_elem(global_mesh, TET);
   remotes_new(global_mesh);
   view_focus(global_view, mesh_bbox(global_mesh));
   render();
