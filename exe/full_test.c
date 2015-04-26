@@ -94,11 +94,11 @@ static void cavity_test(void)
 {
   ment v;
   global_flag = mflag_new(global_mesh);
-  for (v = ment_f(global_mesh, VERTEX); ment_ok(v);
+  for (v = ment_f(global_mesh, TET); ment_ok(v);
        v = ment_n(global_mesh, v))
     mflag_set(global_flag, v);
-  cavity_exec_flagged(global_mesh, global_flag, no_op, VERTEX);
-  ASSERT(!mpi_max_unsigned(mpi_world(),mflag_count(global_flag, VERTEX)));
+  cavity_exec_flagged(global_mesh, global_flag, no_op, TET);
+  ASSERT(!mpi_max_unsigned(mpi_world(),mflag_count(global_flag, TET)));
   mflag_free(global_flag);
 }
 
