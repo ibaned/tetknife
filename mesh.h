@@ -71,4 +71,6 @@ void mesh_set_remotes(mesh* m, struct remotes* rs);
 
 void mesh_merge_verts(mesh* m, ment v, ment into);
 
+int ment_exists(mesh* m, ment v);
+
 #endif

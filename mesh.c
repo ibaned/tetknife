@@ -315,3 +315,8 @@ void mesh_merge_verts(mesh* m, ment v, ment into)
     }
   ment_free(m, v);
 }
+
+int ment_exists(mesh* m, ment v)
+{
+  return flex_exists(&m->f[v.t], v.i);
+}
