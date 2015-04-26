@@ -134,3 +134,13 @@ void mflag_free(mflag* f)
     flag_dtor(f->f + t);
   my_free(f);
 }
+
+unsigned mflag_count(mflag* f, simplex t)
+{
+  ment e;
+  unsigned n = 0;
+  for (e = ment_f(f->m, t); ment_ok(e); e = ment_n(f->m, e))
+    if (mflag_get(f, e))
+      ++n;
+  return n;
+}
