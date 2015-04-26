@@ -28,7 +28,7 @@ int cavity_check_verts(cavity_env* env, unsigned nv, ment const v[])
   for (i = 0; i < nv; ++i)
     if (ment_shared(env->m, v[i]))
       are_local = 0;
-  if (env->is_requesting) {
+  if (!are_local && env->is_requesting) {
     for (i = 0; i < nv; ++i)
       mset_add(&env->vs, v[i]);
   }
@@ -69,7 +69,7 @@ static int exch_ents(cavity_env* env)
       ra = (int) mlabel_get(plan, e);
       rb = comm_from();
       if (ra == -1)
-        mlabel_set(plan, e, ra);
+        mlabel_set(plan, e, rb);
       else {
         if (remotes_less(m, rb, ra))
           mlabel_set(plan, e, rb);
