@@ -277,9 +277,14 @@ static void unpack_rent_frees(mesh* m)
 static void free_verts(mesh* m)
 {
   ment v;
-  for (v = ment_f(m, VERTEX); ment_ok(v); v = ment_n(m, v))
-    if (!muse_ok(muse_f(m, v, mesh_elem(m))))
-      ment_free(m, v);
+  rent re;
+  for (v = ment_f(m, VERTEX); ment_ok(v); v = ment_n(m, v)) {
+    if (muse_ok(muse_f(m, v, mesh_elem(m))))
+      continue;
+    while (rent_ok(re = rent_of_f(m, v)))
+      rent_free(m, re);
+    ment_free(m, v);
+  }
 }
 
 void migrate(mesh* m, mlabel* plan)
