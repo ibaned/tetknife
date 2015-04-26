@@ -97,6 +97,7 @@ void cavity_exec(mesh* m, cavity_op op, simplex t)
     for (e = ment_f(m, t); ment_ok(e); e = ment_n(m, e))
       op(e, &env);
     env.is_requesting = 1;
+    mset_clear(&env.vs);
     for (e = ment_f(m, t); ment_ok(e); e = ment_n(m, e))
       op(e, &env);
   } while (exch_ents(&env));
