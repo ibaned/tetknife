@@ -292,6 +292,7 @@ void remotes_add_vert(mesh* m, ment v)
 
 void pack_remote(rcopy rc)
 {
+  ASSERT(rc.ri >= 0);
   COMM_PACK(rc.ri, rc.rank);
 }
 
@@ -300,6 +301,7 @@ ment unpack_local(simplex t)
   ment v;
   v.t = t;
   COMM_UNPACK(v.i);
+  ASSERT(v.i >= 0);
   return v;
 }
 
