@@ -151,6 +151,11 @@ rent rent_of_n(mesh* m, rent re)
   return p->e[re.i].n;
 }
 
+unsigned rent_count(mesh* m, rpeer rp)
+{
+  return mesh_remotes(m)->p[rp.i].ef.n;
+}
+
 rcopy rent_copy(mesh* m, rent re)
 {
   rcopy rc;

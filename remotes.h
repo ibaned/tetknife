@@ -38,6 +38,8 @@ int rent_eq(rent a, rent b) __attribute__((const));
 rent rent_f(mesh* m, rpeer rp) __attribute__((pure));
 rent rent_n(mesh* m, rent re) __attribute__((pure));
 
+unsigned rent_count(mesh* m, rpeer rp);
+
 rent rent_of_f(mesh* m, ment e) __attribute__((pure));
 rent rent_of_n(mesh* m, rent re) __attribute__((pure));
 rcopy rent_copy(mesh* m, rent re) __attribute__((pure));
