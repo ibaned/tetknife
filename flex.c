@@ -69,3 +69,8 @@ int flex_n(flex* f, int i)
   return iter(f, stack_n(&f->s, i));
 }
 
+int flex_exists(flex* f, int i)
+{
+  return stack_exists(&f->s, i) && f->fl[i] == LIVE_IDX;
+}
+

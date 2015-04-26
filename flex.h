@@ -18,5 +18,6 @@ int flex_add(flex* f);
 void flex_rm(flex* f, int i);
 int flex_f(flex* f);
 int flex_n(flex* f, int i);
+int flex_exists(flex* f, int i);
 
 #endif

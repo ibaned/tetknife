@@ -20,5 +20,6 @@ int stack_push(stack* s);
 int stack_push_by(stack* s, unsigned n);
 int stack_f(stack* s);
 int stack_n(stack* s, int i);
+int stack_exists(stack* s, int i);
 
 #endif

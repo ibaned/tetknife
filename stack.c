@@ -75,3 +75,8 @@ int stack_n(stack* s, int i)
 {
   return iter(s, i + 1);
 }
+
+int stack_exists(stack* s, int i)
+{
+  return 0 <= i && ((unsigned)i < s->n);
+}
