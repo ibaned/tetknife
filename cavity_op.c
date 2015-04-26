@@ -4,6 +4,7 @@
 #include "migrate.h"
 #include "basics.h"
 #include "comm.h"
+#include "flag.h"
 
 struct cavity_env {
   mesh* m;
@@ -102,4 +103,26 @@ void cavity_exec(mesh* m, cavity_op op, simplex t)
       op(e, &env);
   } while (exch_ents(&env));
   mset_dtor(&env.vs);
+}
+
+static mflag* the_flag;
+static void (*the_fun)(mesh*, ment);
+static mesh* the_mesh;
+
+static void the_op(ment e, cavity_env* env)
+{
+  if (mflag_get(the_flag, e) &&
+      cavity_check(env, e)) {
+    the_fun(the_mesh, e);
+    mflag_clear(the_flag, e);
+  }
+}
+
+void cavity_exec_flagged(mesh* m, struct mflag* f,
+    void (*fn)(mesh* m, ment e), simplex t)
+{
+  the_flag = f;
+  the_fun = fn;
+  the_mesh = m;
+  cavity_exec(m, the_op, t);
 }

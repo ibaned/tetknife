@@ -84,29 +84,22 @@ void back_key_down(char k)
   global_key = k;
 }
 
-static void the_op(ment e, cavity_env* env)
+static void no_op(mesh* m, ment e)
 {
-  if (mflag_get(global_flag, e))
-    if (cavity_check_verts(env, 1, &e))
-      mflag_clear(global_flag, e);
+  (void)m;
+  (void)e;
 }
 
 static void cavity_test(void)
 {
   ment v;
-  if (!global_flag) {
-    global_flag = mflag_new(global_mesh);
-    for (v = ment_f(global_mesh, VERTEX); ment_ok(v);
-         v = ment_n(global_mesh, v))
-      mflag_set(global_flag, v);
-  }
-  cavity_exec(global_mesh, the_op, VERTEX);
-  if (!mpi_max_unsigned(mpi_world(),
-        mflag_count(global_flag, VERTEX))) {
-    mflag_free(global_flag);
-    global_flag = 0;
-    debug("done\n");
-  }
+  global_flag = mflag_new(global_mesh);
+  for (v = ment_f(global_mesh, VERTEX); ment_ok(v);
+       v = ment_n(global_mesh, v))
+    mflag_set(global_flag, v);
+  cavity_exec_flagged(global_mesh, global_flag, no_op, VERTEX);
+  ASSERT(!mpi_max_unsigned(mpi_world(),mflag_count(global_flag, VERTEX)));
+  mflag_free(global_flag);
 }
 
 void back_key_up(void)

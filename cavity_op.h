@@ -12,4 +12,7 @@ typedef void (*cavity_op)(ment e, cavity_env* env);
 
 void cavity_exec(mesh* m, cavity_op op, simplex t);
 
+void cavity_exec_flagged(mesh* m, struct mflag* f,
+    void (*fn)(mesh* m, ment e), simplex t);
+
 #endif
