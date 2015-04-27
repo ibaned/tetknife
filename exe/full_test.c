@@ -23,7 +23,7 @@ static void render(void)
 
 void back_start(int argc, char** argv)
 {
-  bbox b = {{0,0,0},{1,1,1}};
+  bbox b = {{0,0,0},{1,1,0}};
   ment bv[MAX_BBOX_VERTS];
   ment be[MAX_BBOX_SIMPLICES];
   (void)argc;
@@ -31,9 +31,9 @@ void back_start(int argc, char** argv)
   global_view = view_new(WIDTH, HEIGHT);
   global_mesh = mesh_new();
   if (!comm_rank())
-    mesh_gen_bbox(global_mesh, b, DIM3, bv, be);
+    mesh_gen_bbox(global_mesh, b, DIM2, bv, be);
   else
-    mesh_set_elem(global_mesh, TET);
+    mesh_set_elem(global_mesh, TRIANGLE);
   remotes_new(global_mesh);
   view_focus(global_view, mesh_bbox(global_mesh));
   render();
@@ -93,13 +93,18 @@ static void no_op(mesh* m, ment e)
 static void cavity_test(void)
 {
   ment v;
-  global_flag = mflag_new(global_mesh);
-  for (v = ment_f(global_mesh, TET); ment_ok(v);
-       v = ment_n(global_mesh, v))
-    mflag_set(global_flag, v);
-  cavity_exec_flagged(global_mesh, global_flag, no_op, TET);
-  ASSERT(!mpi_max_unsigned(mpi_world(),mflag_count(global_flag, TET)));
-  mflag_free(global_flag);
+  if (!global_flag) {
+    global_flag = mflag_new(global_mesh);
+    for (v = ment_f(global_mesh, TRIANGLE); ment_ok(v);
+         v = ment_n(global_mesh, v))
+      mflag_set(global_flag, v);
+  }
+  cavity_exec_flagged(global_mesh, global_flag, no_op, TRIANGLE);
+  if (!mpi_max_unsigned(mpi_world(),mflag_count(global_flag, TRIANGLE))) {
+    mflag_free(global_flag);
+    global_flag = 0;
+    debug("DONE!\n");
+  }
 }
 
 void back_key_up(void)
