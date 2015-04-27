@@ -1,6 +1,7 @@
 #include "mesh_adapt.h"
 #include "mesh_adj.h"
 #include "mesh_mod.h"
+#include "cavity_op.h"
 
 static void find_best_edge_split(mesh* m, split* s, ment e, ment v[2])
 {
@@ -24,37 +25,25 @@ static void find_best_edge_split(mesh* m, split* s, ment e, ment v[2])
   }
 }
 
-static void split_ment(mesh* m, split* s, ment e)
+static split* the_split;
+
+static void refine_op(mesh* m, ment e)
 {
   ment v[2];
-  find_best_edge_split(m, s, e, v);
-  split_edge(s, v);
+  find_best_edge_split(m, the_split, e, v);
+  split_edge(the_split, v);
 }
 
 void mesh_refine(mesh* m, mflag* f)
 {
-  ment e;
-  split* s;
-  s = split_new(m);
-  for (e = ment_f(m, mesh_elem(m)); ment_ok(e); e = ment_n(m, e))
-    if (mflag_get(f, e))
-      split_ment(m, s, e);
-  split_free(s);
-}
-
-static mflag* flag_all(mesh* m)
-{
-  mflag* f;
-  ment e;
-  f = mflag_new(m);
-  for (e = ment_f(m, mesh_elem(m)); ment_ok(e); e = ment_n(m, e))
-    mflag_set(f, e);
-  return f;
+  the_split = split_new(m);
+  cavity_exec_flagged(m, f, refine_op, mesh_elem(m));
+  split_free(the_split);
 }
 
 void mesh_refine_all(mesh* m)
 {
-  mflag* f = flag_all(m);
+  mflag* f = mflag_new_all(m, mesh_elem(m));
   mesh_refine(m, f);
   mflag_free(f);
 }

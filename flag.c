@@ -144,3 +144,13 @@ unsigned mflag_count(mflag* f, simplex t)
       ++n;
   return n;
 }
+
+mflag* mflag_new_all(mesh* m, simplex t)
+{
+  mflag* f;
+  ment e;
+  f = mflag_new(m);
+  for (e = ment_f(m, t); ment_ok(e); e = ment_n(m, e))
+    mflag_set(f, e);
+  return f;
+}

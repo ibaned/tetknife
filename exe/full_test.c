@@ -84,23 +84,14 @@ void back_key_down(char k)
   global_key = k;
 }
 
-static void no_op(mesh* m, ment e)
-{
-  (void)m;
-  (void)e;
-}
-
 static void cavity_test(void)
 {
-  ment v;
-  if (!global_flag) {
-    global_flag = mflag_new(global_mesh);
-    for (v = ment_f(global_mesh, TRIANGLE); ment_ok(v);
-         v = ment_n(global_mesh, v))
-      mflag_set(global_flag, v);
-  }
-  cavity_exec_flagged(global_mesh, global_flag, no_op, TRIANGLE);
-  if (!mpi_max_unsigned(mpi_world(),mflag_count(global_flag, TRIANGLE))) {
+  simplex t;
+  t = mesh_elem(global_mesh);
+  if (!global_flag)
+    global_flag = mflag_new_all(global_mesh, t);
+  mesh_refine(global_mesh, global_flag);
+  if (!mpi_max_unsigned(mpi_world(),mflag_count(global_flag, t))) {
     mflag_free(global_flag);
     global_flag = 0;
     debug("DONE!\n");

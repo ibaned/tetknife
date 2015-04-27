@@ -33,5 +33,6 @@ void mflag_set(mflag* f, ment e);
 int mflag_get(mflag* f, ment e);
 void mflag_free(mflag* f);
 unsigned mflag_count(mflag* f, simplex t);
+mflag* mflag_new_all(mesh* m, simplex t);
 
 #endif
