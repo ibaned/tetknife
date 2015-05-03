@@ -23,7 +23,7 @@ static void pack_residence(mesh* m, mlabel* plan)
   ment e;
   int rank;
   for (v = ment_f(m, VERTEX); ment_ok(v); v = ment_n(m, v)) {
-    o = ment_owner(m, v);
+    o = ment_owner_copy(m, v);
     COMM_PACK(o.ri, o.rank);
     ne = muse_count(m, v, mesh_elem(m));
     COMM_PACK(ne, o.rank);

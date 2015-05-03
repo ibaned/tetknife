@@ -54,7 +54,8 @@ int ment_shared(mesh* m, ment e);
 rent rent_new(mesh* m, ment e, rcopy rc);
 void rent_free(mesh* m, rent re);
 
-rcopy ment_owner(mesh* m, ment e) __attribute__((pure));
+int ment_owner(mesh* m, ment e) __attribute__((pure));
+rcopy ment_owner_copy(mesh* m, ment e) __attribute__((pure));
 void ment_set_owner(mesh* m, ment e, int rank);
 int ment_owned(mesh* m, ment e);
 

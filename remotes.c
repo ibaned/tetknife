@@ -253,11 +253,16 @@ void rent_free(mesh* m, rent re)
     peer_free(rs, re.p);
 }
 
-rcopy ment_owner(mesh* m, ment e)
+int ment_owner(mesh* m, ment e)
+{
+  return mesh_remotes(m)->o[e.i];
+}
+
+rcopy ment_owner_copy(mesh* m, ment e)
 {
   int orank;
   rcopy rc;
-  orank = mesh_remotes(m)->o[e.i];
+  orank = ment_owner(m, e);
   if (orank == comm_rank()) {
     rc.rank = orank;
     rc.ri = e.i;
