@@ -21,6 +21,7 @@ cad.o \
 list.o \
 cavity_op.o \
 migrate.o \
+subcomm.o \
 remotes.o \
 label.o \
 flag.o \
@@ -221,7 +222,8 @@ cad_gen.o: cad_gen.c cad_gen.h cad.h space.h cad_geom.h param.h
 cad_geom.o: cad_geom.c cad_geom.h cad.h space.h param.h flex.h stack.h \
   basics.h simplex.h
 cavity_op.o: cavity_op.c cavity_op.h mesh.h simplex.h space.h mesh_adj.h \
-  stack.h basics.h remotes.h migrate.h label.h
+  stack.h basics.h remotes.h migrate.h label.h comm.h my_mpi.h flag.h \
+  cad.h
 charbits.o: charbits.c charbits.h
 classif.o: classif.c classif.h mesh.h simplex.h space.h cad.h list.h \
   field.h basics.h cad_geom.h param.h mesh_adj.h stack.h
@@ -245,7 +247,7 @@ mersenne_twister.o: mersenne_twister.c mersenne_twister.h image.h \
 mesh.o: mesh.c mesh.h simplex.h space.h flex.h stack.h basics.h list.h \
   field.h classif.h cad.h flag.h remotes.h
 mesh_adapt.o: mesh_adapt.c mesh_adapt.h mesh.h simplex.h space.h flag.h \
-  cad.h mesh_adj.h stack.h basics.h mesh_mod.h
+  cad.h mesh_adj.h stack.h basics.h mesh_mod.h cavity_op.h
 mesh_adj.o: mesh_adj.c mesh_adj.h mesh.h simplex.h space.h stack.h \
   basics.h
 mesh_bbox.o: mesh_bbox.c mesh_bbox.h mesh.h simplex.h space.h cad.h \
@@ -255,7 +257,7 @@ mesh_geom.o: mesh_geom.c mesh_geom.h mesh.h simplex.h space.h mesh_adj.h \
 mesh_mod.o: mesh_mod.c mesh_mod.h mesh.h simplex.h space.h mesh_adj.h \
   stack.h basics.h mesh_geom.h classif.h cad.h
 migrate.o: migrate.c migrate.h mesh.h simplex.h space.h label.h comm.h \
-  my_mpi.h remotes.h mesh_adj.h stack.h basics.h
+  my_mpi.h remotes.h mesh_adj.h stack.h basics.h flag.h cad.h
 my_endian.o: my_endian.c my_endian.h
 param.o: param.c param.h space.h basics.h
 remotes.o: remotes.c remotes.h mesh.h simplex.h space.h flex.h stack.h \
@@ -268,6 +270,8 @@ socket_front.o: socket_front.c front.h server.h image.h my_endian.h \
   basics.h socket_codes.h
 space.o: space.c space.h basics.h
 stack.o: stack.c stack.h basics.h
+subcomm.o: subcomm.c subcomm.h comm.h my_mpi.h remotes.h mesh.h simplex.h \
+  space.h
 view.o: view.c view.h simplex.h space.h image.h draw.h basics.h
 view_mesh.o: view_mesh.c view_mesh.h view.h simplex.h space.h image.h \
   mesh.h mesh_adj.h stack.h basics.h mesh_geom.h luby.h
