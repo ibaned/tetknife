@@ -23,7 +23,7 @@ static void render(void)
 
 void back_start(int argc, char** argv)
 {
-  bbox b = {{0,0,0},{1,1,0}};
+  bbox b = {{0,0,0},{1.2,1.1,1}};
   ment bv[MAX_BBOX_VERTS];
   ment be[MAX_BBOX_SIMPLICES];
   (void)argc;
@@ -31,9 +31,9 @@ void back_start(int argc, char** argv)
   global_view = view_new(WIDTH, HEIGHT);
   global_mesh = mesh_new();
   if (!comm_rank())
-    mesh_gen_bbox(global_mesh, b, DIM2, bv, be);
+    mesh_gen_bbox(global_mesh, b, DIM3, bv, be);
   else
-    mesh_set_elem(global_mesh, TRIANGLE);
+    mesh_set_elem(global_mesh, TET);
   remotes_new(global_mesh);
   view_focus(global_view, mesh_bbox(global_mesh));
   render();
