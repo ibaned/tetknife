@@ -102,6 +102,11 @@ int rpeer_rank(mesh* m, rpeer rp)
   return mesh_remotes(m)->p[rp.i].rank;
 }
 
+void rpeer_set_rank(mesh* m, rpeer rp, int rank)
+{
+  mesh_remotes(m)->p[rp.i].rank = rank;
+}
+
 unsigned rpeer_count(mesh* m)
 {
   remotes* rs;

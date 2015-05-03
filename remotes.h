@@ -29,6 +29,7 @@ rpeer rpeer_n(mesh* m, rpeer rp) __attribute__((pure));
 
 rpeer rpeer_by_rank(mesh* m, int rank);
 int rpeer_rank(mesh* m, rpeer rp);
+void rpeer_set_rank(mesh* m, rpeer rp, int rank);
 
 unsigned rpeer_count(mesh* m);
 
