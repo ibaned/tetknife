@@ -70,25 +70,3 @@ double mersenne_twister_real(void)
 {
   return ((double) (mersenne_twister())) / ((double) 0xFFFFFFFF);
 }
-
-/*
-https://stackoverflow.com/questions/43044/algorithm-to-randomly-generate-an-aesthetically-pleasing-color-palette
-
-essentially, the idea is to generate a random color
-and then average it with white, which produces nice
-pastel results
-*/
-static unsigned char color_component(void)
-{
-  unsigned rc = mersenne_twister();
-  return (unsigned char) (((rc % 256) + 255) / 2);
-}
-
-color mersenne_twister_color(void)
-{
-  color c;
-  c.r = color_component();
-  c.g = color_component();
-  c.b = color_component();
-  return c;
-}
