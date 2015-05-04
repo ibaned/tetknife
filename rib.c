@@ -1,6 +1,6 @@
 #include "rib.h"
 #include "basics.h"
-#include "comm.h"
+#include "subcomm.h"
 #include "migrate.h"
 #include "mesh_geom.h"
 
@@ -232,22 +232,15 @@ void recursive_inertial_bisection(unsigned* n, point** o, rcopy** idx)
   int osize;
   int orank;
   int size;
-  mpi* ompi;
-  mpi* submpi;
+  mpi* oldcomm;
   osize = comm_size();
   orank = comm_rank();
-  ompi = mpi_copy(comm_mpi());
   for (size = osize; size != 1; size /= 2) {
     ASSERT(size % 2 == 0);
-    submpi = mpi_split(ompi, orank / size, orank % size);
-    comm_finalize();
-    comm_init(submpi);
+    oldcomm = enter_groups(orank / size, orank % size);
     inertial_bisection(n, o, idx);
-    mpi_free(submpi);
+    exit_groups(oldcomm);
   }
-  comm_finalize();
-  comm_init(ompi);
-  mpi_free(ompi);
 }
 
 static void prepare_rib_input(mesh* m, unsigned* n, point** o, rcopy** idx)

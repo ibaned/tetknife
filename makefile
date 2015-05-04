@@ -262,16 +262,16 @@ my_endian.o: my_endian.c my_endian.h
 param.o: param.c param.h space.h basics.h
 remotes.o: remotes.c remotes.h mesh.h simplex.h space.h flex.h stack.h \
   basics.h comm.h my_mpi.h
-rib.o: rib.c rib.h space.h remotes.h mesh.h simplex.h basics.h comm.h \
-  my_mpi.h migrate.h label.h mesh_geom.h mesh_adj.h stack.h
+rib.o: rib.c rib.h space.h remotes.h mesh.h simplex.h basics.h subcomm.h \
+  comm.h my_mpi.h migrate.h label.h mesh_geom.h mesh_adj.h stack.h
 serial_mpi.o: serial_mpi.c my_mpi.h basics.h
 simplex.o: simplex.c simplex.h space.h
 socket_front.o: socket_front.c front.h server.h image.h my_endian.h \
   basics.h socket_codes.h
 space.o: space.c space.h basics.h
 stack.o: stack.c stack.h basics.h
-subcomm.o: subcomm.c subcomm.h comm.h my_mpi.h remotes.h mesh.h simplex.h \
-  space.h
+subcomm.o: subcomm.c subcomm.h comm.h my_mpi.h mesh.h simplex.h space.h \
+  remotes.h basics.h
 view.o: view.c view.h simplex.h space.h image.h draw.h basics.h
 view_mesh.o: view_mesh.c view_mesh.h view.h simplex.h space.h image.h \
   mesh.h mesh_adj.h stack.h basics.h mesh_geom.h luby.h
