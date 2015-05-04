@@ -14,7 +14,6 @@
 static view* global_view;
 static mesh* global_mesh;
 static char global_key;
-static mflag* global_flag = 0;
 
 static void render(void)
 {
@@ -84,20 +83,6 @@ void back_key_down(char k)
   global_key = k;
 }
 
-static void cavity_test(void)
-{
-  simplex t;
-  t = mesh_elem(global_mesh);
-  if (!global_flag)
-    global_flag = mflag_new_all(global_mesh, t);
-  mesh_refine(global_mesh, global_flag);
-  if (!mpi_max_unsigned(mpi_world(),mflag_count(global_flag, t))) {
-    mflag_free(global_flag);
-    global_flag = 0;
-    debug("DONE!\n");
-  }
-}
-
 void back_key_up(void)
 {
   switch (global_key) {
@@ -110,9 +95,6 @@ void back_key_up(void)
       break;
     case 'b':
       mesh_balance_rib(global_mesh);
-      break;
-    case 'c':
-      cavity_test();
       break;
   };
   render();
