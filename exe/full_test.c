@@ -4,7 +4,7 @@
 #include "../mesh_adapt.h"
 #include "../mesh_geom.h"
 #include "../basics.h"
-#include "../comm.h"
+#include "../subcomm.h"
 #include "../remotes.h"
 #include "../rib.h"
 #include "../cavity_op.h"
@@ -14,6 +14,7 @@
 static view* global_view;
 static mesh* global_mesh;
 static char global_key;
+static int global_groups = 4;
 
 static void render(void)
 {
@@ -83,6 +84,34 @@ void back_key_down(char k)
   global_key = k;
 }
 
+static void refine_subgroup(void)
+{
+  mpi* oldcomm;
+  int mygroup;
+  mygroup = comm_rank() % global_groups;
+  oldcomm = mesh_enter_groups(
+      global_mesh, mygroup,
+      comm_rank() / global_groups);
+  if (!mygroup)
+    mesh_refine_all(global_mesh);
+  mesh_exit_groups(global_mesh, oldcomm);
+  mpi_barrier(comm_mpi());
+}
+
+static void balance_subgroup(void)
+{
+  mpi* oldcomm;
+  int mygroup;
+  mygroup = comm_rank() % global_groups;
+  oldcomm = mesh_enter_groups(
+      global_mesh, mygroup,
+      comm_rank() / global_groups);
+  if (!mygroup)
+    mesh_balance_rib(global_mesh);
+  mesh_exit_groups(global_mesh, oldcomm);
+  mpi_barrier(comm_mpi());
+}
+
 void back_key_up(void)
 {
   switch (global_key) {
@@ -91,11 +120,16 @@ void back_key_up(void)
       view_set_mode(global_view, VIEW_ROT);
       return;
     case 'r':
-      mesh_refine_all(global_mesh);
+      refine_subgroup();
       break;
     case 'b':
-      mesh_balance_rib(global_mesh);
+      balance_subgroup();
       break;
+    case 's':
+      global_groups /= 2;
+      if (!comm_rank())
+        debug("global_groups = %d\n", global_groups);
+      return;
   };
   render();
 }
