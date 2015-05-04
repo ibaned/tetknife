@@ -84,7 +84,7 @@ static int exch_ents(cavity_env* env)
     if (mlabel_get(plan, e) == -1)
       mlabel_set(plan, e, comm_rank());
   migrate(m, plan);
-  return 0;
+  return 1;
 }
 
 void cavity_exec(mesh* m, cavity_op op, simplex t)
