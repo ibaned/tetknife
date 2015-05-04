@@ -8,7 +8,7 @@ void switch_comm(mpi* m)
   comm_init(m);
 }
 
-void mesh_regroup(mesh* m, int newgroup, int newrank)
+static void mesh_regroup(mesh* m, int newgroup, int newrank)
 {
   rpeer rp;
   int rrank;
@@ -26,7 +26,6 @@ void mesh_regroup(mesh* m, int newgroup, int newrank)
     COMM_UNPACK(otherrank);
     rpeer_set_rank(m, rpeer_by_rank(m, comm_from()), otherrank);
   }
-  remotes_decide_owners(m);
 }
 
 mpi* enter_groups(int newgroup, int newrank)
@@ -47,13 +46,17 @@ void exit_groups(mpi* oldcomm)
 
 mpi* mesh_enter_groups(mesh* m, int newgroup, int newrank)
 {
+  mpi* oldcomm;
   mesh_regroup(m, newgroup, newrank);
-  return enter_groups(newgroup, newrank);
+  oldcomm = enter_groups(newgroup, newrank);
+  remotes_decide_owners(m);
+  return oldcomm;
 }
 
 void mesh_exit_groups(mesh* m, mpi* oldcomm)
 {
   mesh_regroup(m, 0, mpi_rank(oldcomm));
   exit_groups(oldcomm);
+  remotes_decide_owners(m);
 }
 
