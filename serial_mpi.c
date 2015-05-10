@@ -138,6 +138,12 @@ int mpi_max_int(mpi* m, int x)
   return x;
 }
 
+unsigned mpi_min_unsigned(mpi* m, unsigned x)
+{
+  (void)m;
+  return x;
+}
+
 unsigned mpi_max_unsigned(mpi* m, unsigned x)
 {
   (void)m;
