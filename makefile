@@ -131,6 +131,7 @@ full_test: full_test.o $(GUI_BACK_OBJS)
 	$(BACK_LINK) $^ $(GUI_BACK_LIBS) -o $@
 reduce_test: reduce_test.o $(GUI_BACK_OBJS)
 	$(BACK_LINK) $^ $(GUI_BACK_LIBS) -o $@
+scaling: scaling.o $(BACK_OBJS)
 myperf: myperf.o $(BACK_OBJS)
 cad_test: cad_test.o $(BACK_OBJS)
 quality: quality.o $(BACK_OBJS)
@@ -147,6 +148,12 @@ full_test.o: exe/full_test.c back.h view_mesh.h \
   flag.h mesh_geom.h mesh_adj.h stack.h \
   basics.h comm.h my_mpi.h remotes.h \
   rib.h
+	$(BACK_COMPILE) -c $<
+scaling.o: exe/scaling.c mesh_bbox.h mesh.h \
+  simplex.h space.h cad.h mesh_adapt.h \
+  flag.h mesh_geom.h mesh_adj.h stack.h \
+  basics.h subcomm.h comm.h my_mpi.h \
+  remotes.h rib.h cavity_op.h
 	$(BACK_COMPILE) -c $<
 refine_test.o: exe/refine_test.c back.h view_mesh.h view.h \
   simplex.h space.h image.h mesh.h \
