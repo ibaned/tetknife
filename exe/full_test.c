@@ -14,7 +14,7 @@
 static view* global_view;
 static mesh* global_mesh;
 static char global_key;
-static int global_groups = 4;
+static int global_groups;
 
 static void render(void)
 {
@@ -28,6 +28,7 @@ void back_start(int argc, char** argv)
   ment be[MAX_BBOX_SIMPLICES];
   (void)argc;
   (void)argv;
+  global_groups = comm_size();
   global_view = view_new(WIDTH, HEIGHT);
   global_mesh = mesh_new();
   if (!comm_rank())
