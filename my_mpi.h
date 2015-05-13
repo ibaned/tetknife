@@ -33,4 +33,6 @@ typedef void (*mpi_reduce_fn)(void* inout, void const* in);
 void mpi_reduce(mpi* m, void* data, unsigned size, mpi_reduce_fn f);
 void mpi_bcast(mpi* m, void* data, unsigned size);
 
+double mpi_time(void);
+
 #endif

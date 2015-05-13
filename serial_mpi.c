@@ -164,3 +164,8 @@ void mpi_bcast(mpi* m, void* data, unsigned size)
   (void)data;
   (void)size;
 }
+
+double mpi_time(void)
+{
+  return 0;
+}

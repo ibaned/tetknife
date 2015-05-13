@@ -205,3 +205,8 @@ void mpi_bcast(mpi* m, void* data, unsigned size)
 {
   CALL(MPI_Bcast(data, (int)size, MPI_BYTE, 0, m->comm)); 
 }
+
+double mpi_time(void)
+{
+  return MPI_Wtime();
+}
