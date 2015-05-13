@@ -14,7 +14,7 @@ static void print_stats(mesh* m)
   unsigned long tn;
   unsigned maxn;
   unsigned minn;
-  for (t = 0; t < SIMPLICES; ++t) {
+  for (t = 0; t < SIMPLICES; t += 3) {
     ln = ment_count(m, t);
     tn = mpi_add_ulong(comm_mpi(), ln);
     maxn = mpi_max_unsigned(comm_mpi(), ln);
@@ -69,7 +69,7 @@ static void balance_subgroup(mesh* m, int ngroups)
   mpi_barrier(comm_mpi());
   t1 = mpi_time();
   if (!comm_rank())
-    print("refine_subgroup took %f seconds\n", t1 - t0);
+    print("balance_subgroup took %f seconds\n", t1 - t0);
 }
 
 int main()
