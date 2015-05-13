@@ -30,6 +30,8 @@ static void refine_subgroup(mesh* m, int ngroups)
 {
   mpi* oldcomm;
   int mygroup;
+  double t0, t1;
+  t0 = mpi_time();
   mygroup = comm_rank() % ngroups;
   oldcomm = mesh_enter_groups(
       m, mygroup,
@@ -42,12 +44,17 @@ static void refine_subgroup(mesh* m, int ngroups)
   }
   mesh_exit_groups(m, oldcomm);
   mpi_barrier(comm_mpi());
+  t1 = mpi_time();
+  if (!comm_rank())
+    print("refine_subgroup took %f seconds\n", t1 - t0);
 }
 
 static void balance_subgroup(mesh* m, int ngroups)
 {
   mpi* oldcomm;
   int mygroup;
+  double t0, t1;
+  t0 = mpi_time();
   mygroup = comm_rank() % ngroups;
   oldcomm = mesh_enter_groups(
       m, mygroup,
@@ -60,6 +67,9 @@ static void balance_subgroup(mesh* m, int ngroups)
   }
   mesh_exit_groups(m, oldcomm);
   mpi_barrier(comm_mpi());
+  t1 = mpi_time();
+  if (!comm_rank())
+    print("refine_subgroup took %f seconds\n", t1 - t0);
 }
 
 int main()
