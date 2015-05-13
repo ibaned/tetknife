@@ -84,6 +84,7 @@ static int exch_ents(cavity_env* env)
     if (mlabel_get(plan, e) == -1)
       mlabel_set(plan, e, comm_rank());
   migrate(m, plan);
+  mlabel_free(plan);
   return 1;
 }
 
