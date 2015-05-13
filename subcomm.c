@@ -35,6 +35,7 @@ mpi* enter_groups(int newgroup, int newrank)
   oldcomm = mpi_copy(comm_mpi());
   subcomm = mpi_split(oldcomm, newgroup, newrank);
   switch_comm(subcomm);
+  mpi_free(subcomm);
   return oldcomm;
 }
 
