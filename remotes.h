@@ -32,6 +32,7 @@ int rpeer_rank(mesh* m, rpeer rp);
 void rpeer_set_rank(mesh* m, rpeer rp, int rank);
 
 unsigned rpeer_count(mesh* m);
+unsigned rpeer_cap(mesh* m);
 
 int rent_ok(rent re) __attribute__((const));
 int rent_eq(rent a, rent b) __attribute__((const));

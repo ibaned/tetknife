@@ -116,6 +116,13 @@ unsigned rpeer_count(mesh* m)
   return rs->pf.n;
 }
 
+unsigned rpeer_cap(mesh* m)
+{
+  remotes* rs;
+  rs = mesh_remotes(m);
+  return rs->pf.s.c;
+}
+
 int rent_ok(rent re)
 {
   return IDX_OK(re.i);
