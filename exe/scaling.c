@@ -7,23 +7,26 @@
 #include "../rib.h"
 #include "../cavity_op.h"
 
-static void print_stats(mesh* m)
+static void print_value_stats(char const* name, unsigned ln)
 {
-  simplex t;
-  unsigned ln;
   unsigned long tn;
   unsigned maxn;
   unsigned minn;
-  for (t = 0; t < SIMPLICES; t += 3) {
-    ln = ment_count(m, t);
-    tn = mpi_add_ulong(comm_mpi(), ln);
-    maxn = mpi_max_unsigned(comm_mpi(), ln);
-    minn = mpi_min_unsigned(comm_mpi(), ln);
-    if (!comm_rank())
-      print("%s max %u min %u total %lu imb %f\n",
-          simplex_name[t], maxn, minn, tn,
-          ((double) maxn) / (((double) tn) / ((double) (comm_size()))));
-  }
+  double avg;
+  tn = mpi_add_ulong(comm_mpi(), ln);
+  maxn = mpi_max_unsigned(comm_mpi(), ln);
+  minn = mpi_min_unsigned(comm_mpi(), ln);
+  avg = ((double) tn) / ((double) (comm_size()));
+  if (!comm_rank())
+    print("%s max %u min %u total %lu avg %f imb %f\n",
+        name, maxn, minn, tn, avg, ((double) maxn) / avg);
+}
+
+static void print_mesh_stats(mesh* m)
+{
+  print_value_stats("nverts", ment_count(m, VERTEX));
+  print_value_stats("nelem", ment_count(m, TET));
+  print_value_stats("nneigh", rpeer_count(m));
 }
 
 static void refine_subgroup(mesh* m, int ngroups)
@@ -40,7 +43,7 @@ static void refine_subgroup(mesh* m, int ngroups)
     mesh_refine_all(m);
     if (!comm_rank())
       print("refine, comm_size %d\n", comm_size());
-    print_stats(m);
+    print_mesh_stats(m);
   }
   mesh_exit_groups(m, oldcomm);
   mpi_barrier(comm_mpi());
@@ -63,7 +66,7 @@ static void balance_subgroup(mesh* m, int ngroups)
     mesh_balance_rib(m);
     if (!comm_rank())
       print("balance, comm_size %d\n", comm_size());
-    print_stats(m);
+    print_mesh_stats(m);
   }
   mesh_exit_groups(m, oldcomm);
   mpi_barrier(comm_mpi());
