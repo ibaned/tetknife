@@ -14,6 +14,8 @@ static void mesh_regroup(mesh* m, int newgroup, int newrank)
   int rrank;
   int othergroup;
   int otherrank;
+  int* newranks;
+  newranks = my_malloc(sizeof(int) * rpeer_cap(m));
   for (rp = rpeer_f(m); rpeer_ok(rp); rp = rpeer_n(m, rp)) {
     rrank = rpeer_rank(m, rp);
     COMM_PACK(newgroup, rrank);
@@ -24,8 +26,13 @@ static void mesh_regroup(mesh* m, int newgroup, int newrank)
     COMM_UNPACK(othergroup);
     ASSERT(othergroup == newgroup);
     COMM_UNPACK(otherrank);
-    rpeer_set_rank(m, rpeer_by_rank(m, comm_from()), otherrank);
+    rp = rpeer_by_rank(m, comm_from());
+    ASSERT(rpeer_ok(rp));
+    newranks[rp.i] = otherrank;
   }
+  for (rp = rpeer_f(m); rpeer_ok(rp); rp = rpeer_n(m, rp))
+    rpeer_set_rank(m, rp, newranks[rp.i]);
+  my_free(newranks);
 }
 
 mpi* enter_groups(int newgroup, int newrank)
