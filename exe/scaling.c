@@ -6,7 +6,9 @@
 #include "../remotes.h"
 #include "../rib.h"
 #include "../cavity_op.h"
+#ifdef __bgq__
 #include <spi/include/kernel/memory.h>
+#endif
 
 static void print_value_stats(char const* name, unsigned ln)
 {
@@ -32,6 +34,7 @@ static void print_mesh_stats(mesh* m)
 
 static void print_memory_stats(void)
 {
+#ifdef __bgq__
   uint64_t heap, heapmax, hmmap;
   Kernel_GetMemorySize(KERNEL_MEMSIZE_HEAP, &heap);
   Kernel_GetMemorySize(KERNEL_MEMSIZE_HEAPMAX, &heapmax);
@@ -39,6 +42,7 @@ static void print_memory_stats(void)
   print_value_stats("heap", heap);
   print_value_stats("heapmax", heapmax);
   print_value_stats("mmap", hmmap);
+#endif
 }
 
 static void refine_subgroup(mesh* m, int ngroups)
