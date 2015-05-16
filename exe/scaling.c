@@ -84,7 +84,9 @@ int main()
   ment be[MAX_BBOX_SIMPLICES];
   unsigned i;
   static unsigned const initial_refines = 14;
+  double t0, ts;
   mpi_init();
+  t0 = mpi_time();
   comm_init(mpi_world());
   ngroups = comm_size();
   m = mesh_new();
@@ -100,6 +102,9 @@ int main()
     refine_subgroup(m, ngroups);
     ngroups /= 2;
     balance_subgroup(m, ngroups);
+    ts = mpi_time();
+    if (!comm_rank())
+      print("wall time: %f seconds\n", ts - t0);
   }
   mesh_free(m);
   comm_finalize();
