@@ -1,0 +1,18 @@
+->23.70% (2,212,032B) 0x40CB90: ment_new (mesh.c:106)
+  REALLOC(m->nu[t], wc);
+->23.70% (2,212,032B) 0x40CB79: ment_new (mesh.c:105)
+  REALLOC(m->d[t], wc);
+->17.44% (1,627,312B) 0x515B755: ompi_free_list_grow (in /usr/lib/openmpi/libmpi.so.1.6.0)
+->07.10% (662,236B) 0x40CFEF: flex_grow (flex.c:27)
+  REALLOC(f->fl, c);
+| ->07.10% (662,236B) 0x40CA76: ment_new (mesh.c:96)
+  c = flex_grow(&m->f[t]);
+->07.02% (655,368B) 0x40C16A: fields_grow (field.c:20)
+  REALLOC(v->x, c);
+| ->07.02% (655,368B) 0x40CAE7: ment_new (mesh.c:100)
+->03.51% (327,684B) 0x40CAC1: ment_new (mesh.c:99)
+  REALLOC(m->fu[ut], c);
+->02.34% (218,456B) 0x40B770: remotes_grow_verts (remotes.c:305)
+  REALLOC(rs->f, cap);
+->01.17% (109,228B) 0x40B787: remotes_grow_verts (remotes.c:306)
+  REALLOC(rs->o, cap);
