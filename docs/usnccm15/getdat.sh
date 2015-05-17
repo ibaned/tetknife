@@ -45,3 +45,4 @@ gnuplot < scl_bal_heap.plt
 gnuplot < scl_time.plt
 gnuplot < scl_ref_neigh.plt
 gnuplot < scl_bal_neigh.plt
+touch DATA
