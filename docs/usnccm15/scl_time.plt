@@ -1,5 +1,5 @@
-set terminal svg size 350,262 fname 'Verdana' fsize 10
-set output 'scl_time.svg'
+set terminal png size 500,300
+set output 'scl_time.png'
 set logscale x 2
 set xlabel "procs"
 set ylabel "seconds"

@@ -1,5 +1,5 @@
-set terminal svg size 400,262 fname 'Verdana' fsize 10
-set output 'scl_ref_nelem_total.svg'
+set terminal png size 500,300
+set output 'scl_ref_nelem_total.png'
 set logscale x 2
 set logscale y
 set xlabel "procs"

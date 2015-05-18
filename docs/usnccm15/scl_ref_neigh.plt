@@ -1,5 +1,6 @@
-set terminal svg size 350,262 fname 'Verdana' fsize 10
-set output 'scl_ref_neigh.svg'
+set terminal png size 400,400
+set output 'scl_ref_neigh.png'
+set title "after refinement"
 set logscale x 2
 set xlabel "procs"
 set ylabel "neighbors"

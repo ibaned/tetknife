@@ -252,106 +252,84 @@ and vertices would use the following set of arrays:
 \end{center}
 }
 
-\frame{\frametitle{Full Topological Representation}
-For flexible adaptive meshes, as well as for simulations
-with high-order field nodes, it is useful to represent
-multiple dimensions of entities. 
-The presence of edges and faces greatly simplifies
-mesh adaptation code.
-\begin{columns}[T]
-\begin{column}{0.4\textwidth}
-\end{column}
-\begin{column}{0.6\textwidth}
-\includegraphics[width=\textwidth]{mia.png}
-\end{column}
-\end{columns}
-To do this, create upward/downward relation arrays
-for each pair of entity types.
-Above is an edges-to-triangles example.
-}
-
-\frame{\frametitle{Full Topological Structure}
-\begin{itemize}
-\item free list array per dimension (4)
-\item downward array per dimension (3)
-\item upward arrays per dimension (6)
-\item additional fields, indexed by entity id
-\end{itemize}
-Operations
-\begin{itemize}
-\item Add entity and set one-level up/down adjacencies
-\item Remove entity
-\item Query one-level upward adjacency
-\item Query one-level downward adjacency
-\item Iterate (increment, skip holes)
-\end{itemize}
-}
-
-\frame{\frametitle{Mixed Meshes}
-\begin{itemize}
-\item Multiple topological types per dimension
-\item Each per-dimension array is split into
-per-type arrays
-\item 2D array indices are encoded as $e = iT + t$,
-where $T$ is the number of types, $t$ is entity type,
-$i$ is index in array.
-\item this applies to downward arrays, upward list arrays,
-and additional field arrays.
-\end{itemize}
-
-\begin{center}
-\includegraphics[width=0.5\textwidth]{ibanez_cse15-10.png}
-\end{center}
-}
-
 \frame{\frametitle{Memory Analysis}
 \begin{itemize}
-\item consider full one-level tetrahedral mesh
+\item theoretical memory use for reduced tetrahedral mesh
 \item static pointers =
-$(4+4)n_{tet} + (1+3+3)n_{tri} + (1+2+2)n_{edg} + (1)n_{vtx}$
+$(4+4)n_{tet} + (3)n_{vtx}$
 \item with free list =
-$(1+4+4)n_{tet} + (1+1+3+3)n_{tri} + (1+1+2+2)n_{edg} + (1+1)n_{vtx}$
+$(1+4+4)n_{tet} + (1+3)n_{vtx}$
 \item estimated ratios
-\[n_{vtx} = n_{edg}/7 = n_{tri}/12 = n_{tet}/6\]
-\item with free list, 194 pointers per vertex, 33 pointers per element
-\item using 32-bit index ``pointers", 130 bytes per element
-\item with non-topological data added, uses 250 bytes
+\[n_{vtx} = n_{tet}/6\]
+\item with free list, 56 pointers per vertex, ~9.7 pointers per element
+\item using 32-bit index ``pointers", ~40 bytes per element
+\item with non-topological data added, uses ~50 bytes
 per element
-\item 4X less than before (from 1KB down to 250B per element)
 \end{itemize}
 }
 
-\frame{\frametitle{Memory Measurement}
-This array structure is implemented as a sub-component
-of the PUMI tools, storing a full representation
-
-\vspace{10pt}
-\vspace{10pt}
-
-Comparisons where made to MOAB from
-Argonne National Labs, STK from Sandia National Labs,
-and GRUMMP from UBC.
-
-Note that MOAB is not representing edges or faces
-and is not designed to add/remove entities individually.
-
+\frame{\frametitle{Memory Use Comparison}
+Redo this
 }
 
-\frame{\frametitle{Integration into PUMI}
+\begin{frame}
+\frametitle{1.6 Billion Element Mesh Generation}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{scl_ref_nelem_total.png}
+\end{center}
 \begin{itemize}
-\item
-RPI's Parallel Unstructured Mesh Infrastructure (PUMI) now uses this array representation by default.
-\item
-To represent parallel meshes, we link an existing object-based
-remote copy system into the array structure.
-\item
-Future work includes converting the remote copy storage into
-a useful array form.
-\item
-Other future work includes implementing a reduced representation
-and mesh adaptation algorithms which can operate on it.
+\item start with 100K element mesh on rank 0
+\item repeat 14 times ($2^{14} = 16384$)
+\begin{itemize}
+\item use Cavity Operator to make 2X more elements
+\item use global RIB to partition to 2X more cores
 \end{itemize}
-}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Runtime of Steps}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{scl_time.png}
+\end{center}
+\begin{itemize}
+\item Total runtime: 288 seconds
+\item (without link-time optimization, 884 seconds)
+\item Entirely in-memory, no files, one MPI batch job
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Heap Memory Usage}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{scl_bal_heap.png}
+\end{center}
+\begin{itemize}
+\item 200K elements max + remote copies + MPI + misc
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Balance after Cavity Operator}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{scl_ref_imb.png}
+\end{center}
+\begin{itemize}
+\item RIB does ``perfect" rebalance on this cube
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Neighbor Counts}
+\begin{center}
+\includegraphics[width=0.5\textwidth]{scl_ref_neigh.png}
+\includegraphics[width=0.5\textwidth]{scl_bal_neigh.png}
+\end{center}
+\begin{itemize}
+\item left is after refinement, right is after balance
+\item 26 is theoretical for uniform grid under RIB
+\end{itemize}
+\end{frame}
 
 \frame{\frametitle{Acknowledgements}
 This material is based upon work supported by the
