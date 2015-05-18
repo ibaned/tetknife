@@ -15,10 +15,14 @@ static view* global_view;
 static mesh* global_mesh;
 static char global_key;
 static int global_groups;
+static enum {VIEW_EDGES, VIEW_SOLID} global_viewkind = VIEW_EDGES;
 
 static void render(void)
 {
-  view_mesh_parts(global_view, global_mesh);
+  if (global_viewkind == VIEW_SOLID)
+    view_mesh_parts(global_view, global_mesh);
+  else
+    view_mesh_wireframe(global_view, global_mesh);
 }
 
 void back_start(int argc, char** argv)
@@ -120,6 +124,9 @@ void back_key_up(void)
     case 'z':
       view_set_mode(global_view, VIEW_ROT);
       return;
+    case 'v':
+      global_viewkind = !global_viewkind;
+      break;
     case 'r':
       refine_subgroup();
       break;
