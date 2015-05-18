@@ -12,4 +12,4 @@ DATA: best.out
 clean:
 	rm -f *.txt *.svg *.dat *.snm *.toc *.aux
 	rm -f *.log *.nav *.mpx *.png *.svg DATA
-	rm -f usnccm15.out *.pdf
+	rm -f usnccm15.out *.pdf *.vrb
