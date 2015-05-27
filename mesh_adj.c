@@ -24,7 +24,7 @@ void mset_add(mset* s, ment e)
   stack_push(&s->s);
 }
 
-int mset_has(mset* s, ment e)
+int mset_has(mset const* s, ment e)
 {
   return ments_have(s->s.n, s->e, e);
 }
@@ -33,6 +33,16 @@ void mset_reserve(mset* s, unsigned n)
 {
   if (!stack_can_hold(&s->s, n))
     REALLOC(s->e, stack_grow_to(&s->s, n));
+}
+
+void mset_sub(mset const* a, mset const* b, mset* c)
+{
+  unsigned i;
+  mset_clear(c);
+  mset_reserve(c, a->s.n);
+  for (i = 0; i < a->s.n; ++i)
+    if (!mset_has(b, a->e[i]))
+      mset_add(c, a->e[i]);
 }
 
 unsigned muse_count(mesh* m, ment v, simplex t)

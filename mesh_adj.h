@@ -13,8 +13,9 @@ void mset_init(mset* s);
 void mset_dtor(mset* s);
 void mset_clear(mset* s);
 void mset_add(mset* s, ment e);
-int mset_has(mset* s, ment e);
+int mset_has(mset const* s, ment e);
 void mset_reserve(mset* s, unsigned n);
+void mset_sub(mset const* a, mset const* b, mset* c);
 
 unsigned muse_count(mesh* m, ment v, simplex t);
 int ments_have(unsigned n, ment const es[], ment e);

@@ -17,6 +17,15 @@ struct split {
   int padding_;
 };
 
+struct collapse {
+  mesh* m;
+  mset oe[SIMPLICES];
+  mset ke[SIMPLICES];
+  mset ce[SIMPLICES];
+  mset ne[SIMPLICES];
+  ment v[2];
+};
+
 typedef enum {
   IGNORE_OVERLAP,
   CHECK_OVERLAP
@@ -136,4 +145,78 @@ void split_edge(split* s, ment v[2])
 {
   split_start(s, EDGE, v, ment_null);
   split_accept(s);
+}
+
+collapse* collapse_new(mesh* m)
+{
+  collapse* c;
+  simplex t;
+  c = my_malloc(sizeof(*c));
+  c->m = m;
+  for (t = 0; t < SIMPLICES; ++t) {
+    mset_init(c->oe + t);
+    mset_init(c->ke + t);
+    mset_init(c->ce + t);
+    mset_init(c->ne + t);
+  }
+  return c;
+}
+
+void collapse_free(collapse* c)
+{
+  simplex t;
+  for (t = 0; t < SIMPLICES; ++t) {
+    mset_dtor(c->oe + t);
+    mset_dtor(c->ke + t);
+    mset_dtor(c->ce + t);
+    mset_dtor(c->ne + t);
+  }
+  my_free(c);
+}
+
+void collapse_start_from(collapse* c, ment v)
+{
+  simplex t;
+  for (t = 1; t < SIMPLICES; ++t)
+    mesh_up(c->m, VERTEX, &v, t, c->oe + t);
+  c->v[0] = v;
+}
+
+void collapse_start_to(collapse* c, ment v)
+{
+  simplex t;
+  unsigned i;
+  c->v[1] = v;
+  for (t = 1; t < SIMPLICES; ++t) {
+    mesh_up(c->m, EDGE, c->v, t, c->ce + t);
+    mset_sub(c->oe + t, c->ce + t, c->ke + t);
+    mset_clear(c->ne + t);
+    mset_reserve(c->ne + t, c->ke[t].s.n);
+    for (i = 0; i < c->ke[t].s.n; ++i)
+      c->ne[t].e[i] = rebuild(c->m, c->ke[t].e[i], c->v[0], c->v[1],
+          CHECK_OVERLAP);
+  }
+}
+
+void collapse_accept(collapse* c)
+{
+  rm_sets(c->m, c->oe);
+  ment_free(c->m, c->v[0]);
+}
+
+void collapse_cancel(collapse* c)
+{
+  rm_sets(c->m, c->ne);
+}
+
+double collapse_quality(collapse* c)
+{
+  return mset_min_quality(c->m, c->ne + mesh_elem(c->m));
+}
+
+void collapse_edge(collapse* c, ment v[2])
+{
+  collapse_start_from(c, v[0]);
+  collapse_start_to(c, v[1]);
+  collapse_accept(c);
 }
