@@ -196,11 +196,6 @@ static int check_classif(collapse* c)
   return gent_eq(gv[0], ge);
 }
 
-static int check_pull(collapse* c)
-{
-  return c->ke[mesh_elem(c->m)].s.n != 0;
-}
-
 static int check_geom(collapse* c)
 {
   simplex et;
@@ -231,8 +226,6 @@ int collapse_start_to(collapse* c, ment v)
     return 0;
   for (t = 1; t < SIMPLICES; ++t)
     mset_sub(c->oe + t, c->ce + t, c->ke + t);
-  if (!check_pull(c))
-    return 0;
   for (t = 1; t < SIMPLICES; ++t) {
     mset_clear(c->ne + t);
     mset_reserve(c->ne + t, c->ke[t].s.n);
