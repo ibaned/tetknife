@@ -27,12 +27,12 @@ struct collapse {
 };
 
 typedef enum {
-  IGNORE_OVERLAP,
-  CHECK_OVERLAP
-} check_overlap;
+  DONT_CHECK_DUPLICATES,
+  CHECK_DUPLICATES
+} check_duplicates;
 
 static ment rebuild(mesh* m, ment e, ment ov, ment nv,
-    check_overlap co)
+    check_duplicates co)
 {
   ment v[SIMPLEX_MAX_DOWN];
   unsigned n, i;
@@ -41,7 +41,7 @@ static ment rebuild(mesh* m, ment e, ment ov, ment nv,
   for (i = 0; i < n; ++i)
     if (ment_eq(v[i], ov))
       v[i] = nv;
-  if (co == CHECK_OVERLAP) {
+  if (co == CHECK_DUPLICATES) {
     ne = mesh_find(m, e.t, v);
     if (ment_ok(ne))
       return ment_null;
@@ -107,6 +107,7 @@ void split_start(split* s, simplex t, ment v[], ment sv)
   unsigned nv;
   unsigned i, j;
   simplex rt;
+  ment er;
   set_sv(s, &sv);
   if (s->vf == MADE_VERT)
     mesh_transfer_point(s->m, t, v, sv);
@@ -118,9 +119,10 @@ void split_start(split* s, simplex t, ment v[], ment sv)
     mset_reserve(s->ne + rt, s->oe[rt].s.n * nv);
     mset_clear(s->ne + rt);
     for (i = 0; i < s->oe[rt].s.n; ++i)
-      for (j = 0; j < nv; ++j)
-        mset_add(s->ne + rt, rebuild(
-              s->m, s->oe[rt].e[i], v[j], sv, IGNORE_OVERLAP));
+      for (j = 0; j < nv; ++j) {
+        er = rebuild(s->m, s->oe[rt].e[i], v[j], sv, DONT_CHECK_DUPLICATES);
+        mset_add(s->ne + rt, er);
+      }
   }
 }
 
@@ -235,7 +237,9 @@ int collapse_start_to(collapse* c, ment v)
     mset_clear(c->ne + t);
     mset_reserve(c->ne + t, c->ke[t].s.n);
     for (i = 0; i < c->ke[t].s.n; ++i) {
-      er = rebuild(c->m, c->ke[t].e[i], c->v[0], c->v[1], CHECK_OVERLAP);
+      er = rebuild(c->m, c->ke[t].e[i], c->v[0], c->v[1], CHECK_DUPLICATES);
+      if (!ment_ok(er))
+        return 0;
       mset_add(c->ne + t, er);
     }
   }
