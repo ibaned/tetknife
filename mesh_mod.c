@@ -207,7 +207,7 @@ static int check_geom(collapse* c)
   unsigned i;
   et = mesh_elem(c->m);
   for (i =0; i < c->ne[et].s.n; ++i)
-    if (!ment_size(c->m, c->ne[et].e[i]))
+    if (ment_size(c->m, c->ne[et].e[i]) <= 0)
       return 0;
   if (et != TRIANGLE)
     return 1;
