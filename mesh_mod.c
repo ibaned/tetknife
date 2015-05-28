@@ -267,6 +267,6 @@ double collapse_quality(collapse* c)
 void collapse_edge(collapse* c, ment v[2])
 {
   collapse_start_from(c, v[0]);
-  collapse_start_to(c, v[1]);
+  ASSERT(collapse_start_to(c, v[1]));
   collapse_accept(c);
 }
