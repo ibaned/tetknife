@@ -176,26 +176,72 @@ void collapse_free(collapse* c)
 
 void collapse_start_from(collapse* c, ment v)
 {
-  simplex t;
-  for (t = 1; t < SIMPLICES; ++t)
-    mesh_up(c->m, VERTEX, &v, t, c->oe + t);
+  all_up(c->m, VERTEX, &v, c->oe);
   c->v[0] = v;
 }
 
-void collapse_start_to(collapse* c, ment v)
+static int check_classif(collapse* c)
+{
+  gent gv[2];
+  gent ge;
+  if (!mesh_classif(c->m))
+    return 1;
+  gv[0] = classif_get(c->m, c->v[0]);
+  gv[1] = classif_get(c->m, c->v[1]);
+  if (gv[0].t < gv[1].t)
+    return 0;
+  ge = classif_by_adj(c->m, c->ce);
+  return gent_eq(gv[0], ge);
+}
+
+static int check_pull(collapse* c)
+{
+  return c->ke[mesh_elem(c->m)].s.n != 0;
+}
+
+static int check_geom(collapse* c)
+{
+  simplex et;
+  unsigned i;
+  et = mesh_elem(c->m);
+  for (i =0; i < c->ne[et].s.n; ++i)
+    if (!ment_size(c->m, c->ne[et].e[i]))
+      return 0;
+  if (et != TRIANGLE)
+    return 1;
+  for (i =0; i < c->ne[et].s.n; ++i) {
+    point on = triangle_norm(ment_triangle(c->m, c->ke[et].e[i]));
+    point nn = triangle_norm(ment_triangle(c->m, c->ne[et].e[i]));
+    if (point_dot(on, nn) <= 0)
+      return 0;
+  }
+  return 1;
+}
+
+int collapse_start_to(collapse* c, ment v)
 {
   simplex t;
   unsigned i;
+  ment er;
   c->v[1] = v;
-  for (t = 1; t < SIMPLICES; ++t) {
-    mesh_up(c->m, EDGE, c->v, t, c->ce + t);
+  all_up(c->m, EDGE, c->v, c->ce);
+  if (!check_classif(c))
+    return 0;
+  for (t = 1; t < SIMPLICES; ++t)
     mset_sub(c->oe + t, c->ce + t, c->ke + t);
+  if (!check_pull(c))
+    return 0;
+  for (t = 1; t < SIMPLICES; ++t) {
     mset_clear(c->ne + t);
     mset_reserve(c->ne + t, c->ke[t].s.n);
-    for (i = 0; i < c->ke[t].s.n; ++i)
-      c->ne[t].e[i] = rebuild(c->m, c->ke[t].e[i], c->v[0], c->v[1],
-          CHECK_OVERLAP);
+    for (i = 0; i < c->ke[t].s.n; ++i) {
+      er = rebuild(c->m, c->ke[t].e[i], c->v[0], c->v[1], CHECK_OVERLAP);
+      mset_add(c->ne + t, er);
+    }
   }
+  if (!check_geom(c))
+    return 0;
+  return 1;
 }
 
 void collapse_accept(collapse* c)
