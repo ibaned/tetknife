@@ -10,7 +10,7 @@ static void client_posix_sleep(unsigned msecs)
 {
   struct timespec ts;
   ts.tv_sec = msecs / 1000;
-  ts.tv_nsec = (msecs % 1000) * 1000;
+  ts.tv_nsec = (msecs % 1000) * 1000 * 1000;
   nanosleep(&ts, NULL);
 }
 
