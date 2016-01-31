@@ -2,7 +2,7 @@
 
 static unsigned const canary = 1;
 
-#define ENDIANNESS (*((unsigned char*)&canary))
+#define ENDIANNESS (*((unsigned char const*)&canary))
 #define LITTLE_ENDIAN 1
 
 static void swap(void* out, void const* in, unsigned size)

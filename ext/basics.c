@@ -108,6 +108,7 @@ unsigned cubic_roots(double a, double b, double c, double d, double x[])
   double complex u[3];
   double complex cx[3];
   double complex bx;
+  double complex const czero = 0.0;
   unsigned i;
   del0 = b * b - 3 * a * c;
   del1 = 2 * b * b * b - 9 * a * b * c + 27 * a * a * d;
@@ -116,13 +117,13 @@ unsigned cubic_roots(double a, double b, double c, double d, double x[])
   u[0] = 1.0;
   u[1] = (-1.0 + sqrt(3) * I) / 2.0;
   u[2] = (-1.0 - sqrt(3) * I) / 2.0;
-  if (del && !del0)
+  if ((del != 0.0) && (del0 == 0))
     t1 = del1;
   else
     t1 = csqrt(t0);
   C = cpow((del1 + t1) / 2.0, 1.0 / 3.0);
   for (i = 0; i < 3; ++i) {
-    if (C)
+    if (C != czero)
       cx[i] = -(b + u[i] * C + del0 / (u[i] * C)) / (3 * a);
     else
       cx[i] = -b / (3 * a);

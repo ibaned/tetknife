@@ -1,6 +1,6 @@
 CC = mpicc
 FRONT_CC = clang
-CFLAGS = -O2 -g -Weverything -Wpedantic -Wno-format-nonliteral
+CFLAGS = -O2 -g -Weverything -Wpedantic -Wno-format-nonliteral -Wno-float-equal
 GUI = cocoa
 BACK = socket
 SOCKET = posix

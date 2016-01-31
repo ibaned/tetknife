@@ -21,7 +21,7 @@ static void globe_rot(globe* g, double spin, double tilt)
 {
   point about;
   double by;
-  if (!tilt && !spin)
+  if ((tilt == 0.0) && (spin == 0.0))
     about = point_z;
   else
     about = point_norm(point_new(-tilt, spin, 0));
@@ -92,7 +92,7 @@ void view_focus(view* v, bbox bb)
   /* avoid a div by zero for a zero-size bounding box
      (there may be less than one point used to compute
       the bounding box) */
-  if (!bbr)
+  if (bbr == 0.0)
     bbr = 1;
   imc = point_scale(point_new(v->d.im.w, v->d.im.h, 0), 1.0/2.0);
   imr = MIN(imc.x, imc.y);
